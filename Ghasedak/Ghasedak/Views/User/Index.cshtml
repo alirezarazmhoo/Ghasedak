@@ -1,0 +1,191 @@
+﻿@model PagedList.Core.IPagedList<Ghasedak.Models.User>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">کاربران</h3>
+                <br />
+                <p style="color:red">@ViewBag.success</p>
+            </div>
+            <div class="row">
+                <form>
+                    <div class="box-body">
+                        <div class="col-md-4 form-group">
+                            <input type="text" id="filteruserName" name="filteruserName" class="form-control" placeholder="نام کاربری" />
+                        </div>
+                        <div class="col-md-1 form-group">
+                            <button type="submit" class="btn btn-default">جستجو</button>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <a href="/User/Index" class="btn btn-default">مشاهده همه</a>
+                        </div>
+                        <div class="col-md-2 form-group">
+
+                            <div class="btn btn-default" id="export">خروجی اکسل</div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-default" asp-action="Create">کاربر جدید</a>
+                    <a class="btn btn-default deleteAll">حذف موارد انتخابی</a>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="checkbox1">
+                                    </label>
+                                </div>
+                            </th>
+                            <th>نام کاربری</th>
+                            @*<th>نمایش</th>*@
+                            <th>امکانات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                <div class="chkRow">
+                                    <label>
+                                        <input value="@item.id" type="checkbox">
+                                    </label>
+                                </div>
+                            </td>
+                            <td>@item.userName</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">ویرایش</a>
+                                <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
+
+                                @*@if (item.isActive)
+        {
+            <a onclick="Active(@item.id)" class="btn btn-danger">غیر فعال کردن</a>
+        }
+        else
+        {
+            <a onclick="Active(@item.id)" class="btn btn-default">فعال کردن</a>
+
+        }*@
+                            </td>
+                        </tr>
+                        }
+
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            @*@for (int i = 1; i <= Model.PageCount; i++)
+                                {
+                                    <li class="paginate_button  @((i==Model.CurrentPage?"active":""))">
+                                        <a href="/Admin/Users?pageId=@i" aria-controls="example1" data-dt-idx="1" tabindex="0">@i</a>
+                                    </li>
+                                }*@
+                            <li>
+                                <pager list="@Model" asp-controller="User" asp-action="Index" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+@section scripts
+    {
+    <script>
+        $('#checkbox1').change(function () {
+            if (this.checked) {
+                var isChecked = $(this).prop("checked");
+                $('#example2 tr:has(td)').find('input[type="checkbox"]').prop('checked', isChecked);
+            }
+        });
+        $('.deleteAll').on('click', function () {
+            var array = [];
+            $('#example2 tr:has(td)').find("input[type='checkbox']:checked").each(function () {
+                array.push(parseInt($(this).val()));
+            });
+
+            swal({
+                title: ' مطمئن هستید؟',
+                text: 'آیا از حذف رکورد انتخابی اطمینان دارید؟!',
+                type: 'warning',
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonClass: 'btn btn-danger',
+                confirmButtonText: '! بله ',
+                cancelButtonClass: 'btn btn-light',
+                background: 'rgba(0, 0, 0, 0.96)'
+            }).then(function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/User/DeleteAll",
+                    data: { ids: array },
+                    success: function (response) {
+                        if (response == "Success")
+                            window.location.href = "/User/Index";
+                        else
+                            window.location.href = "/User/Index?isSuccess=true";
+
+                    }
+                });
+            });
+        })
+        $("#export").on('click', function () {
+            var filteruserName = $("#filteruserName").val();
+            window.location.href = '/User/ExportToExcel?filteruserName=' + filteruserName;
+        });
+    </script>
+    <script>
+        function Active(event) {
+
+            $.ajax({
+                url: "/User/InActive?id=" + event,
+                method: "POST",
+                success: function (data) {
+                    if (data == "Done") {
+
+                        swal({
+                            title: '!  موفقیت آمیز',
+                            text: "با موفقیت تغییر اعمال شد",
+                            type: 'success',
+                            buttonsStyling: false,
+                            confirmButtonClass: 'btn btn-sm btn-light',
+                            background: 'rgba(0, 0, 0, 0.96)',
+                            timer: 1500
+                        })
+                        location.reload();
+                    }
+
+                },
+                error: function () {
+                    alert("Ajax call failed");
+                }
+            })
+        }
+
+    </script>
+}
+
+

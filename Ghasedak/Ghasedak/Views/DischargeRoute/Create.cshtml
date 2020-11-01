@@ -1,0 +1,50 @@
+﻿@model Ghasedak.Models.DischargeRoute
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">مسیر جدید</h3>
+                </div>
+                <div class="row">
+                    <form asp-action="Create" method="post">
+                        <div class="box-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="code" class="control-label"></label>
+                                    <input asp-for="code" class="form-control" />
+                                    <span asp-validation-for="code" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="day" class="control-label"></label>
+                                    <input asp-for="day" class="form-control" />
+                                    <span asp-validation-for="day" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="address" class="control-label"></label>
+                                    <textarea asp-for="address" class="form-control"></textarea>
+                                    <span asp-validation-for="address" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="submit" value="ثبت" class="btn btn-default" />
+                                    <a class="btn btn-danger" asp-action="Index">بازگشت</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+

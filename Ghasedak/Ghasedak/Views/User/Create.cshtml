@@ -1,0 +1,65 @@
+﻿@model Ghasedak.Models.User
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">کاربر جدید</h3>
+                </div>
+                <div class="row">
+                    <form asp-action="Create" method="post">
+                        <div class="box-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">کد</label>
+                                    <input asp-for="code" class="form-control" />
+                                    <span asp-validation-for="code" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">رمز عبور</label>
+                                    <input asp-for="passwordShow" class="form-control" />
+                                    <span asp-validation-for="passwordShow" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">نام کاربری</label>
+                                    <input asp-for="userName" class="form-control" />
+                                    <span asp-validation-for="userName" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">نام و نام خانوادگی</label>
+                                    <input asp-for="fullName" class="form-control" />
+                                    <span asp-validation-for="fullName" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="submit" value="تایید" class="btn btn-default" />
+                                    <a class="btn btn-danger" asp-action="Index">بازگشت</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts
+    {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        
+}

@@ -1,0 +1,361 @@
+﻿@model Ghasedak.Models.BoxIncome
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="row">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="id" />
+                        <input type="hidden" asp-for="userId" />
+                        <input type="hidden" asp-for="lon" />
+                        <input type="hidden" asp-for="lat" />
+                        <div class="box-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <a class="btn btn-danger" asp-action="Index">بازگشت</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-body">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">شماره صندوق</label>
+                                    <input asp-for="@Model.box.number" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.box.number" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">نام مالک صندوق</label>
+                                    <input asp-for="@Model.box.fullName" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.box.fullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">موبایل مالک صندوق</label>
+                                    <input asp-for="@Model.box.mobile" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.box.mobile" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">مبلغ</label>
+                                    <input asp-for="price" type="text" class="form-control" onkeyup="numberWithCommas(this)" />
+                                    <span asp-validation-for="price" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">کد مسیر</label>
+                                    <select asp-for="boxId" required class="form-control"  asp-items="ViewBag.boxId">
+                                        <option value="">انتخاب کنید</option>
+                                    </select>
+                                    <span asp-validation-for="boxId" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">تاریخ تخلیه:</label>
+                                    <input value="@Model.registerDate"  type="text" class="form-control" />
+
+                                    @*<div class="input-group date">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+            </div>
+            <input type="text" name="registerDate" id="registerDate" class="form-control pull-right">
+        </div>*@
+                                    <span asp-validation-for="registerDate" class="text-danger"></span>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="box-body">
+                            <div class="col-md-6">
+                                <label class="control-label">آدرس مکان زنده</label>
+                                <div id='map' style='width: 500px; height: 500px;'></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label">آدرس صندوق</label>
+                                <div id='map2' style='width: 500px; height: 500px;'></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+<script src='https://api.cedarmaps.com/cedarmaps.js/v1.8.0/cedarmaps.js'></script>
+<div id="results">
+
+    @*<div id="loading"><img src="../dist/v1.8.0/images/loading-14-blue.gif" width="14" height="14"> Loading...</div>*@
+    <div id="latlng"></div>
+    <div id="parsed-response"></div>
+    <div id="raw-response"></div>
+</div>
+<div id="results2">
+
+    @*<div id="loading"><img src="../dist/v1.8.0/images/loading-14-blue.gif" width="14" height="14"> Loading...</div>*@
+    <div id="latlng2"></div>
+    <div id="parsed-response2"></div>
+    <div id="raw-response2"></div>
+</div>
+@section scripts
+    {
+    <script src="~/js/PersianDatePicker.min.js"></script>
+    <script>
+
+    var lon = 51.6650002;
+    var lat = 32.6707877;
+
+    $("#lon").val(@Model.lon);
+    $("#lat").val(@Model.lat);
+    try {
+        L.cedarmaps.accessToken = "51bb3122d525fe4ddc70cd4a7356eaf3e9e2f76f";
+    }
+    catch (err) {
+        throw new Error('You need to get an access token to be able to use cedarmaps SDK. ' +
+            'Send us an email to <info@cedar.ir>');
+    }
+
+    var tileJSONUrl = 'https://api.cedarmaps.com/v1/tiles/cedarmaps.streets.json?access_token=' + L.cedarmaps.accessToken,
+        marker,
+        syntaxHighlight;
+
+    // Initializing our map
+    var map = L.cedarmaps.map('map', tileJSONUrl, {
+        scrollWheelZoom: true
+    }).addControl(L.cedarmaps.geocoderControl('cedarmaps.streets', {
+        keepOpen: false,
+        autocomplete: true
+    })).setView(['@Model.lat', '@Model.lon'], 15);
+
+    // Setting up our DOM elements.
+    var resultsContainer = document.getElementById('results'),
+        latLngContainer = document.getElementById('latlng'),
+        parsedResponseContainer = document.getElementById('parsed-response'),
+        rawResponseContainer = document.getElementById('raw-response'),
+        loadingIndicator = document.getElementById('loading');
+
+    // We need to introduce our index to geocoder module. "cedarmaps.streets" in this case.
+    var geocoder = L.cedarmaps.geocoder('cedarmaps.streets');
+
+    map.on('click', function (e) {
+        if (marker) map.removeLayer(marker);
+        marker = new L.marker(e.latlng).addTo(map);
+        lon = e.latlng.lng;
+        lat = e.latlng.lat;
+        $("#lon").val(lon);
+        $("#lat").val(lat);
+        loading.style.visibility = 'visible';
+        latLngContainer.innerHTML = 'LatLng: ' + e.latlng.lat + ', ' + e.latlng.lng;
+
+        geocoder.reverseQuery(e.latlng, function callback(err, res) {
+            loading.style.visibility = 'hidden';
+            parsedResponseContainer.style.display = 'block';
+            rawResponseContainer.style.display = 'block';
+
+            var parsedResponse = '<ul>' +
+                '<li><strong>استان:</strong> ' + res.result.province + '</li>' +
+                '<li><strong>شهر:</strong> ' + res.result.city + '</li>' +
+                '<li><strong>محله:</strong> ' + res.result.locality + '</li>' +
+                '<li><strong>خیابان:</strong> ' + res.result.address + '</li>' +
+                '<li><strong>در منطقه طرح ترافیک:</strong> ' + (res.result.traffic_zone.in_central ? 'بله' : 'خیر') + '</li>' +
+                '<li><strong>در منطقه زوج و فرد:</strong> ' + (res.result.traffic_zone.in_evenodd ? 'بله' : 'خیر') + '</li>' +
+                '</ul>';
+            var rawResponse = '<pre class="language-javascript">' + syntaxHighlight(JSON.stringify(res, undefined, 2)) + '</pre>'
+
+            //parsedResponseContainer.innerHTML = parsedResponse;
+            //rawResponseContainer.innerHTML = rawResponse;
+
+        });
+    });
+
+    syntaxHighlight = function (json) {
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    }
+    var myIcon = L.icon({
+        iconUrl: '//api.cedarmaps.com/cedarmaps.js/v1.8.0/images/marker-icon.png',
+        //iconRetinaUrl: '//api.cedarmaps.com/cedarmaps.js/v1.8.0/images/marker-icon.png',
+        iconSize: [34, 46],
+        iconAnchor: [17, 41],
+        popupAnchor: [-3, -46],
+        //shadowUrl: '//api.cedarmaps.com/cedarmaps.js/v1.8.0/images/marker-icon.png',
+        //shadowRetinaUrl: '//api.cedarmaps.com/cedarmaps.js/v1.8.0/images/marker-icon.png',
+        shadowSize: [26, 6],
+        shadowAnchor: [13, 3]
+    });
+
+    var marker = new L.marker(['@Model.lat', '@Model.lon'], {
+        icon: myIcon
+    }).addTo(map);
+
+    var popupOptions = {
+        offset: new L.Point(2, 14),
+        closeButton: false,
+        autoPan: false
+    };
+    marker.bindPopup('@Model.user.fullName', popupOptions).openPopup();
+    </script>
+
+    <script>
+
+    var lon2 = 51.6650002;
+    var lat2 = 32.6707877;
+
+   
+    try {
+        L.cedarmaps.accessToken = "51bb3122d525fe4ddc70cd4a7356eaf3e9e2f76f";
+    }
+    catch (err) {
+        throw new Error('You need to get an access token to be able to use cedarmaps SDK. ' +
+            'Send us an email to <info@cedar.ir>');
+    }
+
+    var tileJSONUrl = 'https://api.cedarmaps.com/v1/tiles/cedarmaps.streets.json?access_token=' + L.cedarmaps.accessToken,
+        marker,
+        syntaxHighlight;
+
+    // Initializing our map
+    var map2 = L.cedarmaps.map('map2', tileJSONUrl, {
+        scrollWheelZoom: true
+    }).addControl(L.cedarmaps.geocoderControl('cedarmaps.streets', {
+        keepOpen: false,
+        autocomplete: true
+    })).setView(['@Model.box.lat', '@Model.box.lon'], 15);
+
+    // Setting up our DOM elements.
+    var resultsContainer2 = document.getElementById('results2'),
+        latLngContainer2 = document.getElementById('latlng2'),
+        parsedResponseContainer2 = document.getElementById('parsed-response2'),
+        rawResponseContainer2 = document.getElementById('raw-response2'),
+        loadingIndicator2 = document.getElementById('loading2');
+
+    // We need to introduce our index to geocoder module. "cedarmaps.streets" in this case.
+    var geocoder2 = L.cedarmaps.geocoder('cedarmaps.streets');
+
+    map2.on('click', function (e) {
+        if (marker2) map2.removeLayer(marker);
+        marker2 = new L.marker(e.latlng2).addTo(map);
+        lon2 = e.latlng2.lng;
+        lat2 = e.latlng2.lat;
+        //$("#lon").val(lon);
+        //$("#lat").val(lat);
+        loading2.style.visibility = 'visible';
+        latLngContainer2.innerHTML = 'LatLng2: ' + e.latlng2.lat + ', ' + e.latlng2.lng;
+
+        geocoder2.reverseQuery(e.latlng2, function callback(err, res) {
+            loading2.style.visibility = 'hidden';
+            parsedResponseContainer2.style.display = 'block';
+            rawResponseContainer2.style.display = 'block';            
+            //parsedResponseContainer.innerHTML = parsedResponse;
+            //rawResponseContainer.innerHTML = rawResponse;
+
+        });
+    });
+
+    syntaxHighlight2 = function (json) {
+        json2 = json2.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json2.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls2 = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    }
+    var myIcon2 = L.icon({
+        iconUrl: '//api.cedarmaps.com/cedarmaps.js/v1.8.0/images/marker-icon.png',
+        //iconRetinaUrl: '//api.cedarmaps.com/cedarmaps.js/v1.8.0/images/marker-icon.png',
+        iconSize: [34, 46],
+        iconAnchor: [17, 41],
+        popupAnchor: [-3, -46],
+        //shadowUrl: '//api.cedarmaps.com/cedarmaps.js/v1.8.0/images/marker-icon.png',
+        //shadowRetinaUrl: '//api.cedarmaps.com/cedarmaps.js/v1.8.0/images/marker-icon.png',
+        shadowSize: [26, 6],
+        shadowAnchor: [13, 3]
+    });
+
+    var marker2 = new L.marker(['@Model.box.lat', '@Model.box.lon'], {
+        icon: myIcon
+    }).addTo(map2);
+
+    var popupOptions2 = {
+        offset: new L.Point(2, 14),
+        closeButton: false,
+        autoPan: false
+    };
+    marker2.bindPopup('@Model.user.fullName', popupOptions2).openPopup();
+    </script>
+    <script>
+        $(document).ready(function () {
+
+
+
+            $('#registerDate').persianDatepicker({
+                //formatDate: "YYYY/MM/DD hh:mm:ss:ms",
+                altFormat: 'X',
+                observer: true,
+
+                timePicker: {
+                    enabled: true
+                },
+            });
+        });
+        function numberWithCommas(x) {
+            var tmp = x.value;
+            while (tmp.indexOf(',') != -1)
+                tmp = tmp.replace(',', '');
+            var parts = tmp.toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            x.value = parts.join(".");
+        }
+        $('form').submit(function () {
+            if ($('#price').length != 0) {
+                while (price.value.indexOf(',') != -1) {
+                    price.value = price.value.replace(',', '');
+                }
+            }
+
+        });
+
+    </script>
+}
+
+

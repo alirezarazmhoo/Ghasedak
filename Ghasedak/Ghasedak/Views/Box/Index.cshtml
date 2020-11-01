@@ -1,0 +1,210 @@
+﻿@model PagedList.Core.IPagedList<Ghasedak.Models.Box>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">صندوقات</h3>
+                <br />
+                <p style="color:red">@ViewBag.success</p>
+            </div>
+            <div class="row">
+                <form>
+                    <div class="box-body">
+                        <div class="col-md-4 form-group">
+                            <input type="text" name="filternumber" id="filternumber" class="form-control" placeholder="شماره صندوق" />
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <button type="submit" class="btn btn-default">جستجو</button>
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <a href="/Box/Index" class="btn btn-default">مشاهده همه</a>
+                        </div>
+                        <div class="col-md-2 form-group">
+
+                            <div class="btn btn-default" id="export">خروجی اکسل</div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="row">
+                <div class="box-body">
+
+                    <div class="col-md-4">
+                        <input type="file" id="fUpload" name="files" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="button" class="btn btn-default" id="btnUpload" value="آپلود فایل اکسل" />
+                    </div>
+                    <div class="col-md-6">
+                        فایل آپلودی به ترتیب از راست به چپ دارای فیلدهای IsSendSMS از نوع عدد،PathCode از نوع عدد،Address از نوع حروف،Mobile از نوع عدد،Name از نوع حروف،Number از نوع عدد
+                    </div>
+                    </div>
+                </div>
+            <div class="row">
+                <div class="box-body">
+                    <div class="col-md-12">
+                        <a class="btn btn-default" asp-action="Create">صندوق جدید</a>
+                        <a class="btn btn-default deleteAll">حذف موارد انتخابی</a>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive">
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" id="checkbox1">
+                                        </label>
+                                    </div>
+                                </th>
+                                <th>شماره صندوق</th>
+                                <th>نام و نام خانوادگی</th>
+
+                                <th>امکانات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="chkRow">
+                                            <label>
+                                                <input value="@item.id" type="checkbox">
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>@item.number</td>
+                                    <td>@item.fullName</td>
+
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">ویرایش</a>
+
+                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="row">
+                    <div class="col-sm-5">
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                            <ul class="pagination">
+                                @*@for (int i = 1; i <= Model.PageCount; i++)
+                            {
+                                <li class="paginate_button  @((i==Model.CurrentPage?"active":""))">
+                                    <a href="/Admin/Users?pageId=@i" aria-controls="example1" data-dt-idx="1" tabindex="0">@i</a>
+                                </li>
+                            }*@
+                                <li>
+                                    <pager list="@Model" asp-controller="Box" asp-action="Index" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    <!-- /.col -->
+</div>
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $('#btnUpload').on('click', function () {
+                var fileExtension = ['xls', 'xlsx'];
+                var filename = $('#fUpload').val();
+                if (filename.length == 0) {
+                    alert("Please select a file.");
+                    return false;
+                }
+                else {
+                    var extension = filename.replace(/^.*\./, '');
+                    if ($.inArray(extension, fileExtension) == -1) {
+                        alert("Please select only excel files.");
+                        return false;
+                    }
+                }
+                var fdata = new FormData();
+                var fileUpload = $("#fUpload").get(0);
+                var files = fileUpload.files;
+                fdata.append(files[0].name, files[0]);
+                $.ajax({
+                    type: "POST",
+                    url: "/Box/OnPostImport",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: fdata,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response == "Success")
+                            window.location.href = "/Box/Index";
+                    },
+                    error: function (e) {
+
+                    }
+                });
+            })
+        });
+        $('#checkbox1').change(function () {
+            if (this.checked) {
+                var isChecked = $(this).prop("checked");
+                $('#example2 tr:has(td)').find('input[type="checkbox"]').prop('checked', isChecked);
+            }
+        });
+        $('.deleteAll').on('click', function () {
+            var array = [];
+            $('#example2 tr:has(td)').find("input[type='checkbox']:checked").each(function () {
+                array.push(parseInt($(this).val()));
+            });
+
+            swal({
+                title: ' مطمئن هستید؟',
+                text: 'آیا از حذف رکورد انتخابی اطمینان دارید؟!',
+                type: 'warning',
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonClass: 'btn btn-danger',
+                confirmButtonText: '! بله ',
+                cancelButtonClass: 'btn btn-light',
+                background: 'rgba(0, 0, 0, 0.96)'
+            }).then(function () {
+                
+                $.ajax({
+                    type: "POST",
+                    url: "/Box/DeleteAll",
+                    data: {ids: array },
+                    success: function (response) {
+                        if (response == "Success")
+                            window.location.href = "/Box/Index";
+                        else
+                            window.location.href = "/Box/Index?isSuccess=true";
+
+                    }
+                });
+            });
+        })
+        $("#export").on('click', function () {
+            var filternumber = $("#filternumber").val();
+            window.location.href = '/Box/ExportToExcel?filternumber=' + filternumber;
+        });
+    </script>
+}
+
+
+
