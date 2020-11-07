@@ -32,7 +32,7 @@
     <link href="/AdminContent/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" />
     <link href="/AdminContent/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
     <link href="/AdminContent/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" rel="stylesheet" />
-
+    <link href="/AdminContent/plugins/iCheck/minimal/_all.css" rel="stylesheet" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -44,6 +44,8 @@
     <link href="/AdminContent/dist/css/customcss.css" rel="stylesheet" />
     <link href="~/css/sweetalert2.min.css" rel="stylesheet" />
     <link href="~/css/PersianDatePicker.min.css" rel="stylesheet" />
+    <link href='https://api.cedarmaps.com/cedarmaps.js/v1.8.0/cedarmaps.css' rel='stylesheet' />
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
@@ -56,7 +58,13 @@
                 <span class="logo-lg"><b>کنترل پنل مدیریت</b></span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
 
+            </nav>
         </header>
         <!-- right side column. contains the logo and sidebar -->
         <aside class="main-sidebar">
@@ -78,27 +86,47 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">منو</li>
-                    @*<li class="active treeview">
-            <a href="#">
-                <i class="fa fa-dashboard"></i> <span>مدیریت کاربران</span>
-                <span class="pull-left-container">
-                    <i class="fa fa-angle-right pull-left"></i>
-                </span>
-            </a>
-            <ul class="treeview-menu">
-                <li class="active"><a href="/Admin/Users"><i class="fa fa-circle-o"></i> کاربران</a></li>
-            </ul>
-        </li>*@
+                    
+                    <li class=" treeview">
+                            <a href="#">
+                                <i class="fa fa-dashboard"></i> <span>مدیریت کاربران</span>
+                                <span class="pull-left-container">
+                                    <i class="fa fa-angle-right pull-left"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="active"><a href="/Oprator/Index"><i class="fa fa-circle-o"></i> کاربران</a></li>
+
+                            </ul>
+                        </li>
+
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-fw fa-newspaper-o"></i> <span>مدیریت اطلاعات پایه</span>
+                            <span class="pull-left-container">
+                                <i class="fa fa-angle-right pull-left"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="/DischargeRoute/Index"><i class="fa fa-fw fa-align-left"></i> مسیر ها</a></li>
+                            <li><a href="/Box/Index"><i class="fa fa-fw fa-align-left"></i> صندوقات</a></li>
+                          
+
+                        </ul>
+
+                    </li>
+                    
+
                     <li>
-                        <a href="/TicketChatsAdvisor/Index"><i class="fa fa-fw fa-comments-o"></i> چت ها</a>
+                        <a href="/BoxIncome/Index"><i class="fa fa-fw fa-cubes"></i> درآمد ها</a>
                     </li>
-                    <li >
-                        <a href="/HistoryAdvisor/Index"><i class="fa fa-fw fa-comments-o"></i> سابقه مشاور ها</a>
-                    </li>
+
+                   
 
 
                     <li>
-                        <a href="/Logout">
+                        <a href="../User/Logout">
                             <i class="fa fa-fw fa-arrow-right"></i> <span>خروج</span>
                         </a>
                     </li>
@@ -178,7 +206,8 @@
     <script src="/AdminContent/plugins/timepicker/bootstrap-timepicker.min.js"></script>
     <script src="/AdminContent/dist/js/persian-date-0.1.8.min.js"></script>
     <script src="/AdminContent/dist/js/persian-datepicker-0.4.5.min.js"></script>
-
+    <script src="~/scripts/Common.js"></script>
+    <script src="/AdminContent/plugins/iCheck/icheck.min.js"></script>
     @*<script>
             $(document).ready(function () {
 

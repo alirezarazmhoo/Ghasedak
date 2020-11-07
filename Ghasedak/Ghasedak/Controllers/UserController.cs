@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Ghasedak.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ghasedak.Controllers
 {
@@ -79,47 +81,157 @@ namespace Ghasedak.Controllers
             //    ModelState.AddModelError("", "کپچا صحیح نمی باشد");
             //    return View("Login");
             //}
-            if (user.password == "" || user.password == null || user.userName == "" || user.userName == null)
+            if (string.IsNullOrEmpty(user.password) || string.IsNullOrEmpty(user.userName))
             {
                 ModelState.Clear();
                 ModelState.AddModelError("", "نام کاربری یا رمز عبور صحیح نیست");
                 return View("Login");
             }
             var u = _context.Users.Include(x => x.role).Where(p => p.userName == user.userName && p.role.RoleNameEn == "Admin").FirstOrDefault();
-            if (u == null)
+            var charity = _context.Charitys.Where(p => p.userName == user.userName).FirstOrDefault();
+            if (u == null && charity == null)
             {
                 ModelState.Clear();
                 ModelState.AddModelError("", "نام کاربری یا رمز عبور صحیح نیست");
                 return View("Login");
             }
-            if (!BCrypt.Net.BCrypt.Verify(user.password, u.password))
+            if (u != null && charity == null)
             {
-                ModelState.Clear();
-                ModelState.AddModelError("", "نام کاربری یا رمز عبور صحیح نیست");
-                return View("Login");
-            }
-
-            var claims = new List<Claim>()
+                if (!BCrypt.Net.BCrypt.Verify(user.password, u.password))
+                {
+                    ModelState.Clear();
+                    ModelState.AddModelError("", "نام کاربری یا رمز عبور صحیح نیست");
+                    return View("Login");
+                }
+                else
+                {
+                    var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.NameIdentifier,user.userName.ToString()),
-                        new Claim(ClaimTypes.Name,user.userName)
+                        new Claim(ClaimTypes.Name,user.userName),
+                        new Claim(ClaimTypes.Role,"Admin")
+                        
                     };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
 
-            var properties = new AuthenticationProperties
+                    var properties = new AuthenticationProperties
+                    {
+                        IsPersistent = user.RememberMe
+                    };
+                    HttpContext.SignInAsync(principal, properties);
+
+                    return Redirect("/Home/Index");
+                }
+            }
+            if (u == null && charity != null)
             {
-                IsPersistent = user.RememberMe
-            };
-            HttpContext.SignInAsync(principal, properties);
+                if (!BCrypt.Net.BCrypt.Verify(user.password, charity.password))
+                {
+                    ModelState.Clear();
+                    ModelState.AddModelError("", "نام کاربری یا رمز عبور صحیح نیست");
+                    return View("Login");
+                }
+                else
+                {
+                    var claims = new List<Claim>()
+                    {
+                        new Claim(ClaimTypes.NameIdentifier,charity.id.ToString()),
+                        new Claim(ClaimTypes.Name,charity.id.ToString()),
+                        new Claim(ClaimTypes.Role,"Charity")
+                    };
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
 
-            return Redirect("/Home/Index");
+                    var properties = new AuthenticationProperties
+                    {
+                        IsPersistent = user.RememberMe
+                        
+                        
+                    };
+                    HttpContext.SignInAsync(principal, properties);
+
+                    return Redirect("/Home/IndexCharity");
+                }
 
 
+            }
+            return View("Login");
+        }
 
+
+        
+
+        public ActionResult SignInAsCharity(string userName,string password)
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var charity = _context.Charitys.Where(p => p.userName == userName).FirstOrDefault();
+            if (charity == null)
+            {
+                ModelState.Clear();
+                ModelState.AddModelError("", "نام کاربری یا رمز عبور صحیح نیست");
+                return View("Login");
+            }
+            if (!BCrypt.Net.BCrypt.Verify(password, charity.password))
+            {
+                ModelState.Clear();
+                ModelState.AddModelError("", "نام کاربری یا رمز عبور صحیح نیست");
+                return View("Login");
+            }
+            else
+            {
+                var claims = new List<Claim>()
+                    {
+                        new Claim(ClaimTypes.NameIdentifier,charity.id.ToString()),
+                        new Claim(ClaimTypes.Name,charity.id.ToString()),
+                        new Claim(ClaimTypes.Role,"Charity")
+
+                    };
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                var properties = new AuthenticationProperties
+                {
+                    IsPersistent = true
+                };
+                HttpContext.SignInAsync(principal, properties);
+
+                return Redirect("/Home/IndexCharity");
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UserInfo(int ItemId)
+        {
+            try
+            {
+                var user = await _context.Users.FindAsync(ItemId);
+
+                if (user == null)
+                {
+                    return Json(new { success = false, responseText = "Requset Faild !" });
+                }
+                List<EditViewModels> edit = new List<EditViewModels>();
+                edit.Add(new EditViewModels() { key = "code", value = user.code });
+                edit.Add(new EditViewModels() { key = "UserId", value = user.id.ToString() });
+                edit.Add(new EditViewModels() { key = "roleId", value = user.roleId.ToString() });
+                edit.Add(new EditViewModels() { key = "passwordShow", value = user.passwordShow });
+                edit.Add(new EditViewModels() { key = "password", value = user.password });
+                edit.Add(new EditViewModels() { key = "fullName", value = user.fullName });
+                edit.Add(new EditViewModels() { key = "userName", value = user.userName });
+                edit.Add(new EditViewModels() { key = "token", value = user.token });
+
+                return Json(new { success = true, listItem = edit.ToList() });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { success = false, responseText = "Requset Faild !" });
+            }
         }
         #region Logout
-        [Route("Logout")]
+
+
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -214,31 +326,51 @@ namespace Ghasedak.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, User user)
+        public async Task<IActionResult> Register(int? id, User user)
         {
-            if (id != user.id)
+            try
             {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                ModelState.Remove("id");
+                ModelState.Remove("roleId");
+                if (ModelState.IsValid)
                 {
                     user.password = BCrypt.Net.BCrypt.HashPassword(user.passwordShow, BCrypt.Net.BCrypt.GenerateSalt());
-                    _context.Users.Update(user);
+
+                    if (id == null)
+                    {
+                        if (_context.Users.Any(x => x.userName == user.userName))
+                        {
+                            return Json(new { success = false, responseText = "نام کاربری تکراری است !" });
+
+                        }
+                        var role = _context.Roles.FirstOrDefault(x => x.RoleNameEn == "Member");
+                        user.roleId = role.Id;
+                        user.token = Guid.NewGuid().ToString().Replace("-", "");
+                        _context.Users.Add(user);
+                    }
+                    else
+                    {
+                        if (_context.Users.Any(x => x.userName == user.userName && x.id != id))
+                        {
+                            return Json(new { success = false, responseText = "نام کاربری تکراری است !" });
+
+                        }
+                        _context.Users.Update(user);
+                    }
                     await _context.SaveChangesAsync();
+                    return Json(new { success = true, responseText = "Operation Completed !" });
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-
-                    throw;
-
+                    return Json(new { success = false, responseText = "Required Fields Are Empty !" });
                 }
-                return RedirectToAction(nameof(Index));
+
             }
-            return View(user);
+            catch (Exception)
+            {
+
+                return Json(new { success = false, responseText = "Requset Faild !" });
+            }
         }
 
         [HttpPost]
@@ -284,12 +416,15 @@ namespace Ghasedak.Controllers
                 var user = _context.Users.FirstOrDefault(x => x.id == id);
                 _context.Users.Remove(user);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return Json(new { success = true, responseText = "Operation Completed !" });
+
 
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Index", new { @isSuccess = true });
+                //return RedirectToAction("Index", new { @isSuccess = true });
+                return Json(new { success = false, responseText = "Requset Faild !" });
 
             }
         }

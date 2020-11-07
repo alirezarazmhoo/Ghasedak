@@ -35,6 +35,9 @@ namespace Ghasedak.Models
         [Display(Name = "تاریخ ثبت ")]
         [MaxLength(30, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string registerDate { get; set; }
+        
+        public int CharityId { get; set; }
+       
 
     }
 }

@@ -15,7 +15,7 @@ namespace Ghasedak.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -57,6 +57,8 @@ namespace Ghasedak.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CharityId");
+
                     b.Property<string>("address")
                         .HasMaxLength(500);
 
@@ -91,6 +93,8 @@ namespace Ghasedak.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CharityId");
+
                     b.Property<int>("boxId");
 
                     b.Property<double>("lat");
@@ -113,6 +117,41 @@ namespace Ghasedak.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("BoxIncomes");
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.Charity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("address")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("code")
+                        .HasMaxLength(6);
+
+                    b.Property<string>("description")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("mobile")
+                        .HasMaxLength(11);
+
+                    b.Property<string>("password")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("passwordShow")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("title")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("userName")
+                        .HasMaxLength(20);
+
+                    b.HasKey("id");
+
+                    b.ToTable("Charitys");
                 });
 
             modelBuilder.Entity("Ghasedak.Models.ContactUs", b =>
@@ -150,6 +189,8 @@ namespace Ghasedak.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CharityId");
+
                     b.Property<string>("address")
                         .HasMaxLength(500);
 
@@ -160,7 +201,53 @@ namespace Ghasedak.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("CharityId");
+
                     b.ToTable("DischargeRoutes");
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.Oprator", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CharityId");
+
+                    b.Property<string>("address")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("code")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("description")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("fullName")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("imageName")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("mobile")
+                        .HasMaxLength(11);
+
+                    b.Property<string>("nationalcode")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("password")
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("status");
+
+                    b.Property<string>("userName")
+                        .HasMaxLength(50);
+
+                    b.HasKey("id");
+
+                    b.HasIndex("CharityId");
+
+                    b.ToTable("Oprators");
                 });
 
             modelBuilder.Entity("Ghasedak.Models.Role", b =>
@@ -298,6 +385,22 @@ namespace Ghasedak.Migrations
                     b.HasOne("Ghasedak.Models.User", "user")
                         .WithMany()
                         .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.DischargeRoute", b =>
+                {
+                    b.HasOne("Ghasedak.Models.Charity", "Charity")
+                        .WithMany()
+                        .HasForeignKey("CharityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.Oprator", b =>
+                {
+                    b.HasOne("Ghasedak.Models.Charity", "Charity")
+                        .WithMany()
+                        .HasForeignKey("CharityId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

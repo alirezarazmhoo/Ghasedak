@@ -16,6 +16,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190815095341_sj.cs" />
     <Compile Remove="Migrations\20190815095447_sj.cs" />
+    <Compile Remove="Migrations\20201105155605_sss.cs" />
+    <Compile Remove="Migrations\20201105155605_sss.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -7696,9 +7698,6 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Stir\Index.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Shared\_AdvisorLayout.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\User\AdminUser.cshtml">
