@@ -1,0 +1,308 @@
+﻿@model PagedList.Core.IPagedList<Ghasedak.Models.Charity>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">خیریه ها</h3>
+                <br />
+                <p style="color:red">@ViewBag.success</p>
+            </div>
+            <div class="row">
+                <form>
+                    <div class="box-body">
+                        <div class="col-md-4 form-group">
+                            <input type="text" id="filterCode" name="filterCode" class="form-control" placeholder="کد خیریه" />
+                        </div>
+                        <div class="col-md-1 form-group">
+                            <button type="submit" class="btn btn-default">جستجو</button>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <a href="/Charity/Index" class="btn btn-default">مشاهده همه</a>
+                        </div>
+                        <div class="col-md-2 form-group">
+
+                            <div class="btn btn-default" id="export">خروجی اکسل</div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-success openmodal" style="margin-right: 10px;" href="#"  data-toggle="modal" data-target="#myModal"> خیریه جدید</a>
+
+                    <a class="btn btn-default deleteAll">حذف موارد انتخابی</a>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="checkbox1">
+                                    </label>
+                                </div>
+                            </th>
+                            <th>نام کاربری</th>
+                            <th>کد</th>
+                            <th>شماره همراه</th>
+                            @*<th>نمایش</th>*@
+                            <th>امکانات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="chkRow">
+                                        <label>
+                                            <input value="@item.id" type="checkbox">
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>@item.userName</td>
+                                <td>@item.code</td>
+                                <td>@item.mobile</td>
+                                <td>
+                                    <a href="/User/SignInAsCharity?userName=@item.userName&password=@item.passwordShow" class="btn btn-default"> ورود به پنل خیریه</a>
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#EditModal" id="@item.id"> ویرایش</button>
+                                    <a class="btn btn-danger" data-toggle="modal" data-target="#QuestionModal" onclick="AssignButtonClicked(this)" data-assigned-id="@item.id" data-assigned-Charityname="@item.title"> حذف</a>
+
+                                    @*@if (item.isActive)
+        {
+            <a onclick="Active(@item.id)" class="btn btn-danger">غیر فعال کردن</a>
+        }
+        else
+        {
+            <a onclick="Active(@item.id)" class="btn btn-default">فعال کردن</a>
+
+        }*@
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            @*@for (int i = 1; i <= Model.PageCount; i++)
+                                {
+                                    <li class="paginate_button  @((i==Model.CurrentPage?"active":""))">
+                                        <a href="/Admin/Charitys?pageId=@i" aria-controls="example1" data-dt-idx="1" tabindex="0">@i</a>
+                                    </li>
+                                }*@
+                            <li>
+                                <pager list="@Model" asp-controller="Charity" asp-action="Index" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+
+<div class="modal fade" id="myModal" role="dialog" style="height:auto;overflow-y:visible">
+    <div class="modal-dialog modal-sm" style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">خیریه</h4>
+            </div>
+            <div class="modal-body" style="height:auto">
+
+                @*<form id="register">
+            <input id="CharityId" name="CharityId" hidden />
+            <div class="form-group" style="margin-right:5px">
+                <label for="exampleInputEmail1"> Name :</label>
+                <input display="Name" id="Name" name="Name" placeholder="Please Enter Name" class="form-control" style="width:70%" required>
+            </div>
+        </form>*@
+                <form id="register" >
+                    <div class="box-body">
+                        <input type="hidden" id="CharityId" name="CharityId" />
+                        <input type="hidden" id="password" name="password" />
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">نام خیریه</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="نام خیریه نمی تواند بیشتر از 30 کاراکتر باشد ." data-val-maxlength-max="30" id="title" name="title" aria-describedby="fullName-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="title" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">کد</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="کد نمی تواند بیشتر از 6 کاراکتر باشد ." data-val-maxlength-max="6" id="code" name="code" aria-describedby="code-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="code" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">نام کاربری</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="نام کاربری نمی تواند بیشتر از 20 کاراکتر باشد ." data-val-maxlength-max="20" id="userName" name="userName" aria-describedby="CharityName-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="userName" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">رمز عبور</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="پسورد نمی تواند بیشتر از 20 کاراکتر باشد ." data-val-maxlength-max="20" id="passwordShow" name="passwordShow" aria-describedby="password-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="passwordShow" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">شماره همراه</label>
+                                <input class="form-control text-box single-line valid" data-val="true" data-val-regex="شماره همراه را به درستی وارد نمایید" data-val-regex-pattern="^(09\d{9})$" data-val-required="شماره همراه را وارد نمایید" id="mobile" maxlength="11" name="mobile" onkeypress="return validateQty(event);" type="text" value="" aria-describedby="mobile-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="mobile" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">آدرس</label>
+
+                                <textarea class="form-control" data-val="true" data-val-maxlength="آدرس  نمی تواند بیشتر از 500 کاراکتر باشد ." data-val-maxlength-max="500" id="address" name="address"></textarea>
+                                <span class="text-danger field-validation-valid" data-valmsg-for="address" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">توضیحات</label>
+
+                                <textarea class="form-control" data-val="true" data-val-maxlength="توضیحات  نمی تواند بیشتر از 500 کاراکتر باشد ." data-val-maxlength-max="500" id="description" name="description"></textarea>
+                                <span class="text-danger field-validation-valid" data-valmsg-for="description" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                    </div>
+</form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف</button>
+                <button type="button" class="btn btn-success" onclick="Save();">ثبت</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Error">
+
+</div>
+<div id="Success">
+
+</div>
+<div id="Question">
+
+</div>
+@section scripts
+    {
+    <script>
+        $('#checkbox1').change(function () {
+            if (this.checked) {
+                var isChecked = $(this).prop("checked");
+                $('#example2 tr:has(td)').find('input[type="checkbox"]').prop('checked', isChecked);
+            }
+        });
+        $('.deleteAll').on('click', function () {
+            var array = [];
+            $('#example2 tr:has(td)').find("input[type='checkbox']:checked").each(function () {
+                array.push(parseInt($(this).val()));
+            });
+
+            swal({
+                title: ' مطمئن هستید؟',
+                text: 'آیا از حذف رکورد انتخابی اطمینان دارید؟!',
+                type: 'warning',
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonClass: 'btn btn-danger',
+                confirmButtonText: '! بله ',
+                cancelButtonClass: 'btn btn-light',
+                background: 'rgba(0, 0, 0, 0.96)'
+            }).then(function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Charity/DeleteAll",
+                    data: { ids: array },
+                    success: function (response) {
+                        if (response == "Success")
+                            window.location.href = "/Charity/Index";
+                        else
+                            window.location.href = "/Charity/Index?isSuccess=true";
+
+                    }
+                });
+            });
+        })
+        $("#export").on('click', function () {
+            var filterCharityName = $("#filterCode").val();
+            window.location.href = '/Charity/ExportToExcel?filterCode=' + filterCode;
+        });
+    </script>
+    
+    <script>
+        window.onload = Load;
+        function Load() {
+            CreateAllModals();
+            $(".openmodal").click(function () {
+                clear('register', ["input"]);
+                clear('register', ["textarea"]);
+                
+
+            });
+            $(".btn-warning").click(function () {
+                EditAjax("../Charity/CharityInfo", this.id);
+                var bodyStyle = document.body.style;
+                bodyStyle.removeProperty('padding-right');
+            });
+        }
+        function Save() {
+            if (checkvalidity('register') === 0) {
+                return;
+            }
+            else {
+                $("#myModal").modal('toggle');
+                var Parameters = [{ id: "id", htmlname: "CharityId", special: "" },
+                    { id: "password", htmlname: "password", special: "" },
+                    { id: "passwordShow", htmlname: "passwordShow", special: "" },
+                    { id: "code", htmlname: "code", special: "" },
+                    { id: "userName", htmlname: "userName", special: "" },
+                    { id: "title", htmlname: "title", special: "" },
+                    { id: "mobile", htmlname: "mobile", special: "" },
+                    { id: "description", htmlname: "description", special: "" },
+                { id: "address", htmlname: "address", special: "" }];
+                PostAjax('../Charity/Register', Parameters, "../Charity/Index");
+                //PostAjax('../Charity/Register', Parameters, "../Charity/Index?page="++"");
+            }
+        }
+        function AssignButtonClicked(elem) {
+            $('#CharityId').val($(elem).data('assigned-id'));
+            var Charityname = $(elem).data('assigned-Charityname');
+            $('#QuestionModal').find("h4").html(Charityname);
+        }
+        function Remove() {
+            var Parameters = [{ id: "id", htmlname: "CharityId", special: "" }];
+            PostAjax('../Charity/Delete', Parameters, "../Charity/Index");
+        }
+
+
+    </script>
+}
+
+

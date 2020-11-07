@@ -29,7 +29,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <a class="btn btn-default" asp-action="Create">کاربر جدید</a>
+                    <a class="btn btn-success openmodal" style="margin-right: 10px;" href="#"  data-toggle="modal" data-target="#myModal"> کاربر جدید</a>
+
                     <a class="btn btn-default deleteAll">حذف موارد انتخابی</a>
                 </div>
             </div>
@@ -53,20 +54,21 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                <div class="chkRow">
-                                    <label>
-                                        <input value="@item.id" type="checkbox">
-                                    </label>
-                                </div>
-                            </td>
-                            <td>@item.userName</td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">ویرایش</a>
-                                <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
+                            <tr>
+                                <td>
+                                    <div class="chkRow">
+                                        <label>
+                                            <input value="@item.id" type="checkbox">
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>@item.userName</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#EditModal" id="@item.id"> ویرایش</button>
 
-                                @*@if (item.isActive)
+                                    <a class="btn btn-danger" data-toggle="modal" data-target="#QuestionModal" onclick="AssignButtonClicked(this)" data-assigned-id="@item.id" data-assigned-username="@item.userName"> حذف</a>
+
+                                    @*@if (item.isActive)
         {
             <a onclick="Active(@item.id)" class="btn btn-danger">غیر فعال کردن</a>
         }
@@ -75,8 +77,8 @@
             <a onclick="Active(@item.id)" class="btn btn-default">فعال کردن</a>
 
         }*@
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         }
 
 
@@ -110,6 +112,83 @@
 
     </div>
     <!-- /.col -->
+</div>
+
+<div class="modal fade" id="myModal" role="dialog" style="height:auto;overflow-y:visible">
+    <div class="modal-dialog modal-sm" style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">کاربر</h4>
+            </div>
+            <div class="modal-body" style="height:auto">
+
+                @*<form id="register">
+            <input id="UserId" name="UserId" hidden />
+            <div class="form-group" style="margin-right:5px">
+                <label for="exampleInputEmail1"> Name :</label>
+                <input display="Name" id="Name" name="Name" placeholder="Please Enter Name" class="form-control" style="width:70%" required>
+            </div>
+        </form>*@
+
+                <form id="register" >
+                    <div class="box-body">
+                        <input type="hidden" id="UserId" name="UserId"  />
+                        <input type="hidden" id="roleId" name="roleId" />
+                        <input type="hidden" id="password" name="password" />
+                        <input type="hidden" id="token" name="token"/>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">کد</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="کد نمی تواند بیشتر از 6 کاراکتر باشد ." data-val-maxlength-max="6" id="code" name="code" aria-describedby="code-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="code" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">رمز عبور</label>
+                                
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="پسورد نمی تواند بیشتر از 20 کاراکتر باشد ." data-val-maxlength-max="20" id="passwordShow" name="passwordShow" aria-describedby="passwordShow-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="passwordShow" data-valmsg-replace="true"></span>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">نام کاربری</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="نام کاربری نمی تواند بیشتر از 100 کاراکتر باشد ." data-val-maxlength-max="100" id="userName" name="userName"  aria-describedby="userName-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="userName" data-valmsg-replace="true"></span>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">نام و نام خانوادگی</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="نام و نام خانوادگی نمی تواند بیشتر از 100 کاراکتر باشد ." data-val-maxlength-max="100" id="fullName" name="fullName"  aria-describedby="fullName-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="fullName" data-valmsg-replace="true"></span>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف</button>
+                <button type="button" class="btn btn-success" onclick="Save();">ثبت</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Error">
+
+</div>
+<div id="Success">
+
+</div>
+<div id="Question">
+
 </div>
 @section scripts
     {
@@ -184,6 +263,49 @@
                 }
             })
         }
+
+    </script>
+    <script>
+        window.onload = Load;
+        function Load() {
+            CreateAllModals();
+            $(".openmodal").click(function () {
+                clear('register', ["input"]);
+
+            });
+            $(".btn-warning").click(function () {
+                EditAjax("../User/UserInfo", this.id);
+                var bodyStyle = document.body.style;
+                bodyStyle.removeProperty('padding-right');
+            });
+        }
+        function Save() {
+            if (checkvalidity('register') === 0) {
+                return;
+            }
+            else {
+                $("#myModal").modal('toggle');
+                var Parameters = [{ id: "id", htmlname: "UserId", special: "" },
+                    { id: "roleId", htmlname: "roleId", special: "" },
+                    { id: "password", htmlname: "password", special: "" },
+                    { id: "token", htmlname: "token", special: "" },
+                    { id: "code", htmlname: "code", special: "" },
+                    { id: "passwordShow", htmlname: "passwordShow", special: "" },
+                    { id: "userName", htmlname: "userName", special: "" },
+                    { id: "fullName", htmlname: "fullName", special: "" }];
+                PostAjax('../User/Register', Parameters, "../User/Index");
+            }
+        }
+        function AssignButtonClicked(elem) {
+            $('#UserId').val($(elem).data('assigned-id'));
+            var username = $(elem).data('assigned-username');
+            $('#QuestionModal').find("h4").html(username);
+        }
+        function Remove() {
+            var Parameters = [{ id: "id", htmlname: "UserId", special: "" }];
+            PostAjax('../User/Delete', Parameters, "../User/Index");
+        }
+
 
     </script>
 }

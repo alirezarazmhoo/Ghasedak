@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +21,9 @@ namespace Ghasedak.Models
         [Display(Name = "آدرس ")]
         [MaxLength(500, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string address { get; set; }
+         [ForeignKey("Charity")]
+        public int CharityId { get; set; }
+        public virtual Charity Charity { get; set; }
         
 
     }

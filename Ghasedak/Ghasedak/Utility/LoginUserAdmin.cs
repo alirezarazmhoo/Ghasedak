@@ -20,7 +20,7 @@ namespace Ghasedak.Utility
         public string Captcha { get; set; }
          [Display(Name = "مرا به خاطر بسپار")]
         public bool RememberMe { get; set; }
-        public int? majorId { get; set; }
+        public int? charityId { get; set; }
 
     }
 }

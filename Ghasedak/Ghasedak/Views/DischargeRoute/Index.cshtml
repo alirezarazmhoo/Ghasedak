@@ -42,91 +42,91 @@
                         فایل آپلودی به ترتیب از راست به چپ دارای فیلدهای Code از نوع عدد،Address از نوع حروف،DischargeDate از نوع عدد
                     </div>
                 </div>
-                </div>
+            </div>
             <div class="row">
                 <div class="box-body">
 
                     <div class="col-md-12">
                         <a class="btn btn-default" asp-action="Create">مسیر جدید</a>
                         <a class="btn btn-default deleteAll">حذف موارد انتخابی</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body table-responsive">
-                    <table id="example2" class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" id="checkbox1">
-                                        </label>
-                                    </div>
-                                </th>
-                                <th>کد مسیر</th>
-                                <th>آدرس مسیر</th>
-
-                                <th>امکانات</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="chkRow">
-                                            <label>
-                                                <input value="@item.id" type="checkbox">
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>@item.code</td>
-                                    @if (!String.IsNullOrEmpty(item.address))
-                                    {
-                                        if (@item.address.Length > 10)
-                                        {
-                                            <td>@item.address.Substring(0, 10)</td>
-                                        }
-                                        else
-                                        {
-                                            <td>@item.address</td>
-                                        }
-                                    }
-                                    <td>
-                                        <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">ویرایش</a>
-
-                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
-
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                        <tfoot>
-                        </tfoot>
-                    </table>
-                </div>
-                <!-- /.box-body -->
-                <div class="row">
-                    <div class="col-sm-5">
-                    </div>
-                    <div class="col-sm-7">
-                        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
-                            <ul class="pagination">
-                                @*@for (int i = 1; i <= Model.PageCount; i++)
-                        {
-                            <li class="paginate_button  @((i==Model.CurrentPage?"active":""))">
-                                <a href="/Admin/Users?pageId=@i" aria-controls="example1" data-dt-idx="1" tabindex="0">@i</a>
-                            </li>
-                        }*@
-                                <li>
-                                    <pager list="@Model" asp-controller="DischargeRoute" asp-action="Index" />
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="checkbox1">
+                                    </label>
+                                </div>
+                            </th>
+                            <th>کد مسیر</th>
+                            <th>آدرس مسیر</th>
+
+                            <th>امکانات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="chkRow">
+                                        <label>
+                                            <input value="@item.id" type="checkbox">
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>@item.code</td>
+                                @if (!String.IsNullOrEmpty(item.address))
+                                {
+                                    if (@item.address.Length > 10)
+                                    {
+                                        <td>@item.address.Substring(0, 10)</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.address</td>
+                                    }
+                                }
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">ویرایش</a>
+
+                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            @*@for (int i = 1; i <= Model.PageCount; i++)
+                                {
+                                    <li class="paginate_button  @((i==Model.CurrentPage?"active":""))">
+                                        <a href="/Admin/Users?pageId=@i" aria-controls="example1" data-dt-idx="1" tabindex="0">@i</a>
+                                    </li>
+                                }*@
+                            <li>
+                                <pager list="@Model" asp-controller="DischargeRoute" asp-action="Index" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <!-- /.col -->
@@ -169,7 +169,7 @@
                             window.location.href = "/DischargeRoute/Index";
                     },
                     error: function (e) {
-                        
+
                     }
                 });
             })
@@ -232,7 +232,45 @@
             })
         })
     </script>
+    <script>
+        window.onload = Load;
+        function Load() {
+            CreateAllModals();
+            $(".openmodal").click(function () {
+                clear('register', ["input"]);
 
+            });
+            $(".btn-warning").click(function () {
+                EditAjax("../DischargeRoute/DischargeRouteInfo", this.id);
+                var bodyStyle = document.body.style;
+                bodyStyle.removeProperty('padding-right');
+            });
+        }
+        function Save() {
+            if (checkvalidity('register') === 0) {
+                return;
+            }
+            else {
+                $("#myModal").modal('toggle');
+                var Parameters = [{ id: "id", htmlname: "DischargeRouteId", special: "" },
+                    { id: "code", htmlname: "code", special: "" },
+                    { id: "day", htmlname: "day", special: "" },
+                    { id: "address", htmlname: "address", special: "" }];
+                PostAjax('../DischargeRoute/Register', Parameters, "../DischargeRoute/Index");
+            }
+        }
+        function AssignButtonClicked(elem) {
+            $('#DischargeRouteId').val($(elem).data('assigned-id'));
+            var code = $(elem).data('assigned-code');
+            $('#QuestionModal').find("h4").html(code);
+        }
+        function Remove() {
+            var Parameters = [{ id: "id", htmlname: "DischargeRouteId", special: "" }];
+            PostAjax('../DischargeRoute/Delete', Parameters, "../DischargeRoute/Index");
+        }
+
+
+    </script>
 
 }
 

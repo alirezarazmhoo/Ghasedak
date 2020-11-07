@@ -74,6 +74,7 @@ namespace Ghasedak
             services.AddTransient<IUser, userService>();           
             services.AddTransient<IDischargeRoute, DischargeRouteService>();
             services.AddTransient<IBox, BoxService>();
+            services.AddTransient<ICharity, charityService>();
 
             #endregion
 

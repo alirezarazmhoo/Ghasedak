@@ -22,6 +22,10 @@ namespace Ghasedak.Controllers
         {
             return View();
         }
+        public IActionResult IndexCharity()
+        {
+            return View();
+        }
 
         public IActionResult About()
         {

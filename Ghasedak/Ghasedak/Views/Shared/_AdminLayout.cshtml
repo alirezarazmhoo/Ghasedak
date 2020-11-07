@@ -86,7 +86,10 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">منو</li>
-                    <li class=" treeview">
+                    <li>
+                        <a href="/Charity/Index"><i class="fa fa-fw fa-cubes"></i> خیریه ها</a>
+                    </li>
+                    @*<li class=" treeview">
                         <a href="#">
                             <i class="fa fa-dashboard"></i> <span>مدیریت کاربران</span>
                             <span class="pull-left-container">
@@ -95,11 +98,11 @@
                         </a>
                         <ul class="treeview-menu">
                             <li class="active"><a href="/User/Index"><i class="fa fa-circle-o"></i> کاربران</a></li>
-                           
+
                         </ul>
-                    </li>
-                    
-                    
+                    </li>*@
+
+
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-fw fa-newspaper-o"></i> <span>مدیریت اطلاعات پایه</span>
@@ -108,32 +111,32 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="/DischargeRoute/Index"><i class="fa fa-fw fa-align-left"></i> مسیر ها</a></li>
-                            <li><a href="/Box/Index"><i class="fa fa-fw fa-align-left"></i> صندوقات</a></li>
+                            @*<li><a href="/DischargeRoute/Index"><i class="fa fa-fw fa-align-left"></i> مسیر ها</a></li>
+                            <li><a href="/Box/Index"><i class="fa fa-fw fa-align-left"></i> صندوقات</a></li>*@
                             <li><a href="/AboutUs/Index"><i class="fa fa-circle-o"></i> درباره ما</a></li>
                             <li><a href="/CntactUs/Index"><i class="fa fa-circle-o"></i> تماس با ما</a></li>
                             <li><a href="/Rule/Index"><i class="fa fa-circle-o"></i> قوانین و مقررات</a></li>
                             <li><a href="/Stir/Index"><i class="fa fa-circle-o"></i> نحوه فعالیت</a></li>
                             <li><a href="/Setting/Index"><i class="fa fa-circle-o"></i> تنظیمات</a></li>
-                           
+
                         </ul>
-                        
+
                     </li>
                     <li>
                         <a href="/AndroidVersion/Index"><i class="fa fa-fw fa-file-text-o"></i> ورژن اندروید</a>
                     </li>
-                    
-                    <li>
+
+                    @*<li>
                         <a href="/BoxIncome/Index"><i class="fa fa-fw fa-cubes"></i> درآمد ها</a>
-                    </li>
-                    
+                    </li>*@
+
                     <li>
                         <a href="/Sliders/Index"><i class="fa fa-fw fa-file-image-o"></i> اسلایدر</a>
                     </li>
-                   
+
 
                     <li>
-                        <a href="/Logout">
+                        <a href="../User/Logout">
                             <i class="fa fa-fw fa-arrow-right"></i> <span>خروج</span>
                         </a>
                     </li>
@@ -213,7 +216,7 @@
     <script src="/AdminContent/plugins/timepicker/bootstrap-timepicker.min.js"></script>
     <script src="/AdminContent/dist/js/persian-date-0.1.8.min.js"></script>
     <script src="/AdminContent/dist/js/persian-datepicker-0.4.5.min.js"></script>
-
+    <script src="~/scripts/Common.js"></script>
     <script src="/AdminContent/plugins/iCheck/icheck.min.js"></script>
     @*<script>
             $(document).ready(function () {

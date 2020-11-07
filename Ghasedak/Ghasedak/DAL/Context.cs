@@ -25,6 +25,8 @@ namespace Ghasedak.DAL
         public DbSet<DischargeRoute> DischargeRoutes { get; set; }
         public DbSet<Box> Boxs { get; set; }
         public DbSet<AndroidVersion> AndroidVersions { get; set; }
+        public DbSet<Charity> Charitys { get; set; }
+        public DbSet<Oprator> Oprators { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
              

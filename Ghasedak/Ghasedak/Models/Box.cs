@@ -35,5 +35,8 @@ namespace Ghasedak.Models
          [Display(Name = "آدرس ")]
         [MaxLength(500, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string address { get; set; }
+        
+        public int CharityId { get; set; }
+       
     }
 }
