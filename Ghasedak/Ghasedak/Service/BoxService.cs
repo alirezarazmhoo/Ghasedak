@@ -17,9 +17,9 @@ namespace Ghasedak.Service
             _context = context;
         }
 
-        public object GetBox()
+        public object GetBox(int opratorId)
         {
-            IQueryable<Box> result = _context.Boxs;
+            IQueryable<Box> result = _context.Boxs.Where(x=>x.opratorId==opratorId);
             List<Box> res = result.OrderBy(u => u.id).ToList();
             if (res.Count() == 0)
                 return new { Data = res, Count = res.Count(), IsError = true, Message = "صندوقی ثبت نشده است" };
@@ -34,22 +34,11 @@ namespace Ghasedak.Service
             return box.id;
         }
 
-        //public object GetCities()
-        //{
-        //    IQueryable<DischargeRoute> result = _context.Cities;
-        //    List<DischargeRoute> res = result.OrderBy(u => u.id).ToList();
-        //    return new { data = res, totalCount = result.Count() };
-        //}
-        // public object GetProvinces(int cityId)
-        //{
-        //    IQueryable<Box> result = _context.Provinces;
-        //    object res = result.Where(x=>x.cityId==cityId).OrderBy(u => u.id).Select( x=>new {x.id,x.name }).ToList();
-        //    return new { data = res, totalCount = result.Count() };
-        //}
+        
 
-        public PagedList<Box> GetBox(int pageId = 1, string filternumber = "")
+        public PagedList<Box> GetBox(int charityId,int pageId = 1, string filternumber = "")
         {
-            IQueryable<Box> result = _context.Boxs.OrderByDescending(x => x.id);
+            IQueryable<Box> result = _context.Boxs.Where(x=>x.charityId==charityId).OrderByDescending(x => x.id);
             if (!string.IsNullOrEmpty(filternumber))
             {
                 result = result.Where(x => x.number.Contains(filternumber));

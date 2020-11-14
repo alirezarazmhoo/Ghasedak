@@ -263,7 +263,7 @@
             $(".openmodal").click(function () {
                 clear('register', ["input"]);
                 clear('register', ["textarea"]);
-                
+
 
             });
             $(".btn-warning").click(function () {
@@ -287,8 +287,7 @@
                     { id: "mobile", htmlname: "mobile", special: "" },
                     { id: "description", htmlname: "description", special: "" },
                 { id: "address", htmlname: "address", special: "" }];
-                PostAjax('../Charity/Register', Parameters, "../Charity/Index");
-                //PostAjax('../Charity/Register', Parameters, "../Charity/Index?page="++"");
+                PostAjax('../Charity/Register', Parameters, "../Charity/Index?page="+@Model.PageNumber+"");
             }
         }
         function AssignButtonClicked(elem) {

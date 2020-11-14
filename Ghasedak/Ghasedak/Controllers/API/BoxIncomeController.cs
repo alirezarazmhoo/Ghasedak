@@ -34,7 +34,10 @@ namespace Ghasedak.Controllers.API
         [HttpGet]
         public object GetBoxIncome()
         {
-            IQueryable<BoxIncome> result = _context.BoxIncomes;
+            string Token = HttpContext.Request?.Headers["token"];
+            int opratorId = _context.Oprators.FirstOrDefault(x => x.token == Token).id;
+            
+            IQueryable<BoxIncome> result = _context.BoxIncomes.Where(x=>x.opratorId==opratorId);
             List<BoxIncome> res = result.OrderBy(u => u.id).ToList();
             //var BoxIncomes = _context.BoxIncomes.ToList();
             //List<int> BoxIncomeIds = new List<int>();
@@ -47,10 +50,9 @@ namespace Ghasedak.Controllers.API
             //    return new { Data = res, Count = res.Count(), IsError = true, Message = "صندوقی ثبت نشده است" };
             //else
             //    return new { Data = res.Select(x => new { x.id, x.lon, x.lat, x.status, x.boxId, x.registerDate }).GroupBy(x => x.boxId).Select(x => x.Last()), box, Count = res.GroupBy(x => x.boxId).Count(), IsError = false, Message = "" };
-
             
             if (res.Count() == 0)
-                return new { Data = res, Count = res.Count(), IsError = true, Message = "صندوقی ثبت نشده است" };
+                return new { Data = res, Count = res.Count(), IsError = true, Message = "درآمد ثبت نشده است" };
             else
                return new { Data = res.Select(x => new { x.id, x.lon, x.lat, x.status, x.boxId, x.registerDate }).GroupBy(x => x.boxId).Select(x => x.Last()), Count = res.Count(), IsError = false, Message = "" };
 
@@ -65,8 +67,8 @@ namespace Ghasedak.Controllers.API
                 //return BadRequest(ModelState);
             }
             string Token = HttpContext.Request?.Headers["Token"];
-            var user = _context.Users.Where(p => p.token == Token).FirstOrDefault();
-            if (user == null)
+            var oprator = _context.Oprators.Where(p => p.token == Token).FirstOrDefault();
+            if (oprator == null)
                 return new { IsError = true, message = "چنین کاربری وجود ندارد." };
           
             using ( var trans = _context.Database.BeginTransaction())
@@ -80,7 +82,8 @@ namespace Ghasedak.Controllers.API
                         BoxIncome.lon = item.lon;
                         BoxIncome.price = item.price;
                         BoxIncome.status = item.status;
-                        BoxIncome.userId = user.id;
+                        BoxIncome.opratorId = oprator.id;
+                        BoxIncome.charityId = item.charityId;
                         BoxIncome.registerDate = item.assignmentDate;
                         var box = _context.Boxs.FirstOrDefault(x => x.number == item.number);
                         if (box == null)

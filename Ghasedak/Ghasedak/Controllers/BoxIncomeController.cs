@@ -33,7 +33,9 @@ namespace Ghasedak.Controllers
         // GET: Products
         public IActionResult Index(int page = 1, bool isSuccess = false)
         {
-            var model = _BoxIncome.GetBoxIncome(page);
+              int charityId = Convert.ToInt32(User.Identity.Name);
+
+            var model = _BoxIncome.GetBoxIncome(charityId,page);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید ";
             return View(model);
@@ -46,7 +48,7 @@ namespace Ghasedak.Controllers
                 return NotFound();
             }
 
-            var BoxIncome = _context.BoxIncomes.Include(x => x.user).Include(x => x.box).FirstOrDefault(x => x.id == id);
+            var BoxIncome = _context.BoxIncomes.Include(x => x.oprator).Include(x => x.box).FirstOrDefault(x => x.id == id);
             ViewData["BoxId"] = new SelectList(_context.Boxs, "id", "number", BoxIncome.boxId);
 
 
@@ -88,9 +90,31 @@ namespace Ghasedak.Controllers
             return View(BoxIncome);
         }
 
+         [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var BoxIncome = _context.BoxIncomes.FirstOrDefault(x => x.id == id);
+                _context.BoxIncomes.Remove(BoxIncome);
+                _context.SaveChanges();
+                //return RedirectToAction(nameof(Index));
+                return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
+
+
+            }
+            catch (Exception ex)
+            {
+                //return RedirectToAction("Index", new { @isSuccess = true });
+                return Json(new { success = false, responseText = "خطا در حذف رکورد !" });
+
+            }
+        }
+
+
         public async Task<IActionResult> ExportToExcel()
         {
-            IQueryable<BoxIncome> result = _context.BoxIncomes.Include(x => x.user).Include(x => x.box).OrderByDescending(x => x.id);
+            IQueryable<BoxIncome> result = _context.BoxIncomes.Include(x => x.oprator).Include(x => x.box).OrderByDescending(x => x.id);
 
 
             string sWebRootFolder = environment.WebRootPath;
@@ -127,7 +151,7 @@ namespace Ghasedak.Controllers
                     //row.CreateCell(4).SetCellValue(item.box.address);
                     //row.CreateCell(0).SetCellValue(count);
                     row.CreateCell(0).SetCellValue(item.box.number);
-                    row.CreateCell(1).SetCellValue(item.user.code);
+                    row.CreateCell(1).SetCellValue(item.oprator.code);
                     row.CreateCell(2).SetCellValue(Convert.ToInt64(item.price));
                     row.CreateCell(3).SetCellValue(((int)item.status).ToString());
                     count++;
@@ -160,26 +184,26 @@ namespace Ghasedak.Controllers
         }
 
         // POST: Sliders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            try
-            {
-                var BoxIncome = await _context.BoxIncomes.FindAsync(id);
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    try
+        //    {
+        //        var BoxIncome = await _context.BoxIncomes.FindAsync(id);
 
 
 
-                _context.BoxIncomes.Remove(BoxIncome);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Index", new { @isSuccess = true });
+        //        _context.BoxIncomes.Remove(BoxIncome);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return RedirectToAction("Index", new { @isSuccess = true });
 
-            }
-            return RedirectToAction(nameof(Index));
-        }
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
         [HttpPost, ActionName("DeleteAll")]
 
         public async Task<IActionResult> DeleteAll(int[] ids)
@@ -257,10 +281,10 @@ namespace Ghasedak.Controllers
                                 boxIncome.lat = 0;
                                 var price = row.GetCell(2).NumericCellValue;
                                 boxIncome.price = Convert.ToInt64(price);
-                                var user = _context.Users.Where(p => p.code == row.GetCell(1).ToString()).FirstOrDefault();
-                                if (user == null)
+                                var oprator = _context.Oprators.Where(p => p.code == row.GetCell(1).ToString()).FirstOrDefault();
+                                if (oprator == null)
                                     continue;
-                                boxIncome.userId = user.id;
+                                boxIncome.opratorId = oprator.id;
                                 var status = row.GetCell(3).NumericCellValue;
                                 boxIncome.status = (EnumStatus)status;
                                 boxIncome.registerDate = PersianCalendarDate.PersianCalendarResult(DateTime.Now);

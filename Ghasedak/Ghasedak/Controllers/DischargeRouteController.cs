@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
+using Ghasedak.Models.ViewModel;
 using Ghasedak.Service.Interface;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,7 +34,9 @@ namespace Ghasedak.Controllers
         [HttpGet]
         public IActionResult Index(int page = 1, string filtercode = "", bool isSuccess = false)
         {
-            var model = _DischargeRoute.GetDischargeRoute(page, filtercode);
+              int charityId = Convert.ToInt32(User.Identity.Name);
+
+            var model = _DischargeRoute.GetDischargeRoute(charityId,page, filtercode);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید چون صندوق یا درآمد برای این رکورد ثبت شده است";
             return View(model);
@@ -42,7 +45,79 @@ namespace Ghasedak.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public async Task<JsonResult> DischargeRouteInfo(int ItemId)
+        {
+            try
+            {
+                var dischargeRoute = await _context.DischargeRoutes.FindAsync(ItemId);
 
+                if (dischargeRoute == null)
+                {
+                    return Json(new { success = false, responseText = "Requset Faild !" });
+                }
+                List<EditViewModels> edit = new List<EditViewModels>();
+                edit.Add(new EditViewModels() { key = "code", value = dischargeRoute.code });
+                edit.Add(new EditViewModels() { key = "address", value = dischargeRoute.address });
+                edit.Add(new EditViewModels() { key = "charityId", value = dischargeRoute.charityId.ToString() });
+                edit.Add(new EditViewModels() { key = "day", value = dischargeRoute.day.ToString() });
+                edit.Add(new EditViewModels() { key = "DischargeRouteId", value = dischargeRoute.id.ToString() });
+
+
+                return Json(new { success = true, listItem = edit.ToList() });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { success = false, responseText = "Requset Faild !" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(int? id, DischargeRoute dischargeRoute)
+        {
+            try
+            {
+                ModelState.Remove("id");
+                ModelState.Remove("charityId");
+                if (ModelState.IsValid)
+                {
+                    int charityId = Convert.ToInt32(User.Identity.Name);
+                    dischargeRoute.charityId = charityId;
+                    if (id == null)
+                    {
+                        if (_context.DischargeRoutes.Any(x => x.code == dischargeRoute.code && x.charityId == charityId))
+                        {
+                            return Json(new { success = false, responseText = "کد مسیر تکراری است !" });
+
+                        }
+
+                        _context.DischargeRoutes.Add(dischargeRoute);
+                    }
+                    else
+                    {
+                        if (_context.DischargeRoutes.Any(x => x.code == dischargeRoute.code && x.charityId == charityId && x.id != id))
+                        {
+                            return Json(new { success = false, responseText = "کد مسیر تکراری است !" });
+
+                        }
+                        _context.DischargeRoutes.Update(dischargeRoute);
+                    }
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
+                }
+                else
+                {
+                    return Json(new { success = false, responseText = "لطفا تمام موارد را وارد نمایید !" });
+                }
+
+            }
+            catch (Exception)
+            {
+
+                return Json(new { success = false, responseText = "Requset Faild !" });
+            }
+        }
         [HttpPost]
         // [ValidateAntiForgeryToken]
         public IActionResult Create(DischargeRoute DischargeRoute)
@@ -144,28 +219,47 @@ namespace Ghasedak.Controllers
 
             return View(city);
         }
-
-        // POST: Sliders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+        public IActionResult Delete(int id)
         {
             try
             {
-                var DischargeRoute = await _context.DischargeRoutes.FindAsync(id);
-
-
-
+                var DischargeRoute = _context.DischargeRoutes.FirstOrDefault(x => x.id == id);
                 _context.DischargeRoutes.Remove(DischargeRoute);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
+                //return RedirectToAction(nameof(Index));
+                return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
+
+
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Index", new { @isSuccess = true });
+                //return RedirectToAction("Index", new { @isSuccess = true });
+                return Json(new { success = false, responseText = "شما قادر به حذف نمی باشید چون صندوق یا درآمد برای این رکورد ثبت شده است !" });
 
             }
-            return RedirectToAction(nameof(Index));
         }
+        // POST: Sliders/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    try
+        //    {
+        //        var DischargeRoute = await _context.DischargeRoutes.FindAsync(id);
+
+
+
+        //        _context.DischargeRoutes.Remove(DischargeRoute);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return RedirectToAction("Index", new { @isSuccess = true });
+
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
         [HttpPost, ActionName("DeleteAll")]
 
         public async Task<IActionResult> DeleteAll(int[] ids)
@@ -280,14 +374,14 @@ namespace Ghasedak.Controllers
                         {
                             try
                             {
-                            IRow row = sheet.GetRow(i);
-                            if (row == null) continue;
-                            if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
-                            var dischargeRoute = new DischargeRoute();
+                                IRow row = sheet.GetRow(i);
+                                if (row == null) continue;
+                                if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
+                                var dischargeRoute = new DischargeRoute();
                                 if (_context.DischargeRoutes.Any(x => x.code == row.GetCell(0).ToString()))
                                     continue;
-                            dischargeRoute.code = row.GetCell(0).ToString();
-                            dischargeRoute.address = row.GetCell(1).ToString();
+                                dischargeRoute.code = row.GetCell(0).ToString();
+                                dischargeRoute.address = row.GetCell(1).ToString();
                                 var day = row.GetCell(2).NumericCellValue;
                                 dischargeRoute.day = Convert.ToInt32(day);
                                 _context.DischargeRoutes.Add(dischargeRoute);

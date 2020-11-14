@@ -1,0 +1,293 @@
+﻿@model PagedList.Core.IPagedList<Ghasedak.Models.Oprator>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">متصدیان</h3>
+                <br />
+                <p style="color:red">@ViewBag.success</p>
+            </div>
+            <div class="row">
+                <form>
+                    <div class="box-body">
+                        <div class="col-md-4 form-group">
+                            <input type="text" id="filteruserName" name="filteruserName" class="form-control" placeholder="نام کاربری" />
+                        </div>
+                        <div class="col-md-1 form-group">
+                            <button type="submit" class="btn btn-default">جستجو</button>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <a href="/User/Index" class="btn btn-default">مشاهده همه</a>
+                        </div>
+                        <div class="col-md-2 form-group">
+
+                            <div class="btn btn-default" id="export">خروجی اکسل</div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-success openmodal" style="margin-right: 10px;" href="#"  data-toggle="modal" data-target="#myModal"> متصدی جدید</a>
+
+                    <a class="btn btn-default deleteAll">حذف موارد انتخابی</a>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="checkbox1">
+                                    </label>
+                                </div>
+                            </th>
+                            <th>نام کاربری</th>
+                            @*<th>نمایش</th>*@
+                            <th>امکانات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="chkRow">
+                                        <label>
+                                            <input value="@item.id" type="checkbox">
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>@item.userName</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#EditModal" id="@item.id"> ویرایش</button>
+
+                                    <a class="btn btn-danger" data-toggle="modal" data-target="#QuestionModal" onclick="AssignButtonClicked(this)" data-assigned-id="@item.id" data-assigned-username="@item.userName"> حذف</a>
+
+                                    @*@if (item.isActive)
+        {
+            <a onclick="Active(@item.id)" class="btn btn-danger">غیر فعال کردن</a>
+        }
+        else
+        {
+            <a onclick="Active(@item.id)" class="btn btn-default">فعال کردن</a>
+
+        }*@
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            @*@for (int i = 1; i <= Model.PageCount; i++)
+                                {
+                                    <li class="paginate_button  @((i==Model.CurrentPage?"active":""))">
+                                        <a href="/Admin/Users?pageId=@i" aria-controls="example1" data-dt-idx="1" tabindex="0">@i</a>
+                                    </li>
+                                }*@
+                            <li>
+                                <pager list="@Model" asp-controller="User" asp-action="Index" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+
+<div class="modal fade" id="myModal" role="dialog" style="height:auto;overflow-y:visible">
+    <div class="modal-dialog modal-sm" style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">متصدی</h4>
+            </div>
+            <div class="modal-body" style="height:auto">
+
+                @*<form id="register">
+            <input id="UserId" name="UserId" hidden />
+            <div class="form-group" style="margin-right:5px">
+                <label for="exampleInputEmail1"> Name :</label>
+                <input display="Name" id="Name" name="Name" placeholder="Please Enter Name" class="form-control" style="width:70%" required>
+            </div>
+        </form>*@
+
+                <form id="register" >
+                    <div class="box-body">
+                        <input type="hidden" id="OpratorId" name="OpratorId" />
+                        <input type="hidden" id="password" name="password" />
+                        <input type="hidden" id="token" name="token" />
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">نام و نام خانوادگی</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="نام و نام خانوادگی نمی تواند بیشتر از 100 کاراکتر باشد ." data-val-maxlength-max="100" id="fullName" name="fullName" aria-describedby="fullName-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="fullName" data-valmsg-replace="true"></span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">شماره همراه</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="شماره همراه نمی تواند بیشتر از 11 کاراکتر باشد ." data-val-maxlength-max="11" data-val-minlengt-min="11" id="mobile" name="mobile" aria-describedby="mobile-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="mobile" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">کد</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="کد نمی تواند بیشتر از 6 کاراکتر باشد ." data-val-maxlength-max="6" id="code" name="code" aria-describedby="code-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="code" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">رمز عبور</label>
+
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="پسورد نمی تواند بیشتر از 20 کاراکتر باشد ." data-val-maxlength-max="20" id="passwordShow" name="passwordShow" aria-describedby="passwordShow-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="passwordShow" data-valmsg-replace="true"></span>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">نام کاربری</label>
+                                <input class="form-control valid" type="text" data-val="true" data-val-maxlength="نام کاربری نمی تواند بیشتر از 100 کاراکتر باشد ." data-val-maxlength-max="100" id="userName" name="userName" aria-describedby="userName-error" aria-invalid="false">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="userName" data-valmsg-replace="true"></span>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف</button>
+                <button type="button" class="btn btn-success" onclick="Save();">ثبت</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Error">
+
+</div>
+<div id="Success">
+
+</div>
+<div id="Question">
+
+</div>
+@section scripts
+    {
+    <script>
+        $('#checkbox1').change(function () {
+            if (this.checked) {
+                var isChecked = $(this).prop("checked");
+                $('#example2 tr:has(td)').find('input[type="checkbox"]').prop('checked', isChecked);
+            }
+        });
+        $('.deleteAll').on('click', function () {
+            var array = [];
+            $('#example2 tr:has(td)').find("input[type='checkbox']:checked").each(function () {
+                array.push(parseInt($(this).val()));
+            });
+
+            swal({
+                title: ' مطمئن هستید؟',
+                text: 'آیا از حذف رکورد انتخابی اطمینان دارید؟!',
+                type: 'warning',
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonClass: 'btn btn-danger',
+                confirmButtonText: '! بله ',
+                cancelButtonClass: 'btn btn-light',
+                background: 'rgba(0, 0, 0, 0.96)'
+            }).then(function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/User/DeleteAll",
+                    data: { ids: array },
+                    success: function (response) {
+                        if (response == "Success")
+                            window.location.href = "/Oprator/Index";
+                        else
+                            window.location.href = "/Oprator/Index?isSuccess=true";
+
+                    }
+                });
+            });
+        })
+        $("#export").on('click', function () {
+            var filteruserName = $("#filteruserName").val();
+            window.location.href = '/Oprator/ExportToExcel?filteruserName=' + filteruserName;
+        });
+    </script>
+    
+    <script>
+        window.onload = Load;
+        function Load() {
+            CreateAllModals();
+            $(".openmodal").click(function () {
+                clear('register', ["input"]);
+
+            });
+            $(".btn-warning").click(function () {
+                EditAjax("../Oprator/OpratorInfo", this.id);
+                var bodyStyle = document.body.style;
+                bodyStyle.removeProperty('padding-right');
+            });
+        }
+        function Save() {
+            if (checkvalidity('register') === 0) {
+                return;
+            }
+            else {
+                $("#myModal").modal('toggle');
+                var Parameters = [{ id: "id", htmlname: "OpratorId", special: "" },
+                    { id: "password", htmlname: "password", special: "" },
+                    { id: "token", htmlname: "token", special: "" },
+                    { id: "code", htmlname: "code", special: "" },
+                    { id: "mobile", htmlname: "mobile", special: "" },
+                    { id: "passwordShow", htmlname: "passwordShow", special: "" },
+                    { id: "userName", htmlname: "userName", special: "" },
+                    { id: "fullName", htmlname: "fullName", special: "" }];
+                PostAjax('../Oprator/Register', Parameters, "../Oprator/Index?page="+@Model.PageNumber+"");
+            }
+        }
+        function AssignButtonClicked(elem) {
+            $('#OpratorId').val($(elem).data('assigned-id'));
+            var username = $(elem).data('assigned-username');
+            $('#QuestionModal').find("h4").html(username);
+        }
+        function Remove() {
+            var Parameters = [{ id: "id", htmlname: "OpratorId", special: "" }];
+            PostAjax('../Oprator/Delete', Parameters, "../Oprator/Index");
+        }
+
+
+    </script>
+}
+
+

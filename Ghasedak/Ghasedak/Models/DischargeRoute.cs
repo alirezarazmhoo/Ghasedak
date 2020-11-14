@@ -22,9 +22,10 @@ namespace Ghasedak.Models
         [MaxLength(500, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string address { get; set; }
          [ForeignKey("Charity")]
-        public int CharityId { get; set; }
+        public int charityId { get; set; }
         public virtual Charity Charity { get; set; }
         
+        public int? opratorId { get; set; }
 
     }
 }

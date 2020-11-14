@@ -19,6 +19,7 @@ namespace Ghasedak.ViewModel
         public double lon { get; set; }
         public double lat { get; set; }
         public int dischargeRouteId { get; set; }
-
+        public int charityId { get; set; }
+        public int opratorId { get; set; }
     }
 }

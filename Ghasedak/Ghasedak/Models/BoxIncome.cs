@@ -21,9 +21,9 @@ namespace Ghasedak.Models
         public long? price { get; set; }
 
         public EnumStatus status { get; set; }
-        [ForeignKey("user")]
-        public int userId { get; set; }
-        public virtual User user { get; set; }
+        [ForeignKey("oprator")]
+        public int opratorId { get; set; }
+        public virtual Oprator oprator { get; set; }
 
         public double lon { get; set; }
         public double lat { get; set; }
@@ -36,8 +36,8 @@ namespace Ghasedak.Models
         [MaxLength(30, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string registerDate { get; set; }
         
-        public int CharityId { get; set; }
-       
+        public int charityId { get; set; }
+        
 
     }
 }

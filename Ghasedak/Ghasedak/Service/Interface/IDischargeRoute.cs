@@ -9,8 +9,8 @@ namespace Ghasedak.Service.Interface
 {
     public interface IDischargeRoute
     {
-        object GetDischargeRoute();
-        PagedList<DischargeRoute> GetDischargeRoute(int pageId = 1, string filtercode = "");
+        object GetDischargeRoute(int opratorId);
+        PagedList<DischargeRoute> GetDischargeRoute(int charityId,int pageId = 1, string filtercode = "");
         //object GetProvinces(int cityId);
         
     }

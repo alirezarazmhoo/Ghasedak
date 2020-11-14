@@ -27,6 +27,14 @@ namespace Ghasedak.DAL
         public DbSet<AndroidVersion> AndroidVersions { get; set; }
         public DbSet<Charity> Charitys { get; set; }
         public DbSet<Oprator> Oprators { get; set; }
+        public DbSet<FinancialAid> FinancialAids { get; set; }
+        public DbSet<FinancialServiceType> FinancialServiceTypes { get; set; }
+        public DbSet<FlowerCrown> FlowerCrowns { get; set; }
+        public DbSet<FlowerCrownType> FlowerCrownTypes { get; set; }
+        public DbSet<Donator> Donators { get; set; }
+        public DbSet<DeceasedName> DeceasedNames { get; set; }
+        public DbSet<Sponsor> Sponsors { get; set; }
+        public DbSet<SponsorPay> SponsorPays { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
              
@@ -40,6 +48,9 @@ namespace Ghasedak.DAL
             .WithMany()
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
+
+              
+             
              
            
             

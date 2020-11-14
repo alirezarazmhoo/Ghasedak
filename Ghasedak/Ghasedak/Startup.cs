@@ -75,6 +75,14 @@ namespace Ghasedak
             services.AddTransient<IDischargeRoute, DischargeRouteService>();
             services.AddTransient<IBox, BoxService>();
             services.AddTransient<ICharity, charityService>();
+            services.AddTransient<IFlowerCrownType, FlowerCrownTypeService>();
+            services.AddTransient<IFlowerCrown, FlowerCrownService>();
+            services.AddTransient<IFinancialServiceType, FinancialServiceTypeService>();
+            services.AddTransient<IFinancialAid, FinancialAidService>();
+            services.AddTransient<ISponsor, SponsorService>();
+            services.AddTransient<IOprator, OpratorService>();
+            services.AddTransient<IDonator, DonatorService>();
+            services.AddTransient<IDeceasedName, DeceasedNameService>();
 
             #endregion
 

@@ -29,7 +29,9 @@ namespace Ghasedak.Controllers.API
         [HttpGet]
         public object GetDischargeRoute()
         {
-            var data = _DischargeRoute.GetDischargeRoute();
+            string Token = HttpContext.Request?.Headers["token"];
+            int opratorId = _context.Oprators.FirstOrDefault(x => x.token == Token).id;
+            var data = _DischargeRoute.GetDischargeRoute(opratorId);
             return data;
         }
         [HttpPost]

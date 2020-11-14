@@ -35,7 +35,9 @@ namespace Ghasedak.Controllers.API
         [HttpGet]
         public object GetBox()
         {
-            var data = _Box.GetBox();
+            string Token = HttpContext.Request?.Headers["token"];
+            int opratorId = _context.Oprators.FirstOrDefault(x => x.token == Token).id;
+            var data = _Box.GetBox(opratorId);
             return data;
         }
 
@@ -66,7 +68,8 @@ namespace Ghasedak.Controllers.API
                         box.address = item.address;
                         box.lon = item.lon;
                         box.lat = item.lat;
-                        //var dischargeRoute = _context.DischargeRoutes.FirstOrDefault(x => x.code == item.code);
+                        box.charityId = item.charityId;
+                        box.opratorId = item.opratorId;
                         if (!_context.DischargeRoutes.Any(x => x.id == item.dischargeRouteId))
                             continue;
                         box.dischargeRouteId = item.dischargeRouteId;
