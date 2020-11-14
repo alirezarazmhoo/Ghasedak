@@ -9,7 +9,7 @@
                 <div class="row">
                     <form asp-action="Edit" method="post">
                         <input type="hidden" asp-for="id" />
-                        <input type="hidden" asp-for="userId" />
+                        <input type="hidden" asp-for="opratorId" />
                         <input type="hidden" asp-for="lon" />
                         <input type="hidden" asp-for="lat" />
                         <div class="box-body">
@@ -223,7 +223,7 @@
         closeButton: false,
         autoPan: false
     };
-    marker.bindPopup('@Model.user.fullName', popupOptions).openPopup();
+    marker.bindPopup('@Model.oprator.fullName', popupOptions).openPopup();
     </script>
 
     <script>
@@ -321,7 +321,7 @@
         closeButton: false,
         autoPan: false
     };
-    marker2.bindPopup('@Model.user.fullName', popupOptions2).openPopup();
+    marker2.bindPopup('@Model.oprator.fullName', popupOptions2).openPopup();
     </script>
     <script>
         $(document).ready(function () {

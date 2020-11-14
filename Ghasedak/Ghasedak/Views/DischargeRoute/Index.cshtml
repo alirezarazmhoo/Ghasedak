@@ -47,7 +47,8 @@
                 <div class="box-body">
 
                     <div class="col-md-12">
-                        <a class="btn btn-default" asp-action="Create">مسیر جدید</a>
+                        <a class="btn btn-success openmodal" style="margin-right: 10px;" href="#" data-toggle="modal" data-target="#myModal"> مسیر جدید</a>
+
                         <a class="btn btn-default deleteAll">حذف موارد انتخابی</a>
                     </div>
                 </div>
@@ -94,9 +95,9 @@
                                     }
                                 }
                                 <td>
-                                    <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">ویرایش</a>
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#EditModal" id="@item.id"> ویرایش</button>
 
-                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
+                                    <a class="btn btn-danger" data-toggle="modal" data-target="#QuestionModal" onclick="AssignButtonClicked(this)" data-assigned-id="@item.id" data-assigned-code="@item.code"> حذف</a>
 
                                 </td>
                             </tr>
@@ -131,7 +132,59 @@
     </div>
     <!-- /.col -->
 </div>
+<div class="modal fade" id="myModal" role="dialog" style="height:auto;overflow-y:visible">
+    <div class="modal-dialog modal-sm" style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">مسیر</h4>
+            </div>
+            <div class="modal-body" style="height:auto">
+                <form id="register">
+                    <div class="box-body">
+                        <input type="hidden" id="DischargeRouteId" name="DischargeRouteId" />
+                        <input type="hidden" id="charityId" name="charityId" />
 
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">کد</label>
+                                <input class="form-control" type="text" data-val="true" data-val-maxlength="کد  نمی تواند بیشتر از 10 کاراکتر باشد ." data-val-maxlength-max="10" id="code" name="code" value="">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="code" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">روز</label>
+                                <input class="form-control" type="number" id="day" name="day" value="">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="day" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">آدرس</label>
+                                <textarea class="form-control" data-val="true" data-val-maxlength="آدرس  نمی تواند بیشتر از 500 کاراکتر باشد ." data-val-maxlength-max="500" id="address" name="address"></textarea>
+                                <span class="text-danger field-validation-valid" data-valmsg-for="address" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف</button>
+                <button type="button" class="btn btn-success" onclick="Save();">ثبت</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Error">
+
+</div>
+<div id="Success">
+
+</div>
+<div id="Question">
+
+</div>
 @section scripts
     {
     <script>
@@ -238,6 +291,7 @@
             CreateAllModals();
             $(".openmodal").click(function () {
                 clear('register', ["input"]);
+                clear('register', ["textarea"]);
 
             });
             $(".btn-warning").click(function () {
@@ -253,10 +307,11 @@
             else {
                 $("#myModal").modal('toggle');
                 var Parameters = [{ id: "id", htmlname: "DischargeRouteId", special: "" },
-                    { id: "code", htmlname: "code", special: "" },
-                    { id: "day", htmlname: "day", special: "" },
-                    { id: "address", htmlname: "address", special: "" }];
-                PostAjax('../DischargeRoute/Register', Parameters, "../DischargeRoute/Index");
+                { id: "code", htmlname: "code", special: "" },
+                { id: "day", htmlname: "day", special: "" },
+                { id: "address", htmlname: "address", special: "" },
+                { id: "charityId", htmlname: "charityId", special: "" }];
+                PostAjax('../DischargeRoute/Register', Parameters, "../DischargeRoute/Index?page="+@Model.PageNumber+"");
             }
         }
         function AssignButtonClicked(elem) {
@@ -265,8 +320,10 @@
             $('#QuestionModal').find("h4").html(code);
         }
         function Remove() {
+
             var Parameters = [{ id: "id", htmlname: "DischargeRouteId", special: "" }];
             PostAjax('../DischargeRoute/Delete', Parameters, "../DischargeRoute/Index");
+
         }
 
 

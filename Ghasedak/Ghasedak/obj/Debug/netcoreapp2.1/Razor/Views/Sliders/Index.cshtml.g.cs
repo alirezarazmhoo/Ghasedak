@@ -62,7 +62,7 @@ using Ghasedak.Models;
             WriteLiteral("<div class=\"row\">\r\n    <div class=\"col-xs-12\">\r\n        <div class=\"box\">\r\n            <div class=\"box-header\">\r\n                <h3 class=\"box-title\">اسلایدرها</h3>\r\n            </div>\r\n            <div class=\"row\">\r\n                ");
             EndContext();
             BeginContext(292, 484, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "e06d6cd1ebe1400faa4f154eead19040", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "96554c8e3a7e4b6f9fd07af7cffd7216", async() => {
                 BeginContext(298, 471, true);
                 WriteLiteral(@"
                     <div class=""box-body"">
@@ -93,7 +93,7 @@ using Ghasedak.Models;
             WriteLiteral("\r\n            </div>\r\n            <div class=\"row\">\r\n                <div class=\"col-md-12\">\r\n                    ");
             EndContext();
             BeginContext(890, 63, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6356a727c95049e2890e07e5e566a4c9", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "43b3af8b00354c91adaa87ca74016794", async() => {
                 BeginContext(937, 12, true);
                 WriteLiteral("اسلایدر جدید");
                 EndContext();
@@ -159,7 +159,7 @@ using Ghasedak.Models;
             WriteLiteral("</td>\r\n                            <td>\r\n                                ");
             EndContext();
             BeginContext(1704, 79, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f4d08806bea742c3895f1638466bd902", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "36c5590744b34c71b57574b0f10142bb", async() => {
                 BeginContext(1773, 6, true);
                 WriteLiteral("ویرایش");
                 EndContext();
@@ -195,7 +195,7 @@ using Ghasedak.Models;
             WriteLiteral("\r\n                                ");
             EndContext();
             BeginContext(1817, 78, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9ab62791f6bd4c3f9aabd39dc791c8ae", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4acb9d80488b48fda1543a677ff3f52d", async() => {
                 BeginContext(1888, 3, true);
                 WriteLiteral("حذف");
                 EndContext();
@@ -254,7 +254,7 @@ using Ghasedak.Models;
             WriteLiteral("                            <li>\r\n                                ");
             EndContext();
             BeginContext(2938, 67, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "6ef387f6ede740109f5089d32b7a76bd", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "56d35c431dbd4ce397e12ca1b8e87b4c", async() => {
             }
             );
             __PagedList_Core_Mvc_PagerTagHelper = CreateTagHelper<global::PagedList.Core.Mvc.PagerTagHelper>();

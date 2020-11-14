@@ -9,8 +9,8 @@ namespace Ghasedak.Service.Interface
 {
     public interface IBox
     {
-        object GetBox();
-        PagedList<Box> GetBox(int pageId = 1, string filternumber = "");
+        object GetBox(int opratorId);
+        PagedList<Box> GetBox(int charityId,int pageId = 1, string filternumber = "");
         int AddBoxFromAdmin(Box box);
         
         

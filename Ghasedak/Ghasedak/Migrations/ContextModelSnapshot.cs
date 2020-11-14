@@ -57,13 +57,13 @@ namespace Ghasedak.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CharityId");
-
                     b.Property<string>("address")
                         .HasMaxLength(500);
 
                     b.Property<string>("assignmentDate")
                         .HasMaxLength(30);
+
+                    b.Property<int>("charityId");
 
                     b.Property<int>("dischargeRouteId");
 
@@ -80,6 +80,8 @@ namespace Ghasedak.Migrations
                     b.Property<string>("number")
                         .HasMaxLength(10);
 
+                    b.Property<int?>("opratorId");
+
                     b.HasKey("id");
 
                     b.HasIndex("dischargeRouteId");
@@ -93,13 +95,15 @@ namespace Ghasedak.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CharityId");
-
                     b.Property<int>("boxId");
+
+                    b.Property<int>("charityId");
 
                     b.Property<double>("lat");
 
                     b.Property<double>("lon");
+
+                    b.Property<int>("opratorId");
 
                     b.Property<long?>("price");
 
@@ -108,13 +112,11 @@ namespace Ghasedak.Migrations
 
                     b.Property<int>("status");
 
-                    b.Property<int>("userId");
-
                     b.HasKey("id");
 
                     b.HasIndex("boxId");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("opratorId");
 
                     b.ToTable("BoxIncomes");
                 });
@@ -183,27 +185,168 @@ namespace Ghasedak.Migrations
                     b.ToTable("ContactUss");
                 });
 
+            modelBuilder.Entity("Ghasedak.Models.DeceasedName", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("charityId");
+
+                    b.Property<string>("deceaseAalias")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("deceasedFullName")
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("deceasedSex");
+
+                    b.HasKey("id");
+
+                    b.ToTable("DeceasedNames");
+                });
+
             modelBuilder.Entity("Ghasedak.Models.DischargeRoute", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CharityId");
-
                     b.Property<string>("address")
                         .HasMaxLength(500);
+
+                    b.Property<int>("charityId");
 
                     b.Property<string>("code")
                         .HasMaxLength(10);
 
                     b.Property<int?>("day");
 
+                    b.Property<int?>("opratorId");
+
                     b.HasKey("id");
 
-                    b.HasIndex("CharityId");
+                    b.HasIndex("charityId");
 
                     b.ToTable("DischargeRoutes");
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.Donator", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("charityId");
+
+                    b.Property<string>("donatorAlias")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("donatorFullName")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("donatorMobile")
+                        .HasMaxLength(11);
+
+                    b.Property<bool>("isSendMessage");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Donators");
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.FinancialAid", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("charityId");
+
+                    b.Property<int>("financialServiceTypeId");
+
+                    b.Property<string>("name")
+                        .HasMaxLength(100);
+
+                    b.Property<int?>("opratorId");
+
+                    b.Property<long>("price");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("charityId");
+
+                    b.HasIndex("financialServiceTypeId");
+
+                    b.ToTable("FinancialAids");
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.FinancialServiceType", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("charityId");
+
+                    b.Property<string>("title")
+                        .HasMaxLength(50);
+
+                    b.HasKey("id");
+
+                    b.ToTable("FinancialServiceTypes");
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.FlowerCrown", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CeremonyType");
+
+                    b.Property<int>("IntroducedId");
+
+                    b.Property<int?>("charityId");
+
+                    b.Property<int>("deceasedNameId");
+
+                    b.Property<int>("donatorId");
+
+                    b.Property<int>("flowerCrownTypeId");
+
+                    b.Property<int?>("opratorId");
+
+                    b.Property<long>("price");
+
+                    b.Property<string>("registerDate")
+                        .HasMaxLength(30);
+
+                    b.HasKey("id");
+
+                    b.HasIndex("charityId");
+
+                    b.HasIndex("deceasedNameId");
+
+                    b.HasIndex("flowerCrownTypeId");
+
+                    b.ToTable("FlowerCrowns");
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.FlowerCrownType", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("charityId");
+
+                    b.Property<string>("title")
+                        .HasMaxLength(50);
+
+                    b.HasKey("id");
+
+                    b.ToTable("FlowerCrownTypes");
                 });
 
             modelBuilder.Entity("Ghasedak.Models.Oprator", b =>
@@ -212,40 +355,32 @@ namespace Ghasedak.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CharityId");
-
-                    b.Property<string>("address")
-                        .HasMaxLength(500);
+                    b.Property<int>("charityId");
 
                     b.Property<string>("code")
                         .HasMaxLength(30);
 
-                    b.Property<string>("description")
-                        .HasMaxLength(500);
-
                     b.Property<string>("fullName")
                         .HasMaxLength(100);
-
-                    b.Property<string>("imageName")
-                        .HasMaxLength(500);
 
                     b.Property<string>("mobile")
                         .HasMaxLength(11);
 
-                    b.Property<string>("nationalcode")
-                        .HasMaxLength(10);
-
                     b.Property<string>("password")
-                        .HasMaxLength(50);
+                        .HasMaxLength(200);
 
-                    b.Property<bool>("status");
+                    b.Property<string>("passwordShow")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("token")
+                        .HasMaxLength(100);
 
                     b.Property<string>("userName")
                         .HasMaxLength(50);
 
                     b.HasKey("id");
 
-                    b.HasIndex("CharityId");
+                    b.HasIndex("charityId");
 
                     b.ToTable("Oprators");
                 });
@@ -319,6 +454,74 @@ namespace Ghasedak.Migrations
                     b.ToTable("Sliders");
                 });
 
+            modelBuilder.Entity("Ghasedak.Models.Sponsor", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("address")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("birthDate")
+                        .HasMaxLength(30);
+
+                    b.Property<int>("charityId");
+
+                    b.Property<string>("fullName")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("mobile")
+                        .HasMaxLength(11);
+
+                    b.Property<string>("nationalcode")
+                        .HasMaxLength(10);
+
+                    b.Property<int>("opratorId");
+
+                    b.Property<string>("phone")
+                        .HasMaxLength(10);
+
+                    b.HasKey("id");
+
+                    b.HasIndex("charityId");
+
+                    b.ToTable("Sponsors");
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.SponsorPay", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("charityId");
+
+                    b.Property<string>("description")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("deviceCode")
+                        .HasMaxLength(30);
+
+                    b.Property<int>("opratorId");
+
+                    b.Property<long?>("price");
+
+                    b.Property<string>("recieverCode")
+                        .HasMaxLength(30);
+
+                    b.Property<int>("sponsorId");
+
+                    b.Property<string>("terminalCode")
+                        .HasMaxLength(30);
+
+                    b.HasKey("id");
+
+                    b.HasIndex("sponsorId");
+
+                    b.ToTable("SponsorPays");
+                });
+
             modelBuilder.Entity("Ghasedak.Models.Stir", b =>
                 {
                     b.Property<int>("id")
@@ -382,9 +585,9 @@ namespace Ghasedak.Migrations
                         .HasForeignKey("boxId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Ghasedak.Models.User", "user")
+                    b.HasOne("Ghasedak.Models.Oprator", "oprator")
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("opratorId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -392,7 +595,36 @@ namespace Ghasedak.Migrations
                 {
                     b.HasOne("Ghasedak.Models.Charity", "Charity")
                         .WithMany()
-                        .HasForeignKey("CharityId")
+                        .HasForeignKey("charityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.FinancialAid", b =>
+                {
+                    b.HasOne("Ghasedak.Models.Charity", "Charity")
+                        .WithMany()
+                        .HasForeignKey("charityId");
+
+                    b.HasOne("Ghasedak.Models.FinancialServiceType", "FinancialServiceType")
+                        .WithMany()
+                        .HasForeignKey("financialServiceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.FlowerCrown", b =>
+                {
+                    b.HasOne("Ghasedak.Models.Charity", "Charity")
+                        .WithMany()
+                        .HasForeignKey("charityId");
+
+                    b.HasOne("Ghasedak.Models.DeceasedName", "DeceasedName")
+                        .WithMany()
+                        .HasForeignKey("deceasedNameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ghasedak.Models.FlowerCrownType", "FlowerCrownType")
+                        .WithMany()
+                        .HasForeignKey("flowerCrownTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -400,7 +632,23 @@ namespace Ghasedak.Migrations
                 {
                     b.HasOne("Ghasedak.Models.Charity", "Charity")
                         .WithMany()
-                        .HasForeignKey("CharityId")
+                        .HasForeignKey("charityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.Sponsor", b =>
+                {
+                    b.HasOne("Ghasedak.Models.Charity", "Charity")
+                        .WithMany()
+                        .HasForeignKey("charityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.SponsorPay", b =>
+                {
+                    b.HasOne("Ghasedak.Models.Sponsor", "Sponsor")
+                        .WithMany()
+                        .HasForeignKey("sponsorId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

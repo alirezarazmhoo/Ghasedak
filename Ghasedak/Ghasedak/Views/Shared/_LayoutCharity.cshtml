@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -47,6 +49,7 @@
     <link href='https://api.cedarmaps.com/cedarmaps.js/v1.8.0/cedarmaps.css' rel='stylesheet' />
 
 </head>
+
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
         <header class="main-header">
@@ -77,7 +80,8 @@
                         @*<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">*@
                     </div>
                     <div class="pull-right info">
-                        <p>@User.Identity.Name</p>
+                        @*<p>@TempData["charityTitle"]</p>*@
+                        
                         <a href="#"><i class="fa fa-circle text-success"></i> آنلاین</a>
                     </div>
                 </div>
@@ -86,21 +90,9 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">منو</li>
-                    
-                    <li class=" treeview">
-                            <a href="#">
-                                <i class="fa fa-dashboard"></i> <span>مدیریت کاربران</span>
-                                <span class="pull-left-container">
-                                    <i class="fa fa-angle-right pull-left"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li class="active"><a href="/Oprator/Index"><i class="fa fa-circle-o"></i> کاربران</a></li>
-
-                            </ul>
-                        </li>
-
-
+                    <li>
+                        <a href="/Oprator/Index"><i class="fa fa-fw fa-cubes"></i> متصدیان</a>
+                    </li>
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-fw fa-newspaper-o"></i> <span>مدیریت اطلاعات پایه</span>
@@ -111,18 +103,20 @@
                         <ul class="treeview-menu">
                             <li><a href="/DischargeRoute/Index"><i class="fa fa-fw fa-align-left"></i> مسیر ها</a></li>
                             <li><a href="/Box/Index"><i class="fa fa-fw fa-align-left"></i> صندوقات</a></li>
-                          
+                            <li><a href="/FlowerCrownType/Index"><i class="fa fa-fw fa-align-left"></i> نوع تاج گل</a></li>
+                            <li><a href="/FinancialServiceType/Index"><i class="fa fa-fw fa-align-left"></i> نوع خدمت</a></li>
+
 
                         </ul>
 
                     </li>
-                    
+
 
                     <li>
                         <a href="/BoxIncome/Index"><i class="fa fa-fw fa-cubes"></i> درآمد ها</a>
                     </li>
 
-                   
+
 
 
                     <li>

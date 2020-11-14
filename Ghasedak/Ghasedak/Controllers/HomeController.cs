@@ -15,9 +15,10 @@ using PagedList.Core;
 
 namespace Ghasedak.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
+        [Authorize]
+
         public IActionResult Index()
         {
             return View();
@@ -26,6 +27,7 @@ namespace Ghasedak.Controllers
         {
             return View();
         }
+        [Authorize]
 
         public IActionResult About()
         {
@@ -33,6 +35,7 @@ namespace Ghasedak.Controllers
 
             return View();
         }
+        [Authorize]
 
         public IActionResult Contact()
         {
@@ -40,6 +43,7 @@ namespace Ghasedak.Controllers
 
             return View();
         }
+        [Authorize]
 
         public IActionResult Privacy()
         {

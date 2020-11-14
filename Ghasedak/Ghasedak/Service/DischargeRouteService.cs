@@ -17,9 +17,11 @@ namespace Ghasedak.Service
             _context = context;
         }
 
-        public object GetDischargeRoute()
+        public object GetDischargeRoute(int opratorId)
         {
-            IQueryable<DischargeRoute> result = _context.DischargeRoutes;
+
+            IQueryable<DischargeRoute> result = _context.DischargeRoutes.Where(x=>x.opratorId==opratorId);
+
             List<DischargeRoute> res = result.OrderBy(u => u.id).ToList();
             if (res.Count() == 0)
                 return new { Data = res, Count = res.Count(), IsError = true, Message = "مسیری ثبت نشده است" };
@@ -39,9 +41,9 @@ namespace Ghasedak.Service
         //    return new { data = res, totalCount = result.Count() };
         //}
 
-        public PagedList<DischargeRoute> GetDischargeRoute(int pageId = 1, string filtercode = "")
+        public PagedList<DischargeRoute> GetDischargeRoute(int charityId,int pageId = 1, string filtercode = "")
         {
-            IQueryable<DischargeRoute> result = _context.DischargeRoutes.OrderByDescending(x => x.id);
+            IQueryable<DischargeRoute> result = _context.DischargeRoutes.Where(x=>x.charityId==charityId).OrderByDescending(x => x.id);
             if (!string.IsNullOrEmpty(filtercode))
             {
                 result = result.Where(x => x.code.Contains(filtercode));

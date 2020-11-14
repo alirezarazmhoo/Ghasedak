@@ -97,7 +97,7 @@ namespace Ghasedak.Controllers
                 {
                     foreach (var item in ids)
                     {
-                        if (_context.BoxIncomes.Any(x => x.CharityId == item))
+                        if (_context.BoxIncomes.Any(x => x.charityId == item))
                         {
                             trans.Rollback();
                             return Json("Fail");
@@ -160,6 +160,11 @@ namespace Ghasedak.Controllers
                                 return Json(new { success = false, responseText = "نام کاربری تکراری است !" });
 
                             }
+                            if (_context.Charitys.Any(x => x.code == Charity.code))
+                            {
+                                return Json(new { success = false, responseText = "کد خیریه تکراری است !" });
+
+                            }
                             _context.Charitys.Add(Charity);
                         }
                         else
@@ -167,6 +172,11 @@ namespace Ghasedak.Controllers
                          if (_context.Charitys.Any(x => x.userName == Charity.userName && x.id!=id)||_context.Users.Any(x => x.userName == Charity.userName))
                             {
                                 return Json(new { success = false, responseText = "نام کاربری تکراری است !" });
+
+                            }
+                         if (_context.Charitys.Any(x => x.code == Charity.code && x.id!=id))
+                            {
+                                return Json(new { success = false, responseText = "کد خیریه تکراری است !" });
 
                             }
                             _context.Charitys.Update(Charity);
@@ -214,7 +224,7 @@ namespace Ghasedak.Controllers
                 _context.Charitys.Remove(Charity);
                 _context.SaveChanges();
                 //return RedirectToAction(nameof(Index));
-                return Json(new { success = true, responseText = "Operation Completed !" });
+                return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
 
 
             }

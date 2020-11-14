@@ -10,7 +10,7 @@ namespace Ghasedak.Service.Interface
     public interface IBoxIncome
     {
        
-        PagedList<BoxIncome> GetBoxIncome(int pageId = 1);
+        PagedList<BoxIncome> GetBoxIncome(int charityId,int pageId = 1);
        
         
     }

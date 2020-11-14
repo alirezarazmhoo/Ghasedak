@@ -35,85 +35,98 @@
                     <div class="col-md-12">
                         <a class="btn btn-default deleteAll">حذف موارد انتخابی</a>
                     </div>
-                    </div>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body table-responsive">
-                    <table id="example2" class="table table-bordered table-hover ">
-                        <thead>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="example2" class="table table-bordered table-hover ">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="checkbox1">
+                                    </label>
+                                </div>
+                            </th>
+                            <th>کد شخص ثبت کننده</th>
+                            <th>نام مالک صندوق</th>
+                            <th>وضعیت</th>
+                            <th>امکانات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
                             <tr>
-                                <th>
-                                    <div class="checkbox">
+                                <td>
+                                    <div class="chkRow">
                                         <label>
-                                            <input type="checkbox" id="checkbox1">
+                                            <input value="@item.id" type="checkbox">
                                         </label>
                                     </div>
-                                </th>
-                                <th>کد شخص ثبت کننده</th>
-                                <th>نام مالک صندوق</th>
-                                <th>وضعیت</th>
-                                <th>امکانات</th>
+                                </td>
+                                <td>@item.oprator.code</td>
+                                <td>@item.box.fullName</td>
+
+                                @if (item.status == EnumStatus.Other)
+                                {
+                                    <td style="background-color:green">تخلیه شده</td>
+                                }
+                                @if (item.status == EnumStatus.LackOfInventory)
+                                {
+                                    <td style="background-color:yellow">عدم موجودی</td>
+                                }
+                                @if (item.status == EnumStatus.Absence)
+                                {
+                                    <td style="background-color:lightblue">عدم حضور</td>
+                                }
+
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">مشاهده</a>
+                                <a class="btn btn-danger" data-toggle="modal" data-target="#QuestionModal" onclick="AssignButtonClicked(this)" data-assigned-id="@item.id" > حذف</a>
+
+                            </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="chkRow">
-                                            <label>
-                                                <input value="@item.id" type="checkbox">
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>@item.user.code</td>
-                                    <td>@item.box.fullName</td>
-
-                                    @if (item.status == EnumStatus.Other)
-                                    {
-                                        <td style="background-color:green">تخلیه شده</td>
-                                    }
-                                    @if (item.status == EnumStatus.LackOfInventory)
-                                    {
-                                        <td style="background-color:yellow">عدم موجودی</td>
-                                    }
-                                    @if (item.status == EnumStatus.Absence)
-                                    {
-                                        <td style="background-color:lightblue">عدم حضور</td>
-                                    }
-
-                                    <td>
-                                        <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">مشاهده</a>
-                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
-                                    </td>
-                                </tr>
-                            }
+                        }
 
 
-                        </tbody>
-                        <tfoot>
+                    </tbody>
+                    <tfoot>
 
-                        </tfoot>
-                    </table>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
                 </div>
-                <!-- /.box-body -->
-                <div class="row">
-                    <div class="col-sm-5">
-                    </div>
-                    <div class="col-sm-7">
-                        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
-                            <ul class="pagination">
-                                <li>
-                                    <pager list="@Model" asp-controller="BoxIncome" asp-action="Index" />
-                                </li>
-                            </ul>
-                        </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            <li>
+                                <pager list="@Model" asp-controller="BoxIncome" asp-action="Index" />
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
+        </div>
 
     </div>
     <!-- /.col -->
+</div>
+<div id="BoxIncomeId">
+
+</div>
+<div id="Error">
+
+</div>
+<div id="Success">
+
+</div>
+<div id="Question">
+
 </div>
 @section scripts
     {
@@ -198,6 +211,28 @@
         $("#export").on('click', function () {
             window.location.href = '/BoxIncome/ExportToExcel';
         });
+        window.onload = Load;
+        function Load() {
+            CreateAllModals();
+            $(".openmodal").click(function () {
+                clear('register', ["input"]);
+                clear('register', ["textarea"]);
+
+            });
+
+        }
+        function AssignButtonClicked(elem) {
+            debugger
+            $('#BoxIncomeId').val($(elem).data('assigned-id'));
+            var id = $(elem).data('assigned-id');
+            $('#QuestionModal').find("h4").html(id);
+        }
+        function Remove() {
+
+            var Parameters = [{ id: "id", htmlname: "BoxIncomeId", special: "" }];
+            PostAjax('../BoxIncome/Delete', Parameters, "../BoxIncome/Index");
+
+        }
     </script>
 }
 

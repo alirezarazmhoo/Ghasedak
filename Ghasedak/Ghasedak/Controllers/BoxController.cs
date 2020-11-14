@@ -34,7 +34,9 @@ namespace Ghasedak.Controllers
         [HttpGet]
         public IActionResult Index(int page = 1, string filternumber = "", bool isSuccess = false)
         {
-            var model = _Box.GetBox(page, filternumber);
+              int charityId = Convert.ToInt32(User.Identity.Name);
+
+            var model = _Box.GetBox(charityId,page, filternumber);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید چون درآمد برای این رکورد ثبت شده است";
             return View(model);
@@ -57,7 +59,8 @@ namespace Ghasedak.Controllers
         {
             //ViewData["DischargeRouteId"] = new SelectList(_context.DischargeRoutes, "id", "code", "");
             ViewData["DischargeRouteId"] = _context.DischargeRoutes.ToList();
-
+            int charityId = Convert.ToInt32(User.Identity.Name);
+            box.charityId = charityId;
             if (!ModelState.IsValid)
             {
                 return View(box);
@@ -141,6 +144,26 @@ namespace Ghasedak.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var box = _context.Boxs.FirstOrDefault(x => x.id == id);
+                _context.Boxs.Remove(box);
+                _context.SaveChanges();
+                //return RedirectToAction(nameof(Index));
+                return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
+
+
+            }
+            catch (Exception ex)
+            {
+                //return RedirectToAction("Index", new { @isSuccess = true });
+                return Json(new { success = false, responseText = "شما قادر به حذف نمی باشید چون درآمد برای این رکورد ثبت شده است !" });
+
+            }
+        }
 
 
         public async Task<IActionResult> Delete(int? id)
@@ -161,26 +184,26 @@ namespace Ghasedak.Controllers
         }
 
         // POST: Sliders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            try
-            {
-                var Box = await _context.Boxs.FindAsync(id);
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    try
+        //    {
+        //        var Box = await _context.Boxs.FindAsync(id);
 
 
 
-                _context.Boxs.Remove(Box);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Index", new { @isSuccess = true });
+        //        _context.Boxs.Remove(Box);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return RedirectToAction("Index", new { @isSuccess = true });
 
-            }
-            return RedirectToAction(nameof(Index));
-        }
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
         [HttpPost, ActionName("DeleteAll")]
 
         public async Task<IActionResult> DeleteAll(int[] ids)

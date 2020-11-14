@@ -192,3 +192,6 @@ E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Gha
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\Charity\Index.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_LayoutCharity.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\Home\IndexCharity.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\Oprator\Index.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FlowerCrownType\Index.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FinancialServiceType\Index.cshtml.g.cs

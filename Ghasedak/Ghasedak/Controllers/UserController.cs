@@ -75,12 +75,7 @@ namespace Ghasedak.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SignIn(LoginUserAdmin user)
         {
-            //if (!Captcha.ValidateCaptchaCode(user.Captcha, HttpContext))
-            //{
-            //    ModelState.Clear();
-            //    ModelState.AddModelError("", "کپچا صحیح نمی باشد");
-            //    return View("Login");
-            //}
+           
             if (string.IsNullOrEmpty(user.password) || string.IsNullOrEmpty(user.userName))
             {
                 ModelState.Clear();
@@ -95,7 +90,7 @@ namespace Ghasedak.Controllers
                 ModelState.AddModelError("", "نام کاربری یا رمز عبور صحیح نیست");
                 return View("Login");
             }
-            if (u != null && charity == null)
+           else if (u != null && charity == null)
             {
                 if (!BCrypt.Net.BCrypt.Verify(user.password, u.password))
                 {
@@ -110,7 +105,7 @@ namespace Ghasedak.Controllers
                         new Claim(ClaimTypes.NameIdentifier,user.userName.ToString()),
                         new Claim(ClaimTypes.Name,user.userName),
                         new Claim(ClaimTypes.Role,"Admin")
-                        
+
                     };
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
@@ -124,7 +119,7 @@ namespace Ghasedak.Controllers
                     return Redirect("/Home/Index");
                 }
             }
-            if (u == null && charity != null)
+          else  if (u == null && charity != null)
             {
                 if (!BCrypt.Net.BCrypt.Verify(user.password, charity.password))
                 {
@@ -138,7 +133,8 @@ namespace Ghasedak.Controllers
                     {
                         new Claim(ClaimTypes.NameIdentifier,charity.id.ToString()),
                         new Claim(ClaimTypes.Name,charity.id.ToString()),
-                        new Claim(ClaimTypes.Role,"Charity")
+                        new Claim(ClaimTypes.Role,"Charity"),
+                        new Claim(ClaimTypes.GivenName,charity.title)
                     };
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
@@ -146,23 +142,27 @@ namespace Ghasedak.Controllers
                     var properties = new AuthenticationProperties
                     {
                         IsPersistent = user.RememberMe
-                        
-                        
+
+
                     };
-                    HttpContext.SignInAsync(principal, properties);
+                    
+                //TempData["charityTitle"] = charity.title;
 
                     return Redirect("/Home/IndexCharity");
                 }
 
 
             }
-            return View("Login");
+            else
+                return View("Login");
+
+          
         }
 
 
-        
 
-        public ActionResult SignInAsCharity(string userName,string password)
+
+        public ActionResult SignInAsCharity(string userName, string password)
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             var charity = _context.Charitys.Where(p => p.userName == userName).FirstOrDefault();
@@ -195,7 +195,8 @@ namespace Ghasedak.Controllers
                     IsPersistent = true
                 };
                 HttpContext.SignInAsync(principal, properties);
-
+                //HttpContext.Session.SetString("charityTitle", charity.title);
+                TempData["charityTitle"] = charity.title;
                 return Redirect("/Home/IndexCharity");
             }
         }
@@ -248,7 +249,7 @@ namespace Ghasedak.Controllers
                 {
                     foreach (var item in ids)
                     {
-                        if (_context.BoxIncomes.Any(x => x.userId == item))
+                        if (_context.BoxIncomes.Any(x => x.opratorId == item))
                         {
                             trans.Rollback();
                             return Json("Fail");
@@ -358,11 +359,11 @@ namespace Ghasedak.Controllers
                         _context.Users.Update(user);
                     }
                     await _context.SaveChangesAsync();
-                    return Json(new { success = true, responseText = "Operation Completed !" });
+                    return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
                 }
                 else
                 {
-                    return Json(new { success = false, responseText = "Required Fields Are Empty !" });
+                    return Json(new { success = false, responseText = "لطفا تمام موارد را وارد نمایید !" });
                 }
 
             }
@@ -417,7 +418,7 @@ namespace Ghasedak.Controllers
                 _context.Users.Remove(user);
                 _context.SaveChanges();
                 //return RedirectToAction(nameof(Index));
-                return Json(new { success = true, responseText = "Operation Completed !" });
+                return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
 
 
             }
