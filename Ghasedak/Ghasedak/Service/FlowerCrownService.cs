@@ -2,6 +2,7 @@
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
 using Ghasedak.ViewModel;
+using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
 using System;
 using System.Collections.Generic;
@@ -39,18 +40,30 @@ namespace Ghasedak.Service
 
 
 
-        public PagedList<FlowerCrown> GetFlowerCrown(int pageId = 1, string filternumber = "")
+        public PagedList<FlowerCrown> GetFlowerCrown(int charityId,int pageId = 1, long filterprice = 0)
         {
-            IQueryable<FlowerCrown> result = _context.FlowerCrowns.OrderByDescending(x => x.id);
-            //if (!string.IsNullOrEmpty(filternumber))
-            //{
-            //    result = result.Where(x => x.number.Contains(filternumber));
-            //}
+            IQueryable<FlowerCrown> result = _context.FlowerCrowns.Include(x => x.FlowerCrownType).Where(x=>x.charityId==charityId).OrderByDescending(x => x.id);
+            if (filterprice!=0)
+            {
+                result = result.Where(x => x.price==filterprice);
+            }
             PagedList<FlowerCrown> res = new PagedList<FlowerCrown>(result, pageId, 10);
             return res;
         }
 
-
+       public FlowerCrownAdminViewModel GetDataForAdmin(int id)
+        {
+            var FlowerCrown = _context.FlowerCrowns.Include(x => x.FlowerCrownType).FirstOrDefault(x => x.id == id);
+            var Donator = _context.Donators.FirstOrDefault(x => x.id == FlowerCrown.donatorId);
+            var Inturducer = _context.Donators.FirstOrDefault(x => x.id == FlowerCrown.IntroducedId);
+            var DeceasedName = _context.DeceasedNames.FirstOrDefault(x => x.id == FlowerCrown.deceasedNameId);
+            FlowerCrownAdminViewModel FlowerCrownAdminViewModel = new FlowerCrownAdminViewModel();
+            FlowerCrownAdminViewModel.flowerCrown = FlowerCrown;
+            FlowerCrownAdminViewModel.donator = Donator;
+            FlowerCrownAdminViewModel.introduced = Inturducer;
+            FlowerCrownAdminViewModel.deceasedName = DeceasedName;
+            return FlowerCrownAdminViewModel;
+        }
         public object AddFlowerCrown(FlowerCrown item, Oprator oprator)
         {
             using (var trans = _context.Database.BeginTransaction())

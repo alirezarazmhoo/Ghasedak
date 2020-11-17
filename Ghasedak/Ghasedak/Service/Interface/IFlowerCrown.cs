@@ -1,4 +1,5 @@
 ﻿using Ghasedak.Models;
+using Ghasedak.ViewModel;
 using PagedList.Core;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,10 @@ namespace Ghasedak.Service.Interface
 {
     public interface IFlowerCrown
     {
+        FlowerCrownAdminViewModel GetDataForAdmin(int flowerCrownId);
+
         object GetFlowerCrown(int charityId);
-        PagedList<FlowerCrown> GetFlowerCrown(int pageId = 1, string filternumber = "");
+        PagedList<FlowerCrown> GetFlowerCrown(int charityId,int pageId = 1, long filterprice = 0);
         int AddFlowerCrownFromAdmin(FlowerCrown FlowerCrown);
         object AddFlowerCrown(FlowerCrown item, Oprator oprator);      
         

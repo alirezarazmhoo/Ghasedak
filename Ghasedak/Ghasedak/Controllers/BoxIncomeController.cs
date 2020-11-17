@@ -7,6 +7,7 @@ using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
 using Ghasedak.Utility;
+using Ghasedak.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,14 +50,19 @@ namespace Ghasedak.Controllers
             }
 
             var BoxIncome = _context.BoxIncomes.Include(x => x.oprator).Include(x => x.box).FirstOrDefault(x => x.id == id);
+            var oprator = await _context.Oprators.FirstOrDefaultAsync(x => x.id == BoxIncome.opratorId);
+
+            BoxIncomeAdminViewModel boxIncomeAdminViewModel = new BoxIncomeAdminViewModel();
+            boxIncomeAdminViewModel.boxIncome = BoxIncome;
+            boxIncomeAdminViewModel.oprator = oprator;
             ViewData["BoxId"] = new SelectList(_context.Boxs, "id", "number", BoxIncome.boxId);
 
 
-            if (BoxIncome == null)
+            if (boxIncomeAdminViewModel == null)
             {
                 return NotFound();
             }
-            return View(BoxIncome);
+            return View(boxIncomeAdminViewModel);
         }
 
         // POST: Products/Edit/5

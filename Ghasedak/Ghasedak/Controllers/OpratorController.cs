@@ -80,6 +80,7 @@ namespace Ghasedak.Controllers
                 edit.Add(new EditViewModels() { key = "password", value = Oprator.password });
                 edit.Add(new EditViewModels() { key = "fullName", value = Oprator.fullName });
                 edit.Add(new EditViewModels() { key = "token", value = Oprator.token });
+                edit.Add(new EditViewModels() { key = "isActive", value = Oprator.isActive.ToString() });
 
                 return Json(new { success = true, listItem = edit.ToList() });
             }

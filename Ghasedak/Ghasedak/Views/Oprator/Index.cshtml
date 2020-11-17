@@ -176,7 +176,12 @@
 
                             </div>
                         </div>
-
+                        <div class="col-md-12">
+                            <label>
+                                <input type="checkbox" id="isActive" name="isActive">
+                            </label>
+                            <label class="control-label">فعال</label>
+                        </div>
 
                     </div>
                 </form>
@@ -205,6 +210,17 @@
             if (this.checked) {
                 var isChecked = $(this).prop("checked");
                 $('#example2 tr:has(td)').find('input[type="checkbox"]').prop('checked', isChecked);
+            }
+        });
+        $('#isActive').change(function () {
+            if (this.checked) {
+                var isChecked = $(this).prop("checked");
+                $('#register').find('input[type="checkbox"]').prop('checked', isChecked);
+                $('#register #isActive').val(true)
+            }
+            else {
+                $('#register #isActive').val(false)
+
             }
         });
         $('.deleteAll').on('click', function () {
@@ -272,7 +288,9 @@
                     { id: "mobile", htmlname: "mobile", special: "" },
                     { id: "passwordShow", htmlname: "passwordShow", special: "" },
                     { id: "userName", htmlname: "userName", special: "" },
+                    { id: "isActive", htmlname: "isActive", special: "" },
                     { id: "fullName", htmlname: "fullName", special: "" }];
+
                 PostAjax('../Oprator/Register', Parameters, "../Oprator/Index?page="+@Model.PageNumber+"");
             }
         }

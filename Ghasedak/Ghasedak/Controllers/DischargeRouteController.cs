@@ -51,6 +51,7 @@ namespace Ghasedak.Controllers
             try
             {
                 var dischargeRoute = await _context.DischargeRoutes.FindAsync(ItemId);
+                var oprator = await _context.Oprators.FirstOrDefaultAsync(x=>x.id==dischargeRoute.opratorId);
 
                 if (dischargeRoute == null)
                 {
@@ -62,6 +63,16 @@ namespace Ghasedak.Controllers
                 edit.Add(new EditViewModels() { key = "charityId", value = dischargeRoute.charityId.ToString() });
                 edit.Add(new EditViewModels() { key = "day", value = dischargeRoute.day.ToString() });
                 edit.Add(new EditViewModels() { key = "DischargeRouteId", value = dischargeRoute.id.ToString() });
+
+                if (oprator != null)
+                {
+                    edit.Add(new EditViewModels() { key = "codeOprator", value = oprator.code });
+                    edit.Add(new EditViewModels() { key = "mobileOprator", value = oprator.mobile });
+                    edit.Add(new EditViewModels() { key = "fullnameOprator", value = oprator.fullName });
+                    edit.Add(new EditViewModels() { key = "opratorId", value = oprator.id.ToString() });
+                }
+                else
+                    edit.Add(new EditViewModels() { key = "codeOprator", value = "" });
 
 
                 return Json(new { success = true, listItem = edit.ToList() });

@@ -7,6 +7,7 @@ using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
 using Ghasedak.Utility;
+using Ghasedak.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -80,17 +81,17 @@ namespace Ghasedak.Controllers
             }
 
             var box = await _context.Boxs.FindAsync(id);
-
-            //ViewData["DischargeRouteId"] = new SelectList(_context.DischargeRoutes, "id", "code", box.dischargeRouteId);
+            var oprator = await _context.Oprators.FirstOrDefaultAsync(x => x.id == box.opratorId);
+            BoxAdminViewModel boxAdminViewModel = new BoxAdminViewModel();
+            boxAdminViewModel.box = box;
+            boxAdminViewModel.oprator = oprator;
             ViewData["DischargeRouteId"] = _context.DischargeRoutes.ToList();
 
-
-
-            if (box == null)
+            if (boxAdminViewModel == null)
             {
                 return NotFound();
             }
-            return View(box);
+            return View(boxAdminViewModel);
         }
 
         // POST: Products/Edit/5

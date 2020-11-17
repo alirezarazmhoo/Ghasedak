@@ -136,6 +136,16 @@ namespace Ghasedak.Migrations
                     b.Property<string>("description")
                         .HasMaxLength(500);
 
+                    b.Property<bool>("isAccessBox");
+
+                    b.Property<bool>("isAccessFinancialAid");
+
+                    b.Property<bool>("isAccessFlowerCrown");
+
+                    b.Property<bool>("isAccessSponsor");
+
+                    b.Property<bool>("isActive");
+
                     b.Property<string>("mobile")
                         .HasMaxLength(11);
 
@@ -363,6 +373,8 @@ namespace Ghasedak.Migrations
                     b.Property<string>("fullName")
                         .HasMaxLength(100);
 
+                    b.Property<bool>("isActive");
+
                     b.Property<string>("mobile")
                         .HasMaxLength(11);
 
@@ -570,6 +582,30 @@ namespace Ghasedak.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Ghasedak.Models.UserActivity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("charityId");
+
+                    b.Property<DateTime>("date");
+
+                    b.Property<string>("description")
+                        .HasMaxLength(500);
+
+                    b.Property<int?>("opratorId");
+
+                    b.Property<int>("status");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("opratorId");
+
+                    b.ToTable("UserActivities");
+                });
+
             modelBuilder.Entity("Ghasedak.Models.Box", b =>
                 {
                     b.HasOne("Ghasedak.Models.DischargeRoute", "dischargeRoute")
@@ -658,6 +694,13 @@ namespace Ghasedak.Migrations
                         .WithMany("Users")
                         .HasForeignKey("roleId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ghasedak.Models.UserActivity", b =>
+                {
+                    b.HasOne("Ghasedak.Models.Oprator", "oprator")
+                        .WithMany()
+                        .HasForeignKey("opratorId");
                 });
 #pragma warning restore 612, 618
         }

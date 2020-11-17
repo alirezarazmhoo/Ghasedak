@@ -75,7 +75,11 @@ namespace Ghasedak.Controllers
                 edit.Add(new EditViewModels() { key = "address", value = Charity.address });
                 edit.Add(new EditViewModels() { key = "mobile", value = Charity.mobile });
                 edit.Add(new EditViewModels() { key = "description", value = Charity.description });
-
+                edit.Add(new EditViewModels() { key = "isActive", value = Charity.isActive.ToString() });
+                edit.Add(new EditViewModels() { key = "isAccessBox", value = Charity.isAccessBox.ToString() });
+                edit.Add(new EditViewModels() { key = "isAccessSponsor", value = Charity.isAccessSponsor.ToString() });
+                edit.Add(new EditViewModels() { key = "isAccessFinancialAid", value = Charity.isAccessFinancialAid.ToString() });
+                edit.Add(new EditViewModels() { key = "isAccessFlowerCrown", value = Charity.isAccessFlowerCrown.ToString() });
                 return Json(new { success = true, listItem = edit.ToList() });
             }
             catch (Exception ex)
@@ -147,12 +151,14 @@ namespace Ghasedak.Controllers
             try
             {
                 ModelState.Remove("id");
+                ModelState.Remove("isActive");
+                ModelState.Remove("isAccessBox");
+                ModelState.Remove("isAccessSponsor");
+                ModelState.Remove("isAccessFinancialAid");
+                ModelState.Remove("isAccessFlowerCrown");
                 if (ModelState.IsValid)
                 {
                     Charity.password = BCrypt.Net.BCrypt.HashPassword(Charity.passwordShow, BCrypt.Net.BCrypt.GenerateSalt());
-
-
-                    
                         if (id == null)
                         {
                             if (_context.Charitys.Any(x => x.userName == Charity.userName) || _context.Users.Any(x => x.userName == Charity.userName))
