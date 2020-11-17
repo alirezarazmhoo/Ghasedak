@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
+using Ghasedak.Utility;
 using Ghasedak.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -44,19 +45,24 @@ namespace Ghasedak.Controllers.API
         [HttpPost]
         public object PostBox(IEnumerable<BoxViewModel> Boxs)
         {
-             
+
             if (!ModelState.IsValid)
             {
                 //return BadRequest(ModelState);
                 return new { IsError = true, message = "ورودی ها معتبر نیست." };
 
             }
-            
 
+            string Token = HttpContext.Request?.Headers["token"];
+            var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
+            if(oprator==null)
+                return new { IsError = true, message = "چنین کاربری جود ندارد." };
             using (var trans = _context.Database.BeginTransaction())
             {
                 try
                 {
+                    List<Box> boxUserActivitys = new List<Box>();
+
                     foreach (var item in Boxs)
                     {
 
@@ -69,14 +75,19 @@ namespace Ghasedak.Controllers.API
                         box.lon = item.lon;
                         box.lat = item.lat;
                         box.charityId = item.charityId;
-                        box.opratorId = item.opratorId;
+                        box.opratorId = oprator.id;
                         if (!_context.DischargeRoutes.Any(x => x.id == item.dischargeRouteId))
                             continue;
                         box.dischargeRouteId = item.dischargeRouteId;
+                        boxUserActivitys.Add(box);
                         _context.Boxs.Add(box);
 
                     }
                     _context.SaveChanges();
+                    foreach (var item in boxUserActivitys)
+                    {
+                        UserActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "صندق با شماره " + item.number + " و شماره همراه " + item.mobile + "ثبت گردید");
+                    }
                     trans.Commit();
                     return new { IsError = false, message = "صندوق ها با موفقیت ثبت گردید." };
 

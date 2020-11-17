@@ -69,6 +69,7 @@ function PostAjax(ActionName, Parameters, redirecturl) {
         else if (Parameters[i].special === 'radio') {
             fd.append(Parameters[i].id, $('input[name="' + Parameters[i].htmlname + '"]:checked').val());
         }
+
         else if (Parameters[i].special === 'file') {
 
             $.each($(".TheFile"), function (i, obj) {
@@ -155,7 +156,7 @@ function FillComboBox(ActionName, Target) {
 }
 
 function EditAjax(ActionName, id) {
-    
+
     var fd = new FormData();
     fd.append('ItemId', id);
     $.ajax({
@@ -171,6 +172,62 @@ function EditAjax(ActionName, id) {
         success: function (response) {
             if (response.success) {
                 $.each(response.listItem, function () {
+                    
+                    if (this.key == "isActive") {
+                        if (this.value == "True") {
+                            $('#register').find('input:checkbox[id^="isActive"]').prop('checked', true);
+                        }
+                        else {
+                            $('#register').find('input:checkbox[id^="isActive"]').prop('checked', false);
+
+                        }
+                    }
+
+                    if (this.key == "isAccessBox") {
+                        if (this.value == "True") {
+                            $('#register').find('input:checkbox[id^="isAccessBox"]').prop('checked', true);
+                        }
+                        else {
+                            $('#register').find('input:checkbox[id^="isAccessBox"]').prop('checked', false);
+
+                        }
+                    }
+
+                    if (this.key == "isAccessSponsor") {
+                        if (this.value == "True") {
+                            $('#register').find('input:checkbox[id^="isAccessSponsor"]').prop('checked', true);
+                        }
+                        else {
+                            $('#register').find('input:checkbox[id^="isAccessSponsor"]').prop('checked', false);
+
+                        }
+                    }
+
+                    if (this.key == "isAccessFinancialAid") {
+                        if (this.value == "True") {
+                            $('#register').find('input:checkbox[id^="isAccessFinancialAid"]').prop('checked', true);
+                        }
+                        else {
+                            $('#register').find('input:checkbox[id^="isAccessFinancialAid"]').prop('checked', false);
+
+                        }
+                    }
+
+                    if (this.key == "isAccessFlowerCrown") {
+                        if (this.value == "True") {
+                            $('#register').find('input:checkbox[id^="isAccessFlowerCrown"]').prop('checked', true);
+                        }
+                        else {
+                            $('#register').find('input:checkbox[id^="isAccessFlowerCrown"]').prop('checked', false);
+
+                        }
+                    }
+                    if (this.key == "codeOprator") {
+                        debugger
+                        if (this.value == "") {
+                            $("#opratorSection").hide();
+                        }
+                    }
                     $('#' + this.key + '').val(this.value);
                 });
                 //if (response.listartists != null) {
@@ -305,3 +362,58 @@ function RemoveFiles(ParentTarget, ActionName, ParameterName, Parametervalue) {
         }
     });
 }
+$('#isActive').change(function () {
+    if (this.checked) {
+        var isChecked = $(this).prop("checked");
+        $('#register').find('input:checkbox[id^="isActive"]').prop('checked', isChecked);
+        $('#register #isActive').val(true)
+    }
+    else {
+        $('#register #isActive').val(false)
+
+    }
+});
+$('#isAccessBox').change(function () {
+    if (this.checked) {
+        var isChecked = $(this).prop("checked");
+        $('#register').find('input:checkbox[id^="isAccessBox"]').prop('checked', isChecked);
+        $('#register #isAccessBox').val(true)
+    }
+    else {
+        $('#register #isAccessBox').val(false)
+
+    }
+});
+$('#isAccessSponsor').change(function () {
+    if (this.checked) {
+        var isChecked = $(this).prop("checked");
+        $('#register').find('input:checkbox[id^="isAccessSponsor"]').prop('checked', isChecked);
+        $('#register #isAccessSponsor').val(true)
+    }
+    else {
+        $('#register #isAccessSponsor').val(false)
+
+    }
+});
+$('#isAccessFinancialAid').change(function () {
+    if (this.checked) {
+        var isChecked = $(this).prop("checked");
+        $('#register').find('input:checkbox[id^="isAccessFinancialAid"]').prop('checked', isChecked);
+        $('#register #isAccessFinancialAid').val(true)
+    }
+    else {
+        $('#register #isAccessFinancialAid').val(false)
+
+    }
+});
+$('#isAccessFlowerCrown').change(function () {
+    if (this.checked) {
+        var isChecked = $(this).prop("checked");
+        $('#register').find('input:checkbox[id^="isAccessFlowerCrown"]').prop('checked', isChecked);
+        $('#register #isAccessFlowerCrown').val(true)
+    }
+    else {
+        $('#register #isAccessFlowerCrown').val(false)
+
+    }
+});

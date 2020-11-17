@@ -83,6 +83,7 @@ namespace Ghasedak
             services.AddTransient<IOprator, OpratorService>();
             services.AddTransient<IDonator, DonatorService>();
             services.AddTransient<IDeceasedName, DeceasedNameService>();
+            services.AddTransient<ISponsorPay, SponsorPayService>();
 
             #endregion
 

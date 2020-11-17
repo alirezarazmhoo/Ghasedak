@@ -41,7 +41,11 @@ namespace Ghasedak.Controllers.API
             {
                 return BadRequest(ModelState);
             }
-
+            string Token = HttpContext.Request?.Headers["Token"];
+            var oprator = _context.Oprators.Where(p => p.token == Token).FirstOrDefault();
+            if (oprator == null)
+                return new { IsError = true, message = "چنین کاربری وجود ندارد." };
+          
 
             using (var trans = _context.Database.BeginTransaction())
             {

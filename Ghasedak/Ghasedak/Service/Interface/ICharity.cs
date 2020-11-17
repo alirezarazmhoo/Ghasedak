@@ -9,6 +9,8 @@ namespace Ghasedak.Service.Interface
 {
    public interface ICharity
     {
+        Task<object> GetCharityAsync(int chrityId);
+
        PagedList<Charity> GetCharity(int pageId = 1, string filterFullName = "");
     }
 }

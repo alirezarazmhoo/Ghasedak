@@ -44,5 +44,17 @@ namespace Ghasedak.Models
         [Display(Name = "توضیحات ")]
         [MaxLength(500, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string description { get; set; }
+
+        [Display(Name = "فعال")]
+        public bool isActive { get; set; }
+        [Display(Name = "دسترسی به صندوق")]
+        public bool isAccessBox { get; set; }
+        [Display(Name = "دسترسی به مشارکت")]
+        public bool isAccessSponsor { get; set; }
+        [Display(Name = "دسترسی به کمک نقدی")]
+        public bool isAccessFinancialAid { get; set; }
+        [Display(Name = "دسترسی به تاج گل")]
+        public bool isAccessFlowerCrown { get; set; }
+
     }
 }

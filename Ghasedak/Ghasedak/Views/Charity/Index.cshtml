@@ -134,7 +134,7 @@
                 <input display="Name" id="Name" name="Name" placeholder="Please Enter Name" class="form-control" style="width:70%" required>
             </div>
         </form>*@
-                <form id="register" >
+                <form id="register">
                     <div class="box-body">
                         <input type="hidden" id="CharityId" name="CharityId" />
                         <input type="hidden" id="password" name="password" />
@@ -190,8 +190,35 @@
                                 <span class="text-danger field-validation-valid" data-valmsg-for="description" data-valmsg-replace="true"></span>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <label>
+                                <input type="checkbox" id="isActive" name="isActive">
+                            </label>
+                            <label for="isActive" class="control-label">فعال</label>
+                        </div>
+                        <div class="col-md-12">
+                            <label>
+                                <input type="checkbox" id="isAccessBox" name="isAccessBox">
+                            </label>
+                            <label for="isAccessBox" class="control-label">دسترسی به صندوق</label>
+                            <label>
+                                <input type="checkbox" id="isAccessSponsor" name="isAccessSponsor">
+                            </label>
+                            <label for="isAccessSponsor" class="control-label">دسترسی به مشارکت</label>
+                            <br />
+                            <label>
+
+                                <input type="checkbox" id="isAccessFinancialAid" name="isAccessFinancialAid">
+                            </label>
+                            <label for="isAccessFinancialAid" class="control-label">دسترسی به کمک نقدی</label>
+                            <label>
+                                <input type="checkbox" id="isAccessFlowerCrown" name="isAccessFlowerCrown">
+                            </label>
+                            <label for="isAccessFlowerCrown" class="control-label">دسترسی به تاج گل</label>
+                        </div>
                     </div>
-</form>
+                    
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف</button>
@@ -218,6 +245,7 @@
                 $('#example2 tr:has(td)').find('input[type="checkbox"]').prop('checked', isChecked);
             }
         });
+        
         $('.deleteAll').on('click', function () {
             var array = [];
             $('#example2 tr:has(td)').find("input[type='checkbox']:checked").each(function () {
@@ -259,17 +287,18 @@
     <script>
         window.onload = Load;
         function Load() {
+
             CreateAllModals();
             $(".openmodal").click(function () {
                 clear('register', ["input"]);
                 clear('register', ["textarea"]);
-
-
             });
             $(".btn-warning").click(function () {
+                
                 EditAjax("../Charity/CharityInfo", this.id);
                 var bodyStyle = document.body.style;
                 bodyStyle.removeProperty('padding-right');
+
             });
         }
         function Save() {
@@ -286,6 +315,11 @@
                     { id: "title", htmlname: "title", special: "" },
                     { id: "mobile", htmlname: "mobile", special: "" },
                     { id: "description", htmlname: "description", special: "" },
+                    { id: "isActive", htmlname: "isActive", special: "" },
+                    { id: "isAccessBox", htmlname: "isAccessBox", special: "" },
+                    { id: "isAccessSponsor", htmlname: "isAccessSponsor", special: "" },
+                    { id: "isAccessFinancialAid", htmlname: "isAccessFinancialAid", special: "" },
+                    { id: "isAccessFlowerCrown", htmlname: "isAccessFlowerCrown", special: "" },
                 { id: "address", htmlname: "address", special: "" }];
                 PostAjax('../Charity/Register', Parameters, "../Charity/Index?page="+@Model.PageNumber+"");
             }

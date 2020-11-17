@@ -127,7 +127,6 @@ I:\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.csproj.CopyComple
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.csprojAssemblyReference.cache
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.AssemblyInfoInputs.cache
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.AssemblyInfo.cs
-E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.csproj.CoreCompileInputs.cache
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.RazorAssemblyInfo.cache
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.RazorAssemblyInfo.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.dll
@@ -195,3 +194,10 @@ E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Raz
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\Oprator\Index.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FlowerCrownType\Index.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FinancialServiceType\Index.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.csproj.CoreCompileInputs.cache
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\SponsorPay\Delete.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\SponsorPay\Edit.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\SponsorPay\Index.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FlowerCrown\Delete.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FlowerCrown\Edit.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FlowerCrown\Index.cshtml.g.cs

@@ -45,5 +45,8 @@ namespace Ghasedak.Models
         [ForeignKey("Charity")]
         public int charityId { get; set; }
         public virtual Charity Charity { get; set; }
+
+        [Display(Name = "فعال")]
+        public bool isActive { get; set; }
     }
 }

@@ -29,5 +29,10 @@ namespace Ghasedak.Service
             PagedList<Charity> res = new PagedList<Charity>(result, pageId, 10);
             return res;
         }
+        public async Task<object> GetCharityAsync( int chrityId)
+        {
+            var data= await _context.Charitys.Select(x => new { x.isActive,x.isAccessBox,x.isAccessFinancialAid,x.isAccessFlowerCrown,x.isAccessSponsor,x.id }).FirstOrDefaultAsync(x=>x.id==chrityId);
+            return data;
+        }
     }
 }

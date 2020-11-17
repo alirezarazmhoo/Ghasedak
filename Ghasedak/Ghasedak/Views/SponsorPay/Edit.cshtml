@@ -1,0 +1,168 @@
+﻿@model Ghasedak.Models.SponsorPay
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="row">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="id" />
+                        <input type="hidden" asp-for="sponsorId" />
+
+                        <div class="box-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <a class="btn btn-danger" asp-action="Index">بازگشت</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            
+                                    <p style="padding-right: 15px;">
+                                        مشخصات حامی
+
+                                    </p>
+                                
+                            
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">نام و نام خانوادگی </label>
+                                        <input asp-for="@Model.Sponsor.fullName" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.Sponsor.fullName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">شماره همراه</label>
+                                        <input asp-for="@Model.Sponsor.mobile" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.Sponsor.mobile" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">کد ملی</label>
+                                        <input asp-for="@Model.Sponsor.nationalcode" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.Sponsor.nationalcode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">تلفن</label>
+                                        <input asp-for="@Model.Sponsor.phone" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.Sponsor.phone" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">تاریخ تولد:</label>
+                                        <input value="@Model.Sponsor.birthDate" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.Sponsor.birthDate" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">آدرس:</label>
+                                        <textarea value="@Model.Sponsor.address" type="text" class="form-control">
+</textarea>
+                                        <span asp-validation-for="@Model.Sponsor.address" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <hr  style="width:100%" />
+
+                                </div>
+                                <p style="padding-right: 15px;">مشخصات پرداخت</p>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">مبلغ</label>
+                                        <input asp-for="price" type="text" class="form-control" onkeyup="numberWithCommas(this)" />
+                                        <span asp-validation-for="price" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">کد پذیرنده:</label>
+                                        <input value="@Model.recieverCode" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.recieverCode" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">شماره پایانه:</label>
+                                        <input value="@Model.terminalCode" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.terminalCode" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">شماره دستگاه:</label>
+                                        <input value="@Model.deviceCode" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.deviceCode" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">توضیحات:</label>
+                                        <textarea value="@Model.description" type="text" class="form-control">
+</textarea>
+                                        <span asp-validation-for="@Model.description" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+</form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+@section scripts
+    {
+    <script src="~/js/PersianDatePicker.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#registerDate').persianDatepicker({
+                //formatDate: "YYYY/MM/DD hh:mm:ss:ms",
+                altFormat: 'X',
+                observer: true,
+
+                timePicker: {
+                    enabled: true
+                },
+            });
+        });
+        function numberWithCommas(x) {
+            var tmp = x.value;
+            while (tmp.indexOf(',') != -1)
+                tmp = tmp.replace(',', '');
+            var parts = tmp.toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            x.value = parts.join(".");
+        }
+        $('form').submit(function () {
+            if ($('#price').length != 0) {
+                while (price.value.indexOf(',') != -1) {
+                    price.value = price.value.replace(',', '');
+                }
+            }
+
+        });
+
+    </script>
+}
+
+

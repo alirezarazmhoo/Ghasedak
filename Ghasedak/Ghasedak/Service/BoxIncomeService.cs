@@ -20,7 +20,6 @@ namespace Ghasedak.Service
         public PagedList<BoxIncome> GetBoxIncome(int charityId,int pageId = 1)
         {
             IQueryable<BoxIncome> result = _context.BoxIncomes.Where(x=>x.charityId==charityId).Include(x=>x.oprator).Include(x=>x.box).OrderByDescending(x => x.id);
-           
             PagedList<BoxIncome> res = new PagedList<BoxIncome>(result, pageId, 10);
             return res;
         }

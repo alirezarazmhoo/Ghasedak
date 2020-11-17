@@ -1,0 +1,224 @@
+﻿@model PagedList.Core.IPagedList<Ghasedak.Models.FlowerCrown>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">تاج گل</h3>
+            </div>
+            <div class="row">
+                <form>
+                    <div class="box-body">
+                        <div class="col-md-2 form-group">
+
+                            <div class="btn btn-default" id="export">خروجی اکسل</div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="row">
+                <div class="box-body">
+
+                    <div class="col-md-4">
+                        <input type="file" id="fUpload" name="files" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="button" class="btn btn-default" id="btnUpload" value="آپلود فایل اکسل" />
+                    </div>
+                    <div class="col-md-6">
+                        @*فایل آپلودی به ترتیب از راست به چپ دارای فیلدهای CashCode از نوع عدد،OfficeCode از نوع عدد،Price از نوع عدد،StatusIncome از نوع عدد*@
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="box-body">
+                    <div class="col-md-12">
+                        <a class="btn btn-default deleteAll">حذف موارد انتخابی</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="example2" class="table table-bordered table-hover ">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="checkbox1">
+                                    </label>
+                                </div>
+                            </th>
+                            <th>نوع خدمت</th>
+                            <th>قیمت</th>
+                            <th>امکانات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="chkRow">
+                                        <label>
+                                            <input value="@item.id" type="checkbox">
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>@item.FlowerCrownType.title</td>
+                                <td>@item.price</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">مشاهده</a>
+                                <a class="btn btn-danger" data-toggle="modal" data-target="#QuestionModal" onclick="AssignButtonClicked(this)" data-assigned-id="@item.id" > حذف</a>
+                            </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            <li>
+                                <pager list="@Model" asp-controller="FlowerCrown" asp-action="Index" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+<div id="FlowerCrownId">
+
+</div>
+<div id="Error">
+
+</div>
+<div id="Success">
+
+</div>
+<div id="Question">
+
+</div>
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $('#btnUpload').on('click', function () {
+                var fileExtension = ['xls', 'xlsx'];
+                var filename = $('#fUpload').val();
+                if (filename.length == 0) {
+                    alert("Please select a file.");
+                    return false;
+                }
+                else {
+                    var extension = filename.replace(/^.*\./, '');
+                    if ($.inArray(extension, fileExtension) == -1) {
+                        alert("Please select only excel files.");
+                        return false;
+                    }
+                }
+                var fdata = new FormData();
+                var fileUpload = $("#fUpload").get(0);
+                var files = fileUpload.files;
+                fdata.append(files[0].name, files[0]);
+                $.ajax({
+                    type: "POST",
+                    url: "/FlowerCrown/OnPostImport",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: fdata,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response == "Success")
+                            window.location.href = "/FlowerCrown/Index";
+                    },
+                    error: function (e) {
+
+                    }
+                });
+            })
+        });
+        $('#checkbox1').change(function () {
+            if (this.checked) {
+                var isChecked = $(this).prop("checked");
+                $('#example2 tr:has(td)').find('input[type="checkbox"]').prop('checked', isChecked);
+            }
+        });
+        $('.deleteAll').on('click', function () {
+            var array = [];
+            $('#example2 tr:has(td)').find("input[type='checkbox']:checked").each(function () {
+                array.push(parseInt($(this).val()));
+            });
+
+            swal({
+                title: ' مطمئن هستید؟',
+                text: 'آیا از حذف رکورد انتخابی اطمینان دارید؟!',
+                type: 'warning',
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonClass: 'btn btn-danger',
+                confirmButtonText: '! بله ',
+                cancelButtonClass: 'btn btn-light',
+                background: 'rgba(0, 0, 0, 0.96)'
+            }).then(function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/FlowerCrown/DeleteAll",
+                    data: { ids: array },
+                    success: function (response) {
+                        if (response == "Success")
+                            window.location.href = "/FlowerCrown/Index";
+                        else
+                            window.location.href = "/FlowerCrown/Index?isSuccess=true";
+
+                    }
+                });
+            });
+        })
+        $("#export").on('click', function () {
+            window.location.href = '/FlowerCrown/ExportToExcel';
+        });
+        window.onload = Load;
+        function Load() {
+            CreateAllModals();
+            $(".openmodal").click(function () {
+                clear('register', ["input"]);
+                clear('register', ["textarea"]);
+
+            });
+
+        }
+        function AssignButtonClicked(elem) {
+            debugger
+            $('#FlowerCrownId').val($(elem).data('assigned-id'));
+            var id = $(elem).data('assigned-id');
+            $('#QuestionModal').find("h4").html(id);
+        }
+        function Remove() {
+
+            var Parameters = [{ id: "id", htmlname: "FlowerCrownId", special: "" }];
+            PostAjax('../FlowerCrown/Delete', Parameters, "../FlowerCrown/Index");
+
+        }
+    </script>
+}
+
+
+

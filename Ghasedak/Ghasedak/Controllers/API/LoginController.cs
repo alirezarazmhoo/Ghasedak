@@ -39,15 +39,24 @@ namespace Ghasedak.Controllers.API
 
         public object Login(RegisterUser user)
         {
-            var data = _context.Oprators.FirstOrDefault(p => p.userName == user.userName);
-            if (data == null)
+            var oprator = _context.Oprators.FirstOrDefault(p => p.userName == user.userName);
+            if (oprator == null)
             {
                 return new { IsError = true, message = "چنین کاربری وجود ندارد." };
             }
+            var charityActive = _context.Charitys.FirstOrDefault(p => p.id==oprator.charityId);
+            if (!oprator.isActive )
+            {
+                return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
+            }
+            if (!charityActive.isActive )
+            {
+                return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
+            }
 
-            if (!BCrypt.Net.BCrypt.Verify(user.password, data.password))
+            if (!BCrypt.Net.BCrypt.Verify(user.password, oprator.password))
                 return new { IsError = true, message = "خطای ورود." };
-            return new { IsError = false, message = "", token = data.token, fullName = data.fullName, code = data.code,charityId=data.charityId };
+            return new { IsError = false, message = "", token = oprator.token, fullName = oprator.fullName, code = oprator.code,charityId=oprator.charityId };
         }
 
     }

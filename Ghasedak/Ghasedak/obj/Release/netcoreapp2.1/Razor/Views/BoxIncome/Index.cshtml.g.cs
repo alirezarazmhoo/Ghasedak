@@ -60,7 +60,7 @@ using Ghasedak.Models;
             WriteLiteral("<div class=\"row\">\r\n    <div class=\"col-xs-12\">\r\n        <div class=\"box\">\r\n            <div class=\"box-header\">\r\n                <h3 class=\"box-title\">درآمد ها</h3>\r\n            </div>\r\n            <div class=\"row\">\r\n                ");
             EndContext();
             BeginContext(294, 283, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "aeb2b3076b3748bf92503d0a08aa109c", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a5388f86849b43fb9f8fc0b882c4df06", async() => {
                 BeginContext(300, 270, true);
                 WriteLiteral(@"
                     <div class=""box-body"">
@@ -223,7 +223,7 @@ WriteAttributeValue("", 2739, item.id, 2739, 8, false);
             WriteLiteral("\r\n                            <td>\r\n                                ");
             EndContext();
             BeginContext(3793, 79, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7ed6c3e2ced64387a793b9d389ca9b9a", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f294ff742fe64c6eb21f0b8c9ad95631", async() => {
                 BeginContext(3862, 6, true);
                 WriteLiteral("مشاهده");
                 EndContext();
@@ -293,7 +293,7 @@ WriteAttributeValue("", 2739, item.id, 2739, 8, false);
                                 ");
             EndContext();
             BeginContext(4679, 69, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "4374a657b8ab43538d254f23d07624de", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "4babe7902e4c4eb4b189ac83734ec2f2", async() => {
             }
             );
             __PagedList_Core_Mvc_PagerTagHelper = CreateTagHelper<global::PagedList.Core.Mvc.PagerTagHelper>();

@@ -131,3 +131,9 @@ E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Release\netcoreapp2.1\G
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Release\netcoreapp2.1\Ghasedak.csproj.CopyComplete
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Release\netcoreapp2.1\Razor\Views\FinancialServiceType\Index.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Release\netcoreapp2.1\Razor\Views\FlowerCrownType\Index.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Release\netcoreapp2.1\Razor\Views\FlowerCrown\Delete.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Release\netcoreapp2.1\Razor\Views\FlowerCrown\Edit.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Release\netcoreapp2.1\Razor\Views\FlowerCrown\Index.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Release\netcoreapp2.1\Razor\Views\SponsorPay\Delete.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Release\netcoreapp2.1\Razor\Views\SponsorPay\Edit.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Release\netcoreapp2.1\Razor\Views\SponsorPay\Index.cshtml.g.cs
