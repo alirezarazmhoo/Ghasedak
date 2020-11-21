@@ -56,5 +56,9 @@ namespace Ghasedak.Models
         [Display(Name = "دسترسی به تاج گل")]
         public bool isAccessFlowerCrown { get; set; }
 
+        [Display(Name = "کد دریافتی برای فعال سازی خیریه ")]
+        [MaxLength(6, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
+        public string androidCode { get; set; }
+
     }
 }

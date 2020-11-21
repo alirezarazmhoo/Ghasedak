@@ -7675,6 +7675,12 @@
     <Content Update="Views\AndroidVersion\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\UserActivity\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\FinancialAid\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\FlowerCrown\Edit.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

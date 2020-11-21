@@ -1,0 +1,106 @@
+﻿@model Ghasedak.Models.UserActivity
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="row">
+                    <div class="box-body">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <a class="btn btn-danger" asp-action="Index">بازگشت</a>
+                            </div>
+                        </div>
+                        </div>
+                        <form asp-action="Edit" method="post">
+
+                            <div class="box-body">
+
+                                @if (Model.oprator != null)
+                                {
+
+                                    <div id="opratorSection">
+                                        <p style="padding-right: 15px;">
+                                            مشخصات ثبت کننده
+
+                                        </p>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label">کد</label>
+                                                <input class="form-control" type="text" asp-for="@Model.oprator.code" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label">شماره همراه</label>
+                                                <input class="form-control" type="text" asp-for="@Model.oprator.mobile" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label">نام و نام خانوادگی</label>
+                                                <input class="form-control" type="text" asp-for="@Model.oprator.mobile" readonly>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <hr style="width:100%" />
+
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+
+                            <div class="box-body">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">تاریخ :</label>
+                                        <input value="@Model.date" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.date" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">وضعیت:</label>
+                                        @if (Model.status == UserActivityEnum.register)
+                                        {
+                                            <input value="ثبت" type="text" class="form-control" />
+
+                                        }
+                                        @if (Model.status == UserActivityEnum.edit)
+                                        {
+                                            <input value="ویرایش" type="text" class="form-control" />
+
+                                        }
+                                        @if (Model.status == UserActivityEnum.delete)
+                                        {
+                                            <input value="حذف" type="text" class="form-control" />
+
+                                        }
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">توضیحات :</label>
+                                        <textarea value="@Model.description" type="text" class="form-control">
+@Model.description
+</textarea>
+                                        <span asp-validation-for="@Model.description" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+

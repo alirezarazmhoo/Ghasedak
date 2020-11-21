@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
+using Ghasedak.Utility;
 using Ghasedak.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -50,12 +51,26 @@ namespace Ghasedak.Controllers.API
             try
             {
                 string Token = HttpContext.Request?.Headers["token"];
-            var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
-            DeceasedName.charityId = oprator.charityId;
+                var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
+                if (oprator == null)
+                    return new { IsError = true, message = "چنین کاربری جود ندارد." };
+                
+            var charityActive = _context.Charitys.FirstOrDefault(p => p.id==oprator.charityId);
+            if (!oprator.isActive )
+            
+                return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
+            
+            if (!charityActive.isActive )
+            
+                return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
+           
+                DeceasedName.charityId = oprator.charityId;
                 if (_context.DeceasedNames.Any(x => x.deceaseAalias.Equals(DeceasedName.deceasedFullName)))
                     return new { IsError = true, message = "ثبت متوفی با مشکل مواجه شده است." };
                 _context.DeceasedNames.Add(DeceasedName);
                 _context.SaveChanges();
+                UserActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "متوفی با نام و نام خانوادگی " +DeceasedName.deceasedFullName + " ثبت گردید.");
+
                 return new { IsError = false, message = "متوفی با موفقیت ثبت گردید." };
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
+using Ghasedak.Utility;
 using Ghasedak.ViewModel;
 using PagedList.Core;
 using System;
@@ -18,23 +19,25 @@ namespace Ghasedak.Service
             _context = context;
         }
 
-        public object GetSponsor(int charityId,int opratorId)
+        public object GetSponsor(int charityId, int opratorId)
         {
-           IQueryable<Sponsor> result = _context.Sponsors.Where(x=>x.charityId==charityId && x.opratorId==opratorId);
-            
+            IQueryable<Sponsor> result = _context.Sponsors.Where(x => x.charityId == charityId && x.opratorId == opratorId);
+
             var res = result.OrderByDescending(u => u.id).ToList();
             if (res.Count() == 0)
-            
+
                 return new { Data = res, Count = res.Count(), IsError = true, Message = "حامی ثبت نشده است" };
             else
                 return new { Data = res, Count = res.Count(), IsError = false, Message = "" };
         }
-        public object AddSponsor(IEnumerable<SponsorViewModel> SponsorViewModel,Oprator oprator)
+        public object AddSponsor(IEnumerable<SponsorViewModel> SponsorViewModel, Oprator oprator)
         {
-             using (var trans = _context.Database.BeginTransaction())
+            using (var trans = _context.Database.BeginTransaction())
             {
                 try
                 {
+                    List<SponsorPay> sponsorPayUserActivitys = new List<SponsorPay>();
+
                     foreach (var item in SponsorViewModel)
                     {
                         if (item.sponsorId == 0)
@@ -66,6 +69,7 @@ namespace Ghasedak.Service
                             sponsorPay.deviceCode = item.deviceCode;
                             sponsorPay.terminalCode = item.terminalCode;
                             sponsorPay.recieverCode = item.recieverCode;
+                            sponsorPayUserActivitys.Add(sponsorPay);
                             _context.SponsorPays.Add(sponsorPay);
                         }
                         else
@@ -79,10 +83,15 @@ namespace Ghasedak.Service
                             sponsorPay.deviceCode = item.deviceCode;
                             sponsorPay.terminalCode = item.terminalCode;
                             sponsorPay.recieverCode = item.recieverCode;
+                            sponsorPayUserActivitys.Add(sponsorPay);
                             _context.SponsorPays.Add(sponsorPay);
                         }
                     }
                     _context.SaveChanges();
+                    foreach (var item in sponsorPayUserActivitys)
+                    {
+                        UserActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "مشارکت با قیمت  " + item.price + " و شماره پذیرنده " + item.recieverCode +"و شماره پایانه "+item.terminalCode+"و شماره دستگاه "+item.deviceCode+ " ثبت گردید.");
+                    }
                     trans.Commit();
                     return new { IsError = false, message = "پرداخت حامیان با موفقیت ثبت گردید." };
                 }
@@ -95,14 +104,14 @@ namespace Ghasedak.Service
 
         }
 
-         public int AddSponsorFromAdmin(Sponsor Sponsor)
+        public int AddSponsorFromAdmin(Sponsor Sponsor)
         {
             _context.Sponsors.Add(Sponsor);
             _context.SaveChanges();
             return Sponsor.id;
         }
 
-        
+
 
         public PagedList<Sponsor> GetSponsor(int pageId = 1)
         {

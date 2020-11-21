@@ -34,7 +34,26 @@ namespace Ghasedak.Controllers
             _Charity = Charity;
             _hostingEnvironment = hostingEnvironment;
         }
+         [HttpGet]
+        public IActionResult ActiveCharity(int isSuccess = 1)
+        {
+            if (isSuccess==2)
+                ViewBag.success = "خیریه شما فعال گردید برای استفاده از امکانات پنل یکبار از حساب کاربری خارج شده سپس مجددا وارد شوید.";
+            if (isSuccess==3)
+                ViewBag.success = "کد وارد شده نامعتبر است.";
+            return View();
+        }
+        public async Task<IActionResult> ActiveCharity(string androidCode)
+        {
+              int charityId = Convert.ToInt32(User.Identity.Name);
+            bool result =await  _Charity.ActiveCharityAsync(charityId, androidCode);
+            if(result)
+            return RedirectToAction("ActiveCharity", new { @isSuccess = 2 });
+            else
+            return RedirectToAction("ActiveCharity", new { @isSuccess = 3 });
 
+        }
+        
         public IActionResult Index(int page = 1, string filtercode = "", bool isSuccess = false)
         {
             var model = _Charity.GetCharity(page, filtercode);
@@ -75,6 +94,7 @@ namespace Ghasedak.Controllers
                 edit.Add(new EditViewModels() { key = "address", value = Charity.address });
                 edit.Add(new EditViewModels() { key = "mobile", value = Charity.mobile });
                 edit.Add(new EditViewModels() { key = "description", value = Charity.description });
+                edit.Add(new EditViewModels() { key = "androidCode", value = Charity.androidCode });
                 edit.Add(new EditViewModels() { key = "isActive", value = Charity.isActive.ToString() });
                 edit.Add(new EditViewModels() { key = "isAccessBox", value = Charity.isAccessBox.ToString() });
                 edit.Add(new EditViewModels() { key = "isAccessSponsor", value = Charity.isAccessSponsor.ToString() });

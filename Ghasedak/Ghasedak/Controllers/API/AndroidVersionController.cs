@@ -23,13 +23,13 @@ namespace Ghasedak.Controllers.API
 
         }
 
-        [HttpGet]
-
+         [HttpGet]
         public object GetAndroidVersion()
         {
             var data = new object();
             if( _context.AndroidVersions.Any())
               data=  _context.AndroidVersions.FirstOrDefault();
+
              if(data==null)
             return new { Data = data,Count=0,IsError=true,Message="ورژن ثبت نشده است" };
             else

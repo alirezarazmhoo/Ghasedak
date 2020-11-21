@@ -46,6 +46,8 @@ namespace Ghasedak.Migrations
                     b.Property<string>("currVersion")
                         .HasMaxLength(20);
 
+                    b.Property<bool>("isMandatory");
+
                     b.HasKey("id");
 
                     b.ToTable("AndroidVersions");
@@ -129,6 +131,9 @@ namespace Ghasedak.Migrations
 
                     b.Property<string>("address")
                         .HasMaxLength(500);
+
+                    b.Property<string>("androidCode")
+                        .HasMaxLength(6);
 
                     b.Property<string>("code")
                         .HasMaxLength(6);

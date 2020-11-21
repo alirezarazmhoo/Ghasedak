@@ -1,6 +1,7 @@
 ﻿using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
+using Ghasedak.Utility;
 using Ghasedak.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
@@ -19,7 +20,7 @@ namespace Ghasedak.Service
             _context = context;
         }
 
-        public object GetFlowerCrown( int charityId)
+        public object GetFlowerCrown(int charityId)
         {
             IQueryable<FlowerCrown> result = _context.FlowerCrowns.Where(x => x.charityId == charityId);
 
@@ -40,25 +41,27 @@ namespace Ghasedak.Service
 
 
 
-        public PagedList<FlowerCrown> GetFlowerCrown(int charityId,int pageId = 1, long filterprice = 0)
+        public PagedList<FlowerCrown> GetFlowerCrown(int charityId, int pageId = 1, long filterprice = 0)
         {
-            IQueryable<FlowerCrown> result = _context.FlowerCrowns.Include(x => x.FlowerCrownType).Where(x=>x.charityId==charityId).OrderByDescending(x => x.id);
-            if (filterprice!=0)
+            IQueryable<FlowerCrown> result = _context.FlowerCrowns.Include(x => x.FlowerCrownType).Where(x => x.charityId == charityId).OrderByDescending(x => x.id);
+            if (filterprice != 0)
             {
-                result = result.Where(x => x.price==filterprice);
+                result = result.Where(x => x.price == filterprice);
             }
             PagedList<FlowerCrown> res = new PagedList<FlowerCrown>(result, pageId, 10);
             return res;
         }
 
-       public FlowerCrownAdminViewModel GetDataForAdmin(int id)
+        public FlowerCrownAdminViewModel GetDataForAdmin(int id)
         {
             var FlowerCrown = _context.FlowerCrowns.Include(x => x.FlowerCrownType).FirstOrDefault(x => x.id == id);
+            var oprator = _context.Oprators.FirstOrDefault(x => x.id == FlowerCrown.opratorId);
             var Donator = _context.Donators.FirstOrDefault(x => x.id == FlowerCrown.donatorId);
             var Inturducer = _context.Donators.FirstOrDefault(x => x.id == FlowerCrown.IntroducedId);
             var DeceasedName = _context.DeceasedNames.FirstOrDefault(x => x.id == FlowerCrown.deceasedNameId);
             FlowerCrownAdminViewModel FlowerCrownAdminViewModel = new FlowerCrownAdminViewModel();
             FlowerCrownAdminViewModel.flowerCrown = FlowerCrown;
+            FlowerCrownAdminViewModel.oprator = oprator;
             FlowerCrownAdminViewModel.donator = Donator;
             FlowerCrownAdminViewModel.introduced = Inturducer;
             FlowerCrownAdminViewModel.deceasedName = DeceasedName;
@@ -83,6 +86,7 @@ namespace Ghasedak.Service
                     flowerCrown.deceasedNameId = item.deceasedNameId;
                     _context.FlowerCrowns.Add(flowerCrown);
                     _context.SaveChanges();
+                    UserActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "تاج گل با نام متوفی  " + flowerCrown.DeceasedName.deceasedFullName+"با قیمت "+flowerCrown.price + " ثبت گردید.");
                     trans.Commit();
                     return new { IsError = false, message = "تاج گل با موفقیت ثبت گردید." };
                 }

@@ -73,9 +73,9 @@ namespace Ghasedak.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignIn(LoginUserAdmin user)
+        public IActionResult SignIn(LoginUserAdmin user)
         {
-           
+
             if (string.IsNullOrEmpty(user.password) || string.IsNullOrEmpty(user.userName))
             {
                 ModelState.Clear();
@@ -90,7 +90,7 @@ namespace Ghasedak.Controllers
                 ModelState.AddModelError("", "نام کاربری یا رمز عبور صحیح نیست");
                 return View("Login");
             }
-           else if (u != null && charity == null)
+            else if (u != null && charity == null)
             {
                 if (!BCrypt.Net.BCrypt.Verify(user.password, u.password))
                 {
@@ -119,7 +119,7 @@ namespace Ghasedak.Controllers
                     return Redirect("/Home/Index");
                 }
             }
-          else  if (u == null && charity != null)
+            else if (u == null && charity != null)
             {
                 if (!BCrypt.Net.BCrypt.Verify(user.password, charity.password))
                 {
@@ -129,6 +129,7 @@ namespace Ghasedak.Controllers
                 }
                 else
                 {
+
                     var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.NameIdentifier,charity.id.ToString()),
@@ -136,6 +137,16 @@ namespace Ghasedak.Controllers
                         new Claim(ClaimTypes.Role,"Charity"),
                         new Claim(ClaimTypes.GivenName,charity.title)
                     };
+                    if (charity.isActive)
+                        claims.Add(new Claim(ClaimTypes.Role, "isActive"));
+                    if (charity.isAccessBox)
+                        claims.Add(new Claim(ClaimTypes.Role, "isAccessBox"));
+                    if (charity.isAccessSponsor)
+                        claims.Add(new Claim(ClaimTypes.Role, "isAccessSponsor"));
+                    if (charity.isAccessFinancialAid)
+                        claims.Add(new Claim(ClaimTypes.Role, "isAccessFinancialAid"));
+                    if (charity.isAccessFlowerCrown)
+                        claims.Add(new Claim(ClaimTypes.Role, "isAccessFlowerCrown"));
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
 
@@ -145,8 +156,9 @@ namespace Ghasedak.Controllers
 
 
                     };
-                    
-                //TempData["charityTitle"] = charity.title;
+
+                    //TempData["charityTitle"] = charity.title;
+                    HttpContext.SignInAsync(principal, properties);
 
                     return Redirect("/Home/IndexCharity");
                 }
@@ -156,7 +168,7 @@ namespace Ghasedak.Controllers
             else
                 return View("Login");
 
-          
+
         }
 
 
@@ -184,9 +196,20 @@ namespace Ghasedak.Controllers
                     {
                         new Claim(ClaimTypes.NameIdentifier,charity.id.ToString()),
                         new Claim(ClaimTypes.Name,charity.id.ToString()),
-                        new Claim(ClaimTypes.Role,"Charity")
+                        new Claim(ClaimTypes.Role,"Charity"),
+                        new Claim(ClaimTypes.GivenName,charity.title)
 
                     };
+                 if (charity.isActive)
+                 claims.Add(new Claim(ClaimTypes.Role, "isActive"));
+                if (charity.isAccessBox)
+                    claims.Add(new Claim(ClaimTypes.Role, "isAccessBox"));
+                if (charity.isAccessSponsor)
+                    claims.Add(new Claim(ClaimTypes.Role, "isAccessSponsor"));
+                if (charity.isAccessFinancialAid)
+                    claims.Add(new Claim(ClaimTypes.Role, "isAccessFinancialAid"));
+                if (charity.isAccessFlowerCrown)
+                    claims.Add(new Claim(ClaimTypes.Role, "isAccessFlowerCrown"));
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
@@ -196,7 +219,7 @@ namespace Ghasedak.Controllers
                 };
                 HttpContext.SignInAsync(principal, properties);
                 //HttpContext.Session.SetString("charityTitle", charity.title);
-                TempData["charityTitle"] = charity.title;
+                //TempData["charityTitle"] = charity.title;
                 return Redirect("/Home/IndexCharity");
             }
         }
