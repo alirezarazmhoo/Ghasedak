@@ -72,6 +72,8 @@ namespace Ghasedak.Migrations
                     b.Property<string>("fullName")
                         .HasMaxLength(100);
 
+                    b.Property<Guid>("guidBox");
+
                     b.Property<double>("lat");
 
                     b.Property<double>("lon");
@@ -216,6 +218,8 @@ namespace Ghasedak.Migrations
 
                     b.Property<bool>("deceasedSex");
 
+                    b.Property<Guid>("guidDeceasedName");
+
                     b.HasKey("id");
 
                     b.ToTable("DeceasedNames");
@@ -236,6 +240,8 @@ namespace Ghasedak.Migrations
                         .HasMaxLength(10);
 
                     b.Property<int?>("day");
+
+                    b.Property<Guid>("guidDischargeRoute");
 
                     b.Property<int?>("opratorId");
 
@@ -262,6 +268,8 @@ namespace Ghasedak.Migrations
 
                     b.Property<string>("donatorMobile")
                         .HasMaxLength(11);
+
+                    b.Property<Guid>("guidDonator");
 
                     b.Property<bool>("isSendMessage");
 

@@ -84,7 +84,9 @@ namespace Ghasedak.Controllers.API
                     _context.SaveChanges();
                      foreach (var item in financialAidUserActivitys)
                     {
-                        UserActivityAdd.Add(item.opratorId,Convert.ToInt32(item.charityId), DateTime.Now, UserActivityEnum.register, "کمک نقدی با نام حامی  " + item.name + " ثبت گردید.");
+                         UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+
+                        userActivityAdd.Add(item.opratorId,Convert.ToInt32(item.charityId), DateTime.Now, UserActivityEnum.register, "کمک نقدی با نام حامی  " + item.name + " ثبت گردید.");
                     }
                     trans.Commit();
                     return new { IsError = false, message = "کمک های نقدی با موفقیت ثبت گردید." };

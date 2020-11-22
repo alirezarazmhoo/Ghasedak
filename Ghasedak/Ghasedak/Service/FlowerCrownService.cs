@@ -67,14 +67,31 @@ namespace Ghasedak.Service
             FlowerCrownAdminViewModel.deceasedName = DeceasedName;
             return FlowerCrownAdminViewModel;
         }
-        public object AddFlowerCrown(FlowerCrown item, Oprator oprator)
+        public object AddFlowerCrown(FlowerCrownViewModelApi item, Oprator oprator)
         {
-            using (var trans = _context.Database.BeginTransaction())
-            {
+            
                 try
                 {
                     FlowerCrown flowerCrown = new FlowerCrown();
-                    if (_context.FlowerCrowns.Any(x => x.deceasedNameId == item.deceasedNameId && x.IntroducedId == item.IntroducedId && x.donatorId == item.donatorId && x.CeremonyType == item.CeremonyType))
+                    var DeceasedName = _context.DeceasedNames.FirstOrDefault(x => x.guidDeceasedName == item.guidDeceasedName);
+                    if (DeceasedName == null)
+                    {
+                        return new { IsError = true, message = "متوفی قبلا ثبت نشده است." };
+
+                    }
+                    var Donator = _context.Donators.FirstOrDefault(x => x.guidDonator == item.guidDonator);
+                    if (Donator == null)
+                    {
+                        return new { IsError = true, message = "اهدا کننده قبلا ثبت نشده است." };
+
+                    }
+                     var Introduced = _context.Donators.FirstOrDefault(x => x.guidDonator == item.guidIntroduced);
+                    if (Introduced == null)
+                    {
+                        return new { IsError = true, message = "معرف قبلا ثبت نشده است." };
+
+                    }
+                    if (_context.FlowerCrowns.Any(x => x.deceasedNameId == DeceasedName.id && x.IntroducedId == Introduced.id && x.donatorId == Donator.id && x.CeremonyType == item.CeremonyType))
                         return new { IsError = true, message = "تاج گل قبلا ثبت شده است." };
                     flowerCrown.charityId = oprator.charityId;
                     flowerCrown.opratorId = oprator.id;
@@ -82,20 +99,23 @@ namespace Ghasedak.Service
                     flowerCrown.registerDate = item.registerDate;
                     flowerCrown.price = item.price;
                     flowerCrown.CeremonyType = item.CeremonyType;
-                    flowerCrown.donatorId = item.donatorId;
-                    flowerCrown.deceasedNameId = item.deceasedNameId;
+                    flowerCrown.donatorId = Donator.id;
+                    flowerCrown.IntroducedId = Introduced.id;
+                    flowerCrown.deceasedNameId = DeceasedName.id;
                     _context.FlowerCrowns.Add(flowerCrown);
                     _context.SaveChanges();
-                    UserActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "تاج گل با نام متوفی  " + flowerCrown.DeceasedName.deceasedFullName+"با قیمت "+flowerCrown.price + " ثبت گردید.");
-                    trans.Commit();
+                    UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+
+                    userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "تاج گل با نام متوفی  " + flowerCrown.DeceasedName.deceasedFullName + " با قیمت " + flowerCrown.price + " ثبت گردید.");
+                    
                     return new { IsError = false, message = "تاج گل با موفقیت ثبت گردید." };
                 }
                 catch (Exception ex)
                 {
-                    trans.Rollback();
-                }
-            }
             return new { IsError = true, message = "ثبت تاج گل با مشکل مواجه شده است." };
+
+                }
+            
 
         }
 

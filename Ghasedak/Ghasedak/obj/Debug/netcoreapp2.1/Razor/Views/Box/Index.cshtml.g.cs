@@ -72,7 +72,7 @@ using Ghasedak.Models;
             WriteLiteral("</p>\r\n            </div>\r\n\r\n            <div class=\"row\">\r\n                ");
             EndContext();
             BeginContext(374, 871, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5ffdd88677cf4d319f338cc1500d7e03", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6d714c2e141a45b48c16c3ec06ed1c0b", async() => {
                 BeginContext(380, 858, true);
                 WriteLiteral(@"
                     <div class=""box-body"">
@@ -130,7 +130,7 @@ using Ghasedak.Models;
                         ");
             EndContext();
             BeginContext(2136, 61, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c19148280b214c7fbb3121d43a0ff990", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4fe344049e1b431a8c80b5aaa8fc524b", async() => {
                 BeginContext(2183, 10, true);
                 WriteLiteral("صندوق جدید");
                 EndContext();
@@ -215,7 +215,7 @@ WriteAttributeValue("", 3561, item.id, 3561, 8, false);
             WriteLiteral("</td>\r\n\r\n                                    <td>\r\n                                        ");
             EndContext();
             BeginContext(3938, 79, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3b17e68e22d447de91ab42cfefb0b1cc", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2b3800ccd6424aafb47c2a85cb98f54d", async() => {
                 BeginContext(4007, 6, true);
                 WriteLiteral("ویرایش");
                 EndContext();
@@ -294,7 +294,7 @@ WriteAttributeValue("", 3561, item.id, 3561, 8, false);
             WriteLiteral("                                <li>\r\n                                    ");
             EndContext();
             BeginContext(5389, 63, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "507acec347054ef98ec6ea01b23ee67f", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "942f47d86b894560a165c167fdf2e595", async() => {
             }
             );
             __PagedList_Core_Mvc_PagerTagHelper = CreateTagHelper<global::PagedList.Core.Mvc.PagerTagHelper>();

@@ -84,12 +84,12 @@ using Ghasedak.Models;
             ");
             EndContext();
             BeginContext(714, 253, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "06f7b799079a4f759353faa899469003", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "54448c8a110546949660184506d15050", async() => {
                 BeginContext(740, 18, true);
                 WriteLiteral("\r\n                ");
                 EndContext();
                 BeginContext(758, 36, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "f52d356e57bc47ce93d3fc840d4bb349", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "8f395c66945144b988c911ded445e6ec", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper>();
@@ -114,7 +114,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper.For = ModelExpressionProvid
                 WriteLiteral("\r\n                <input type=\"submit\" value=\"حذف\" class=\"btn btn-default\" /> |\r\n                ");
                 EndContext();
                 BeginContext(891, 55, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a5ebda0e3fd34f2482c436da63772510", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "30d1ec4e71ce4ba19b3dd63d4913a6df", async() => {
                     BeginContext(936, 6, true);
                     WriteLiteral("بازگشت");
                     EndContext();

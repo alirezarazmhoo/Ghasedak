@@ -18,8 +18,11 @@ namespace Ghasedak.ViewModel
         public string address { get; set; }
         public double lon { get; set; }
         public double lat { get; set; }
-        public int dischargeRouteId { get; set; }
+        //public int dischargeRouteId { get; set; }
         public int charityId { get; set; }
         public int opratorId { get; set; }
+        public Guid guidDischargeRoute { get; set; }
+        public Guid guidBox { get; set; }
+
     }
 }

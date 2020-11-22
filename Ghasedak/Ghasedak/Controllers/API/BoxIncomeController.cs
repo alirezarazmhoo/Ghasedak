@@ -81,18 +81,21 @@ namespace Ghasedak.Controllers.API
                         BoxIncome.opratorId = oprator.id;
                         BoxIncome.charityId = item.charityId;
                         BoxIncome.registerDate = item.assignmentDate;
-                        var box = _context.Boxs.FirstOrDefault(x => x.number == item.number);
-                        if (box == null)
+                        var Box = _context.Boxs.FirstOrDefault(x => x.guidBox == item.guidBox);
+                        if (Box == null)
                             continue;
-                        BoxIncome.boxId = box.id;
+                        BoxIncome.boxId = Box.id;
                         boxIncomeUserActivitys.Add(BoxIncome);
-
                         _context.BoxIncomes.Add(BoxIncome);
                     }
+                     if(boxIncomeUserActivitys==null)
+                    return new { IsError = false, message = "تمام درآمدها قبلا ثبت شده اند." };
                     _context.SaveChanges();
                     foreach (var item in boxIncomeUserActivitys)
                     {
-                        UserActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "درآمد با قیمت " + item.price + " ثبت گردید.");
+                         UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+
+                        userActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "درآمد با قیمت " + item.price + " ثبت گردید.");
                     }
                     trans.Commit();
                    

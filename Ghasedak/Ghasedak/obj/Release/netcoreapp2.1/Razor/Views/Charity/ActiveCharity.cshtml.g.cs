@@ -76,7 +76,7 @@ using Ghasedak.Models;
             WriteLiteral("</p>\r\n                </div>\r\n                <div class=\"row\">\r\n                    ");
             EndContext();
             BeginContext(490, 930, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1fd632476ec54ea4858978a01ae71723", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7ea163990a5e4fa4bea3b6639b9d8a5e", async() => {
                 BeginContext(567, 846, true);
                 WriteLiteral(@"
                         <div class=""box-body"">

@@ -223,9 +223,13 @@ function EditAjax(ActionName, id) {
                         }
                     }
                     if (this.key == "codeOprator") {
-                        debugger
+                        
                         if (this.value == "") {
                             $("#opratorSection").hide();
+                        }
+                        else {
+                            $("#opratorSection").show();
+
                         }
                     }
                     $('#' + this.key + '').val(this.value);

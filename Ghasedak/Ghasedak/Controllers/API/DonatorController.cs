@@ -54,24 +54,25 @@ namespace Ghasedak.Controllers.API
                 string Token = HttpContext.Request?.Headers["token"];
                 var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
                 if (oprator == null)
-                return new { IsError = true, message = "چنین کاربری وجود ندارد." };
-            var charityActive = _context.Charitys.FirstOrDefault(p => p.id==oprator.charityId);
-            if (!oprator.isActive )
-                return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
-            if (!charityActive.isActive )
-                return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
+                    return new { IsError = true, message = "چنین کاربری وجود ندارد." };
+                var charityActive = _context.Charitys.FirstOrDefault(p => p.id == oprator.charityId);
+                if (!oprator.isActive)
+                    return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
+                if (!charityActive.isActive)
+                    return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
                 Donator.charityId = oprator.charityId;
                 if (_context.Donators.Any(x => x.donatorMobile == Donator.donatorMobile && x.donatorAlias.Equals(Donator.donatorAlias)))
-                    return new { IsError = true, message = "ثبت اهدا کننده با مشکل مواجه شده است." };
+                    return new { IsError = true, message = "اهدا کننده قبلا ثبت شده است." };
                 _context.Donators.Add(Donator);
                 _context.SaveChanges();
-                UserActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "اهدا کننده  " +Donator.donatorFullName + " ثبت گردید.");
+                UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "اهدا کننده  " + Donator.donatorFullName + " ثبت گردید.");
 
                 return new { IsError = false, message = "اهدا کننده با موفقیت ثبت گردید." };
             }
             catch (Exception ex)
             {
-                return new { IsError = true, message = "ثبت متوفی با مشکل مواجه شده است." };
+                return new { IsError = true, message = "ثبت اهدا کننده با مشکل مواجه شده است." };
             }
         }
 

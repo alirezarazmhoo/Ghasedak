@@ -41,7 +41,7 @@ namespace Ghasedak.Controllers.API
             return data;
         }
         [HttpPost]
-        public object PostFlowerCrown(FlowerCrown FlowerCrown)
+        public object PostFlowerCrown(FlowerCrownViewModelApi FlowerCrownViewModelApi)
         {
             if (!ModelState.IsValid)
             {
@@ -56,7 +56,7 @@ namespace Ghasedak.Controllers.API
                 return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
             if (!charityActive.isActive )
                 return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
-            var data = _FlowerCrown.AddFlowerCrown(FlowerCrown,oprator);
+            var data = _FlowerCrown.AddFlowerCrown(FlowerCrownViewModelApi,oprator);
             return data;
             
            

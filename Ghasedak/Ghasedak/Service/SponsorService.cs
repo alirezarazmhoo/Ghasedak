@@ -90,7 +90,9 @@ namespace Ghasedak.Service
                     _context.SaveChanges();
                     foreach (var item in sponsorPayUserActivitys)
                     {
-                        UserActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "مشارکت با قیمت  " + item.price + " و شماره پذیرنده " + item.recieverCode +"و شماره پایانه "+item.terminalCode+"و شماره دستگاه "+item.deviceCode+ " ثبت گردید.");
+                         UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+
+                        userActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "مشارکت با قیمت  " + item.price + " و شماره پذیرنده " + item.recieverCode +"و شماره پایانه "+item.terminalCode+"و شماره دستگاه "+item.deviceCode+ " ثبت گردید.");
                     }
                     trans.Commit();
                     return new { IsError = false, message = "پرداخت حامیان با موفقیت ثبت گردید." };

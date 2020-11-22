@@ -25,6 +25,7 @@ namespace Ghasedak.Models
         public bool deceasedSex { get; set; }
 
         public int charityId { get; set; }
+        public Guid guidDeceasedName { get; set; }
 
     }
 }

@@ -71,14 +71,16 @@ namespace Ghasedak.Controllers.API
 
                         _context.DischargeRoutes.Add(item);
                     }
-
+                    if(DischargeRouteUserActivitys==null)
+                    return new { IsError = false, message = "تمام مسیرها قبلا ثبت شده اند." };
                     _context.SaveChanges();
-
-
                     foreach (var item in DischargeRouteUserActivitys)
                     {
-                        UserActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "مسیر با کد  " + item.code + " ثبت گردید.");
+                    UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+
+                        userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "مسیر با کد  " + item.code + " ثبت گردید.");
                     }
+
                     trans.Commit();
                     return new { IsError = false, message = "مسیر ها با موفقیت ثبت گردید." };
 

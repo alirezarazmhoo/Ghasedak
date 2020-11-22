@@ -15,7 +15,7 @@ namespace Ghasedak.Service.Interface
         object GetFlowerCrown(int charityId);
         PagedList<FlowerCrown> GetFlowerCrown(int charityId,int pageId = 1, long filterprice = 0);
         int AddFlowerCrownFromAdmin(FlowerCrown FlowerCrown);
-        object AddFlowerCrown(FlowerCrown item, Oprator oprator);      
+        object AddFlowerCrown(FlowerCrownViewModelApi item, Oprator oprator);      
         
     }
 }

@@ -29,6 +29,7 @@ namespace Ghasedak.Service
 
          public int AddBoxFromAdmin(Box box)
         {
+            box.guidBox = Guid.NewGuid();
             _context.Boxs.Add(box);
             _context.SaveChanges();
             return box.id;

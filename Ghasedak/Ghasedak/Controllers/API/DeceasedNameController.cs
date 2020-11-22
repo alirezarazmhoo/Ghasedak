@@ -66,10 +66,12 @@ namespace Ghasedak.Controllers.API
            
                 DeceasedName.charityId = oprator.charityId;
                 if (_context.DeceasedNames.Any(x => x.deceaseAalias.Equals(DeceasedName.deceasedFullName)))
-                    return new { IsError = true, message = "ثبت متوفی با مشکل مواجه شده است." };
+                    return new { IsError = true, message = "این متوفی قبلا ثبت شده است." };
                 _context.DeceasedNames.Add(DeceasedName);
                 _context.SaveChanges();
-                UserActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "متوفی با نام و نام خانوادگی " +DeceasedName.deceasedFullName + " ثبت گردید.");
+                UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+
+                userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "متوفی با نام و نام خانوادگی " +DeceasedName.deceasedFullName + " ثبت گردید.");
 
                 return new { IsError = false, message = "متوفی با موفقیت ثبت گردید." };
             }

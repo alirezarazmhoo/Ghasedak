@@ -26,6 +26,7 @@ namespace Ghasedak.Models
         public virtual Charity Charity { get; set; }
         
         public int? opratorId { get; set; }
+        public Guid guidDischargeRoute { get; set; }
 
     }
 }
