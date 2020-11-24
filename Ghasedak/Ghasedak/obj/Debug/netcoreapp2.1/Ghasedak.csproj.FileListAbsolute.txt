@@ -201,3 +201,10 @@ E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Raz
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FlowerCrown\Delete.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FlowerCrown\Edit.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FlowerCrown\Index.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FinancialAid\Delete.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FinancialAid\Edit.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FinancialAid\Index.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\UserActivity\Delete.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\UserActivity\Edit.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\UserActivity\Index.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\Charity\ActiveCharity.cshtml.g.cs

@@ -35,7 +35,7 @@ namespace Ghasedak.Controllers.API
             }
             else
             {
-                var user = _context.Users.Where(p => p.userName == user1.userName).FirstOrDefault();
+                var user = _context.Oprators.Where(p => p.userName == user1.userName).FirstOrDefault();
                 //send sms
                 SmsIrRestfulNetCore.Token tokenInstance = new SmsIrRestfulNetCore.Token();
                 var token = tokenInstance.GetToken("ea72b92b8fbd183eccd6c33c", "Ghasedak!!");

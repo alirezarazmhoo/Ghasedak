@@ -19,5 +19,8 @@ namespace Ghasedak.ViewModel
         [DataType(DataType.Upload)]
         [Display(Name = " apk انتخاب فایل")]
         public IFormFile files { get; set; }
+        [Display(Name = "اجباری ")]
+
+        public bool isMandatory { get; set; }
     }
 }

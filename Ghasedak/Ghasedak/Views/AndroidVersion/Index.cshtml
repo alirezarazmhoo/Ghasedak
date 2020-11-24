@@ -29,6 +29,12 @@
                                     <input asp-for="files" type="file" class="form-control" />
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <label>
+                                    <input type="checkbox" asp-for="isMandatory">
+                                </label>
+                                <label for="isMandatory" class="control-label">اجباری</label>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <input type="submit" value="ثبت" class="btn btn-default" />

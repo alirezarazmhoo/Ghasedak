@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
+using SmsIrRestfulNetCore;
 
 namespace Ghasedak.Controllers
 {
@@ -29,15 +30,16 @@ namespace Ghasedak.Controllers
             _context = context;
         }
         [HttpGet]
-        public IActionResult Index(bool isSuccess=false)
+        public IActionResult Index(bool isSuccess = false)
         {
             var model = _context.AndroidVersions.FirstOrDefault();
             AndroidVersionViewModel AndroidVersionViewModel = new AndroidVersionViewModel();
-           if (model != null)
+            if (model != null)
             {
                 AndroidVersionViewModel.appAndroidUrl = model.appAndroidUrl;
                 AndroidVersionViewModel.currVersion = model.currVersion;
-                AndroidVersionViewModel.id = model.id;             
+                AndroidVersionViewModel.id = model.id;
+                AndroidVersionViewModel.isMandatory = model.isMandatory;
             }
             if (isSuccess)
                 ViewBag.success = "ورژن شما با موفقیت ثبت شد اگر مایل هستید نسخه جدید آپلود نمایید.";
@@ -62,9 +64,37 @@ namespace Ghasedak.Controllers
                         {
                             page.files.CopyTo(stream);
                         }
-                        AndroidVersion.appAndroidUrl = "wwwroot/AndroidApp/"+ name;
+                        AndroidVersion.appAndroidUrl = "wwwroot/AndroidApp/" + name;
                         AndroidVersion.currVersion = page.currVersion;
+                        AndroidVersion.isMandatory = page.isMandatory;
                         _context.AndroidVersions.Add(AndroidVersion);
+                        if (page.isMandatory)
+                        {
+                            Random random = new Random();
+
+                            foreach (var item in _context.Charitys)
+                            {
+                                item.androidCode = random.Next(100000, 999999).ToString();
+                                item.isActive = false;
+                                SmsIrRestfulNetCore.Token tokenInstance = new SmsIrRestfulNetCore.Token();
+                                var token = tokenInstance.GetToken("ea72b92b8fbd183eccd6c33c", "Ghasedak!!");
+                                var ultraFastSend = new UltraFastSend()
+                                {
+                                    Mobile = Convert.ToInt64(item.mobile),
+                                    TemplateId = 37047,
+                                    ParameterArray = new List<UltraFastParameters>()
+                                  {
+                                   new UltraFastParameters()
+                                     {
+                                       Parameter = "activeCode" , ParameterValue = item.androidCode
+
+                                         }
+                                     }.ToArray()
+
+                                };
+                                UltraFastSendRespone ultraFastSendRespone = new UltraFast().Send(token, ultraFastSend);
+                            }
+                        }
                     }
                     else
                     {
@@ -72,7 +102,7 @@ namespace Ghasedak.Controllers
 
                     }
                     await _context.SaveChangesAsync();
-                     return RedirectToAction("Index", new {  @isSuccess = true });
+                    return RedirectToAction("Index", new { @isSuccess = true });
 
                 }
                 else
@@ -94,9 +124,36 @@ namespace Ghasedak.Controllers
                             {
                                 page.files.CopyTo(stream);
                             }
-                            AndroidVersion.appAndroidUrl = "wwwroot/AndroidApp/"+ name;;
+                            AndroidVersion.appAndroidUrl = "wwwroot/AndroidApp/" + name; ;
                             AndroidVersion.currVersion = page.currVersion;
+                            AndroidVersion.isMandatory = page.isMandatory;
                             _context.AndroidVersions.Update(AndroidVersion);
+                            if (page.isMandatory)
+                            {
+                                Random random = new Random();
+                                foreach (var item in _context.Charitys)
+                                {
+                                    item.androidCode = random.Next(100000, 999999).ToString();
+                                    item.isActive = false;
+                                    SmsIrRestfulNetCore.Token tokenInstance = new SmsIrRestfulNetCore.Token();
+                                    var token = tokenInstance.GetToken("ea72b92b8fbd183eccd6c33c", "Ghasedak!!");
+                                    var ultraFastSend = new UltraFastSend()
+                                    {
+                                        Mobile = Convert.ToInt64(item.mobile),
+                                        TemplateId = 37047,
+                                        ParameterArray = new List<UltraFastParameters>()
+                                  {
+                                   new UltraFastParameters()
+                                     {
+                                       Parameter = "activeCode" , ParameterValue = item.androidCode
+
+                                         }
+                                     }.ToArray()
+
+                                    };
+                                    UltraFastSendRespone ultraFastSendRespone = new UltraFast().Send(token, ultraFastSend);
+                                }
+                            }
                         }
                         else
                         {
@@ -104,7 +161,7 @@ namespace Ghasedak.Controllers
 
                         }
                         await _context.SaveChangesAsync();
-                     return RedirectToAction("Index", new {  @isSuccess = true });
+                        return RedirectToAction("Index", new { @isSuccess = true });
 
                     }
                     catch (DbUpdateConcurrencyException)

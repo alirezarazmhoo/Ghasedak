@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
+using Ghasedak.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,19 +46,41 @@ namespace Ghasedak.Controllers.API
             var oprator = _context.Oprators.Where(p => p.token == Token).FirstOrDefault();
             if (oprator == null)
                 return new { IsError = true, message = "چنین کاربری وجود ندارد." };
-          
+            
+            var charityActive = _context.Charitys.FirstOrDefault(p => p.id==oprator.charityId);
+            if (!oprator.isActive )
+            
+                return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
+           
+            if (!charityActive.isActive )
+            
+                return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
+           
 
             using (var trans = _context.Database.BeginTransaction())
             {
                 try
                 {
+                    List<DischargeRoute> DischargeRouteUserActivitys = new List<DischargeRoute>();
+
                     foreach (DischargeRoute item in dischargeRoutes)
                     {
                         if (_context.DischargeRoutes.Any(x => x.code == item.code))
-                                    continue;
+                            continue;
+                        DischargeRouteUserActivitys.Add(item);
+
                         _context.DischargeRoutes.Add(item);
                     }
+                    if(DischargeRouteUserActivitys==null)
+                    return new { IsError = false, message = "تمام مسیرها قبلا ثبت شده اند." };
                     _context.SaveChanges();
+                    foreach (var item in DischargeRouteUserActivitys)
+                    {
+                    UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+
+                        userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "مسیر با کد  " + item.code + " ثبت گردید.");
+                    }
+
                     trans.Commit();
                     return new { IsError = false, message = "مسیر ها با موفقیت ثبت گردید." };
 
@@ -67,8 +90,8 @@ namespace Ghasedak.Controllers.API
                     trans.Rollback();
                 }
             }
-                return new { IsError=true, message = "ثبت مسیر ها با مشکل مواجه شده است." };
-           
+            return new { IsError = true, message = "ثبت مسیر ها با مشکل مواجه شده است." };
+
         }
 
 

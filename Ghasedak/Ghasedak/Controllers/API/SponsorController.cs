@@ -54,6 +54,13 @@ namespace Ghasedak.Controllers.API
             }
             string Token = HttpContext.Request?.Headers["token"];
             var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
+             if (oprator == null)
+                return new { IsError = true, message = "چنین کاربری وجود ندارد." };
+            var charityActive = _context.Charitys.FirstOrDefault(p => p.id==oprator.charityId);
+            if (!oprator.isActive )
+                return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
+            if (!charityActive.isActive )
+                return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
             var data = _Sponsor.AddSponsor(SponsorViewModel,oprator);
             return data;
         }

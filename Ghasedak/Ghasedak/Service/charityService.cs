@@ -34,5 +34,17 @@ namespace Ghasedak.Service
             var data= await _context.Charitys.Select(x => new { x.isActive,x.isAccessBox,x.isAccessFinancialAid,x.isAccessFlowerCrown,x.isAccessSponsor,x.id }).FirstOrDefaultAsync(x=>x.id==chrityId);
             return data;
         }
+        public async Task<bool> ActiveCharityAsync( int chrityId,string code)
+        {
+            var data= await _context.Charitys.FirstOrDefaultAsync(x=>x.id==chrityId);
+            if (data.androidCode == code)
+            {
+                data.isActive = true;
+               await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+                return false;
+        }
     }
 }

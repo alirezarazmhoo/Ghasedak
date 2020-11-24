@@ -143,7 +143,8 @@
                         <input type="hidden" id="DischargeRouteId" name="DischargeRouteId" />
                         <input type="hidden" id="charityId" name="charityId" />
                         <input type="hidden" id="opratorId" name="opratorId" />
-                        <div id="opratorSection">
+                        <input type="hidden" id="guidDischargeRoute" name="guidDischargeRoute" />
+                        <div id="opratorSection" hidden>
                             <p style="padding-right: 15px;">
                                 مشخصات ثبت کننده
 
@@ -337,6 +338,7 @@
                 var Parameters = [{ id: "id", htmlname: "DischargeRouteId", special: "" },
                 { id: "code", htmlname: "code", special: "" },
                 { id: "day", htmlname: "day", special: "" },
+                    { id: "guidDischargeRoute", htmlname: "guidDischargeRoute", special: "" },
                     { id: "address", htmlname: "address", special: "" },
                     { id: "opratorId", htmlname: "opratorId", special: "" },
 

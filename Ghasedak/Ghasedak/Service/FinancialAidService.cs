@@ -1,6 +1,8 @@
 ﻿using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
+using Ghasedak.ViewModel;
+using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
 using System;
 using System.Collections.Generic;
@@ -38,17 +40,25 @@ namespace Ghasedak.Service
 
 
 
-        public PagedList<FinancialAid> GetFinancialAid(int pageId = 1, string filternumber = "")
+        public PagedList<FinancialAid> GetFinancialAidFromAdmin(int charityId,int pageId = 1, string filtername = "")
         {
-            IQueryable<FinancialAid> result = _context.FinancialAids.OrderByDescending(x => x.id);
-            //if (!string.IsNullOrEmpty(filternumber))
-            //{
-            //    result = result.Where(x => x.number.Contains(filternumber));
-            //}
+            IQueryable<FinancialAid> result = _context.FinancialAids.Include(x=>x.FinancialServiceType).Where(x=>x.charityId==charityId).OrderByDescending(x => x.id);
+            if (!string.IsNullOrEmpty(filtername))
+            {
+                result = result.Where(x => x.name.Contains(filtername));
+            }
             PagedList<FinancialAid> res = new PagedList<FinancialAid>(result, pageId, 10);
             return res;
         }
-
+          public FinancialAidAdminViewModel GetDataForAdmin(int id)
+        {
+            var FinancialAid = _context.FinancialAids.Include(x => x.FinancialServiceType).FirstOrDefault(x => x.id == id);
+            var oprator = _context.Oprators.FirstOrDefault(x => x.id ==FinancialAid.opratorId);
+            FinancialAidAdminViewModel FinancialAidAdminViewModel = new FinancialAidAdminViewModel();
+            FinancialAidAdminViewModel.financialAid = FinancialAid;
+            FinancialAidAdminViewModel.oprator = oprator;
+            return FinancialAidAdminViewModel;
+        }
         
     }
 }

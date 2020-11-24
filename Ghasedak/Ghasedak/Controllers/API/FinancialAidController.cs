@@ -54,11 +54,19 @@ namespace Ghasedak.Controllers.API
             }
             string Token = HttpContext.Request?.Headers["token"];
             var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
-
+             if (oprator == null)
+                return new { IsError = true, message = "چنین کاربری وجود ندارد." };
+            var charityActive = _context.Charitys.FirstOrDefault(p => p.id==oprator.charityId);
+            if (!oprator.isActive )
+                return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
+            if (!charityActive.isActive )
+                return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
             using (var trans = _context.Database.BeginTransaction())
             {
                 try
                 {
+                    List<FinancialAid> financialAidUserActivitys = new List<FinancialAid>();
+
                     foreach (var item in FinancialAids)
                     {
                         var FinancialAid = new FinancialAid();
@@ -69,9 +77,17 @@ namespace Ghasedak.Controllers.API
                         FinancialAid.opratorId = oprator.id;
                         if (item.id!=0)
                             continue;
+                        financialAidUserActivitys.Add(FinancialAid);
+
                         _context.FinancialAids.Add(FinancialAid);
                     }
                     _context.SaveChanges();
+                     foreach (var item in financialAidUserActivitys)
+                    {
+                         UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+
+                        userActivityAdd.Add(item.opratorId,Convert.ToInt32(item.charityId), DateTime.Now, UserActivityEnum.register, "کمک نقدی با نام حامی  " + item.name + " ثبت گردید.");
+                    }
                     trans.Commit();
                     return new { IsError = false, message = "کمک های نقدی با موفقیت ثبت گردید." };
                 }

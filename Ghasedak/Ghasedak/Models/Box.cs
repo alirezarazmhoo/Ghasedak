@@ -38,6 +38,9 @@ namespace Ghasedak.Models
         
         public int charityId { get; set; }
         public int? opratorId { get; set; }
+
+        public Guid guidBox { get; set; }
+
        
     }
 }

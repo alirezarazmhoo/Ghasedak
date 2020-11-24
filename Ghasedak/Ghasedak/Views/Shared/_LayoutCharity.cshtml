@@ -49,7 +49,7 @@
     <link href='https://api.cedarmaps.com/cedarmaps.js/v1.8.0/cedarmaps.css' rel='stylesheet' />
 
 </head>
-
+@using Ghasedak.Utility
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
         <header class="main-header">
@@ -81,7 +81,9 @@
                     </div>
                     <div class="pull-right info">
                         @*<p>@TempData["charityTitle"]</p>*@
-                        
+                        @*<p>@User.Identity.Name
+                        </p>*@
+                        <p>@User.Identity.CharityTitle()</p>
                         <a href="#"><i class="fa fa-circle text-success"></i> آنلاین</a>
                     </div>
                 </div>
@@ -90,54 +92,73 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">منو</li>
-                    <li>
-                        <a href="/Oprator/Index"><i class="fa fa-fw fa-cubes"></i> متصدیان</a>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-fw fa-newspaper-o"></i> <span>مدیریت اطلاعات پایه</span>
-                            <span class="pull-left-container">
-                                <i class="fa fa-angle-right pull-left"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="/DischargeRoute/Index"><i class="fa fa-fw fa-align-left"></i> مسیر ها</a></li>
-                            <li><a href="/Box/Index"><i class="fa fa-fw fa-align-left"></i> صندوقات</a></li>
-                            <li><a href="/FinancialServiceType/Index"><i class="fa fa-fw fa-align-left"></i> نوع خدمت</a></li>
+                    @if (User.IsInRole("isActive"))
+                    {
+                        <li>
+                            <a href="/Oprator/Index"><i class="fa fa-fw fa-user-circle-o"></i> متصدیان</a>
+                        </li>
+                        @if (User.IsInRole("isAccessBox"))
+                        {
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-inbox"></i> <span>مدیریت صندوقات</span>
+                                    <span class="pull-left-container">
+                                        <i class="fa fa-angle-right pull-left"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="/DischargeRoute/Index"><i class="fa fa-fw fa-align-left"></i> مسیر ها</a></li>
+                                    <li><a href="/Box/Index"><i class="fa fa-fw fa-cube"></i> صندوقات</a></li>
+                                    <li>
+                                        <a href="/BoxIncome/Index"><i class="fa fa-fw fa-cubes"></i> درآمد ها</a>
+                                    </li>
 
+                                </ul>
 
-                        </ul>
+                            </li>
+                        }
+                        @if (User.IsInRole("isAccessFinancialAid"))
+                        {
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-money"></i> <span>کمک نقدی</span>
+                                    <span class="pull-left-container">
+                                        <i class="fa fa-angle-right pull-left"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="/FinancialServiceType/Index"><i class="fa fa-fw fa-hand-paper-o"></i> نوع خدمت</a></li>
+                                    <li><a href="/FinancialAid/Index"><i class="fa fa-fw fa-money"></i> کمک نقدی </a></li>
+                                </ul>
 
-                    </li>
+                            </li>
+                        }
+                        @if (User.IsInRole("isAccessFlowerCrown"))
+                        {
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-sun-o"></i> <span>تاج گل</span>
+                                    <span class="pull-left-container">
+                                        <i class="fa fa-angle-right pull-left"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="/FlowerCrownType/Index"><i class="fa fa-fw fa-gg-circle"></i> نوع تاج گل</a></li>
+                                    <li><a href="/FlowerCrown/Index"><i class="fa fa-fw fa-sun-o"></i> تاج گل </a></li>
+                                </ul>
 
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-fw fa-newspaper-o"></i> <span>مشارکت</span>
-                            <span class="pull-left-container">
-                                <i class="fa fa-angle-right pull-left"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="/SponsorPay/Index"><i class="fa fa-fw fa-align-left"></i> مشارکت </a></li>
-                        </ul>
-
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-fw fa-newspaper-o"></i> <span>تاج گل</span>
-                            <span class="pull-left-container">
-                                <i class="fa fa-angle-right pull-left"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="/FlowerCrownType/Index"><i class="fa fa-fw fa-align-left"></i> نوع تاج گل</a></li>
-                            <li><a href="/FlowerCrown/Index"><i class="fa fa-fw fa-align-left"></i> تاج گل </a></li>
-                        </ul>
-
-                    </li>
-                    <li>
-                        <a href="/BoxIncome/Index"><i class="fa fa-fw fa-cubes"></i> درآمد ها</a>
-                    </li>
+                            </li>
+                        }
+                        @if (User.IsInRole("isAccessSponsor"))
+                        {
+                            <li><a href="/SponsorPay/Index"><i class="fa fa-fw fa-handshake-o"></i> مشارکت </a></li>
+                        }
+                        <li><a href="/UserActivity/Index"><i class="fa fa-fw fa-history"></i> تاریخچه </a></li>
+                    }
+                    else
+                    {
+                    <li><a href="/Charity/ActiveCharity"><i class="fa fa-fw fa-history"></i> فعال سازی خیریه </a></li>
+                    }
 
 
 

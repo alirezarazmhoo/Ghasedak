@@ -1,4 +1,5 @@
 ﻿using Ghasedak.Models;
+using Ghasedak.ViewModel;
 using PagedList.Core;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,10 @@ namespace Ghasedak.Service.Interface
 {
     public interface IFinancialAid
     {
+        FinancialAidAdminViewModel GetDataForAdmin(int financialAidId);
+
         object GetFinancialAid(int opratorId,int charityId);
-        PagedList<FinancialAid> GetFinancialAid(int pageId = 1, string filternumber = "");
+        PagedList<FinancialAid> GetFinancialAidFromAdmin(int charityId,int pageId = 1, string filtername = "");
         int AddFinancialAidFromAdmin(FinancialAid FinancialAid);
         
         

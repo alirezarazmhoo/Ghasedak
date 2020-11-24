@@ -29,6 +29,7 @@ namespace Ghasedak.Models
 
         [Display(Name = "تیک ارسال پیامک ")]
         public bool isSendMessage { get; set; }
+        public Guid guidDonator { get; set; }
 
     }
 }

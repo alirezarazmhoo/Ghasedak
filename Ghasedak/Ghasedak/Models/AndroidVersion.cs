@@ -16,5 +16,8 @@ namespace Ghasedak.Models
         [Display(Name = "ورژن ")]
 
         public string currVersion { get; set; }
+        [Display(Name = "اجباری ")]
+
+        public bool isMandatory { get; set; }
     }
 }

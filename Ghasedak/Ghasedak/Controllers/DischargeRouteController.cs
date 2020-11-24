@@ -34,9 +34,9 @@ namespace Ghasedak.Controllers
         [HttpGet]
         public IActionResult Index(int page = 1, string filtercode = "", bool isSuccess = false)
         {
-              int charityId = Convert.ToInt32(User.Identity.Name);
+            int charityId = Convert.ToInt32(User.Identity.Name);
 
-            var model = _DischargeRoute.GetDischargeRoute(charityId,page, filtercode);
+            var model = _DischargeRoute.GetDischargeRoute(charityId, page, filtercode);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید چون صندوق یا درآمد برای این رکورد ثبت شده است";
             return View(model);
@@ -51,7 +51,7 @@ namespace Ghasedak.Controllers
             try
             {
                 var dischargeRoute = await _context.DischargeRoutes.FindAsync(ItemId);
-                var oprator = await _context.Oprators.FirstOrDefaultAsync(x=>x.id==dischargeRoute.opratorId);
+                var oprator = await _context.Oprators.FirstOrDefaultAsync(x => x.id == dischargeRoute.opratorId);
 
                 if (dischargeRoute == null)
                 {
@@ -63,6 +63,7 @@ namespace Ghasedak.Controllers
                 edit.Add(new EditViewModels() { key = "charityId", value = dischargeRoute.charityId.ToString() });
                 edit.Add(new EditViewModels() { key = "day", value = dischargeRoute.day.ToString() });
                 edit.Add(new EditViewModels() { key = "DischargeRouteId", value = dischargeRoute.id.ToString() });
+                edit.Add(new EditViewModels() { key = "guidDischargeRoute", value = dischargeRoute.guidDischargeRoute.ToString() });
 
                 if (oprator != null)
                 {
@@ -91,6 +92,7 @@ namespace Ghasedak.Controllers
             {
                 ModelState.Remove("id");
                 ModelState.Remove("charityId");
+                ModelState.Remove("guidDischargeRoute");
                 if (ModelState.IsValid)
                 {
                     int charityId = Convert.ToInt32(User.Identity.Name);
@@ -102,7 +104,7 @@ namespace Ghasedak.Controllers
                             return Json(new { success = false, responseText = "کد مسیر تکراری است !" });
 
                         }
-
+                        dischargeRoute.guidDischargeRoute = Guid.NewGuid();
                         _context.DischargeRoutes.Add(dischargeRoute);
                     }
                     else

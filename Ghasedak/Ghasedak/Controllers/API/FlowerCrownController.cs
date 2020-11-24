@@ -41,7 +41,7 @@ namespace Ghasedak.Controllers.API
             return data;
         }
         [HttpPost]
-        public object PostFlowerCrown(FlowerCrown FlowerCrown)
+        public object PostFlowerCrown(FlowerCrownViewModelApi FlowerCrownViewModelApi)
         {
             if (!ModelState.IsValid)
             {
@@ -49,7 +49,14 @@ namespace Ghasedak.Controllers.API
             }
             string Token = HttpContext.Request?.Headers["token"];
             var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
-            var data = _FlowerCrown.AddFlowerCrown(FlowerCrown,oprator);
+             if (oprator == null)
+                return new { IsError = true, message = "چنین کاربری وجود ندارد." };
+            var charityActive = _context.Charitys.FirstOrDefault(p => p.id==oprator.charityId);
+            if (!oprator.isActive )
+                return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
+            if (!charityActive.isActive )
+                return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
+            var data = _FlowerCrown.AddFlowerCrown(FlowerCrownViewModelApi,oprator);
             return data;
             
            

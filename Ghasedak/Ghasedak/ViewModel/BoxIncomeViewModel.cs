@@ -16,5 +16,6 @@ namespace Ghasedak.ViewModel
         public double lat { get; set; }
         public string assignmentDate { get; set; }
         public int charityId { get; set; }
+        public Guid guidBox { get; set; }
     }
 }

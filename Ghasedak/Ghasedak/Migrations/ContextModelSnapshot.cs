@@ -46,6 +46,8 @@ namespace Ghasedak.Migrations
                     b.Property<string>("currVersion")
                         .HasMaxLength(20);
 
+                    b.Property<bool>("isMandatory");
+
                     b.HasKey("id");
 
                     b.ToTable("AndroidVersions");
@@ -69,6 +71,8 @@ namespace Ghasedak.Migrations
 
                     b.Property<string>("fullName")
                         .HasMaxLength(100);
+
+                    b.Property<Guid>("guidBox");
 
                     b.Property<double>("lat");
 
@@ -129,6 +133,9 @@ namespace Ghasedak.Migrations
 
                     b.Property<string>("address")
                         .HasMaxLength(500);
+
+                    b.Property<string>("androidCode")
+                        .HasMaxLength(6);
 
                     b.Property<string>("code")
                         .HasMaxLength(6);
@@ -211,6 +218,8 @@ namespace Ghasedak.Migrations
 
                     b.Property<bool>("deceasedSex");
 
+                    b.Property<Guid>("guidDeceasedName");
+
                     b.HasKey("id");
 
                     b.ToTable("DeceasedNames");
@@ -231,6 +240,8 @@ namespace Ghasedak.Migrations
                         .HasMaxLength(10);
 
                     b.Property<int?>("day");
+
+                    b.Property<Guid>("guidDischargeRoute");
 
                     b.Property<int?>("opratorId");
 
@@ -257,6 +268,8 @@ namespace Ghasedak.Migrations
 
                     b.Property<string>("donatorMobile")
                         .HasMaxLength(11);
+
+                    b.Property<Guid>("guidDonator");
 
                     b.Property<bool>("isSendMessage");
 
