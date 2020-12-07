@@ -9,6 +9,6 @@ namespace Ghasedak.Service.Interface
 {
    public interface IOprator
     {
-       PagedList<Oprator> GetOprators(int pageId = 1, string filterFullName = "");
+       PagedList<Oprator> GetOprators(int charityId,int pageId = 1, string filterFullName = "");
     }
 }

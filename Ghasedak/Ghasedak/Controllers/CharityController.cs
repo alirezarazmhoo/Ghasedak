@@ -176,7 +176,12 @@ namespace Ghasedak.Controllers
                 ModelState.Remove("isAccessSponsor");
                 ModelState.Remove("isAccessFinancialAid");
                 ModelState.Remove("isAccessFlowerCrown");
-                if (ModelState.IsValid)
+                if (String.IsNullOrEmpty(Charity.code) || String.IsNullOrEmpty(Charity.mobile)|| String.IsNullOrEmpty(Charity.title)||String.IsNullOrEmpty(Charity.userName)||String.IsNullOrEmpty(Charity.password))
+                {
+                    return Json(new { success = false, responseText = "مقادیر وارد شده نامعتبر است !" });
+
+                }
+                    if (ModelState.IsValid)
                 {
                     Charity.password = BCrypt.Net.BCrypt.HashPassword(Charity.passwordShow, BCrypt.Net.BCrypt.GenerateSalt());
                         if (id == null)
@@ -213,14 +218,15 @@ namespace Ghasedak.Controllers
                 }
                 else
                 {
-                    return Json(new { success = false, responseText = "خطا در انجام عملیات !" });
+                    
+                    return Json(new { success = false, responseText = "مقادیر وارد شده نامعتبر است !" });
                 }
 
             }
             catch (Exception ex)
             {
 
-                return Json(new { success = false, responseText = "Requset Faild !" });
+                return Json(new { success = false, responseText = "خطا در انجام عملیات !" });
             }
         }
 
@@ -257,7 +263,7 @@ namespace Ghasedak.Controllers
             catch (Exception ex)
             {
                 //return RedirectToAction("Index", new { @isSuccess = true });
-                return Json(new { success = false, responseText = "Requset Faild !" });
+                return Json(new { success = false, responseText = "به دلیل ثبت اطلاعات در این خیریه امکان حذف وجود ندارد!" });
 
             }
         }

@@ -267,6 +267,7 @@
             CreateAllModals();
             $(".openmodal").click(function () {
                 clear('register', ["input"]);
+                $('#register').find('input:checkbox').prop('checked', true);
 
             });
             $(".btn-warning").click(function () {

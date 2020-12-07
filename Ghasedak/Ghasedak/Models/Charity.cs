@@ -18,6 +18,7 @@ namespace Ghasedak.Models
         public string userName { get; set; }
         
         [Display(Name = "پسورد")]
+
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string password { get; set; }
 
@@ -28,6 +29,7 @@ namespace Ghasedak.Models
 
 
         [Display(Name = "عنوان خیریه ")]
+
         [MaxLength(30, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string title { get; set; }
 

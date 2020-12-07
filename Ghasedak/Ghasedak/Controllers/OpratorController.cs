@@ -49,7 +49,9 @@ namespace Ghasedak.Controllers
         //   private Task<Oprator> GetCurrentOpratorAsync() => _OpratorManager.GetOpratorAsync(HttpContext.Oprator);
         public IActionResult Index(int page = 1, string filtercellphone = "", bool isSuccess = false)
         {
-            var model = _Oprator.GetOprators(page, filtercellphone);
+              int charityId = Convert.ToInt32(User.Identity.Name);
+
+            var model = _Oprator.GetOprators(charityId,page, filtercellphone);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید چون درآمد برای این رکورد ثبت شده است";
             return View(model);
@@ -125,12 +127,12 @@ namespace Ghasedak.Controllers
                 }
                 else
                 {
-                    return Json(new { success = false, responseText = "فیلدها خالی می باشد !" });
+                    return Json(new { success = false, responseText = "مقادیر وارد شده نامعتبر است !" });
                 }
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, responseText = "Requset Faild !" });
+                return Json(new { success = false, responseText = "خطا در انجام عملیات !" });
             }
         }
 
