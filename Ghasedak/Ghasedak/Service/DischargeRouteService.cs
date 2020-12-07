@@ -17,10 +17,10 @@ namespace Ghasedak.Service
             _context = context;
         }
 
-        public object GetDischargeRoute(int opratorId)
+        public object GetDischargeRoute(int charityId)
         {
 
-            IQueryable<DischargeRoute> result = _context.DischargeRoutes.Where(x=>x.opratorId==opratorId);
+            IQueryable<DischargeRoute> result = _context.DischargeRoutes.Where(x=>x.charityId==charityId);
 
             List<DischargeRoute> res = result.OrderBy(u => u.id).ToList();
             if (res.Count() == 0)

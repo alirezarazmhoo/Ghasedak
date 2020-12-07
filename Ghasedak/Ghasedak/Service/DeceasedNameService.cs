@@ -38,7 +38,7 @@ namespace Ghasedak.Service
 
         public PagedList<DeceasedName> GetDeceasedName(int charityId,int? pageId = 1,string filterfullName="")
         {
-            IQueryable<DeceasedName> result = _context.DeceasedNames.OrderByDescending(x => x.id);
+            IQueryable<DeceasedName> result = _context.DeceasedNames.Where(x=>x.charityId==charityId).OrderByDescending(x => x.id);
             if (!string.IsNullOrEmpty(filterfullName))
             {
                 result = result.Where(x => x.deceasedFullName.Contains(filterfullName));

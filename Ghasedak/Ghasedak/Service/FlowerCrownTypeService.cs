@@ -38,7 +38,7 @@ namespace Ghasedak.Service
 
         public PagedList<FlowerCrownType> GetFlowerCrownType(int charityId,int? pageId = 1,string filtertitle="")
         {
-            IQueryable<FlowerCrownType> result = _context.FlowerCrownTypes.OrderByDescending(x => x.id);
+            IQueryable<FlowerCrownType> result = _context.FlowerCrownTypes.Where(x=>x.charityId==charityId).OrderByDescending(x => x.id);
             if (!string.IsNullOrEmpty(filtertitle))
             {
                 result = result.Where(x => x.title.Contains(filtertitle));

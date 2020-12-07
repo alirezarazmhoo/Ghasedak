@@ -298,6 +298,7 @@
             $(".openmodal").click(function () {
                 clear('register', ["input"]);
                 clear('register', ["textarea"]);
+                $('#register').find('input:checkbox').prop('checked', false);
             });
             $(".btn-warning").click(function () {
                 

@@ -19,9 +19,9 @@ namespace Ghasedak.Service
         }
        
       
-        public PagedList<Oprator> GetOprators(int pageId = 1, string filteruserName = "")
+        public PagedList<Oprator> GetOprators(int charityId,int pageId = 1, string filteruserName = "")
         {
-            IQueryable<Oprator> result = _context.Oprators.OrderByDescending(x=>x.id);
+            IQueryable<Oprator> result = _context.Oprators.Where(x=>x.charityId==charityId).OrderByDescending(x=>x.id);
             if(!string.IsNullOrEmpty(filteruserName))
             {
                 result = result.Where(x => x.userName.Contains(filteruserName));

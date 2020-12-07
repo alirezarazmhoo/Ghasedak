@@ -38,7 +38,7 @@ namespace Ghasedak.Service
 
         public PagedList<Donator> GetDonator(int charityId,int? pageId = 1,string filterfullName="")
         {
-            IQueryable<Donator> result = _context.Donators.OrderByDescending(x => x.id);
+            IQueryable<Donator> result = _context.Donators.Where(x=>x.charityId==charityId).OrderByDescending(x => x.id);
             if (!string.IsNullOrEmpty(filterfullName))
             {
                 result = result.Where(x => x.donatorFullName.Contains(filterfullName));

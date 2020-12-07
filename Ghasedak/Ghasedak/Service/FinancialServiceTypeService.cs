@@ -38,7 +38,7 @@ namespace Ghasedak.Service
 
         public PagedList<FinancialServiceType> GetFinancialServiceType(int charityId,int? pageId = 1,string filtertitle="")
         {
-            IQueryable<FinancialServiceType> result = _context.FinancialServiceTypes.OrderByDescending(x => x.id);
+            IQueryable<FinancialServiceType> result = _context.FinancialServiceTypes.Where(x=>x.charityId==charityId).OrderByDescending(x => x.id);
             if (!string.IsNullOrEmpty(filtertitle))
             {
                 result = result.Where(x => x.title.Contains(filtertitle));

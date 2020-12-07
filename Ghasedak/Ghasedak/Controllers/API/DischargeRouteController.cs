@@ -31,8 +31,8 @@ namespace Ghasedak.Controllers.API
         public object GetDischargeRoute()
         {
             string Token = HttpContext.Request?.Headers["token"];
-            int opratorId = _context.Oprators.FirstOrDefault(x => x.token == Token).id;
-            var data = _DischargeRoute.GetDischargeRoute(opratorId);
+            int charityId = _context.Oprators.FirstOrDefault(x => x.token == Token).charityId;
+            var data = _DischargeRoute.GetDischargeRoute(charityId);
             return data;
         }
         [HttpPost]
@@ -67,6 +67,7 @@ namespace Ghasedak.Controllers.API
                     {
                         if (_context.DischargeRoutes.Any(x => x.code == item.code))
                             continue;
+                        item.opratorId =oprator.id;
                         DischargeRouteUserActivitys.Add(item);
 
                         _context.DischargeRoutes.Add(item);

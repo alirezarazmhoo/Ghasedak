@@ -22,7 +22,7 @@ namespace Ghasedak.Service
 
         public object GetFlowerCrown(int charityId)
         {
-            IQueryable<FlowerCrown> result = _context.FlowerCrowns.Where(x => x.charityId == charityId);
+            var result = _context.FlowerCrowns.Include(x=>x.FlowerCrownType).Include(x=>x.DeceasedName).Include(x=>x.FlowerCrownType).Select(x => new { x.id,x.price,x.CeremonyType,x.charityId,x.opratorId,x.flowerCrownTypeId,flowerCrownType=x.FlowerCrownType.title,x.deceasedNameId,x.DeceasedName.deceasedFullName,x.donatorId,donatorName=_context.Donators.FirstOrDefault(y=>y.id==x.donatorId).donatorFullName,x.IntroducedId,IntroducedName=_context.Donators.FirstOrDefault(z=>z.id==x.IntroducedId).donatorFullName,x.registerDate }).Where(x => x.charityId == charityId).OrderByDescending(u => u.id);
 
             var res = result.OrderByDescending(u => u.id).ToList();
             if (res.Count() == 0)
