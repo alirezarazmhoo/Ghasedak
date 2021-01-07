@@ -19,9 +19,12 @@ using Microsoft.AspNetCore.Hosting;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Ghasedak.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ghasedak.Controllers
 {
+        [Authorize]
+
     public class CharityController : Controller
     {
         private readonly Context _context;
@@ -176,7 +179,7 @@ namespace Ghasedak.Controllers
                 ModelState.Remove("isAccessSponsor");
                 ModelState.Remove("isAccessFinancialAid");
                 ModelState.Remove("isAccessFlowerCrown");
-                if (String.IsNullOrEmpty(Charity.code) || String.IsNullOrEmpty(Charity.mobile)|| String.IsNullOrEmpty(Charity.title)||String.IsNullOrEmpty(Charity.userName)||String.IsNullOrEmpty(Charity.password))
+                if (String.IsNullOrEmpty(Charity.code) || String.IsNullOrEmpty(Charity.mobile)|| String.IsNullOrEmpty(Charity.title)||String.IsNullOrEmpty(Charity.userName)||String.IsNullOrEmpty(Charity.passwordShow))
                 {
                     return Json(new { success = false, responseText = "مقادیر وارد شده نامعتبر است !" });
 

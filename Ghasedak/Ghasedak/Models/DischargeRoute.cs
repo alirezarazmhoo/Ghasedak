@@ -14,9 +14,7 @@ namespace Ghasedak.Models
         [MaxLength(10, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
 
         public string code { get; set; }
-        [Display(Name = "تاریخ در ماه ")]
        
-        public int? day { get; set; }
 
         [Display(Name = "آدرس ")]
         [MaxLength(500, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]

@@ -40,7 +40,12 @@ namespace Ghasedak.Models
         public int? opratorId { get; set; }
 
         public Guid guidBox { get; set; }
-
+        [Display(Name = "نوع صندوق")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
+        public string boxKind { get; set; }
+         [Display(Name = "تاریخ در ماه ")]
+       
+        public int? day { get; set; }
        
     }
 }

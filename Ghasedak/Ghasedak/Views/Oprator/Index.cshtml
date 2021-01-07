@@ -180,7 +180,7 @@
                             <label>
                                 <input type="checkbox" id="isActive" name="isActive">
                             </label>
-                            <label class="control-label">فعال</label>
+                            <label for="isActive" class="control-label">فعال</label>
                         </div>
 
                     </div>
@@ -267,7 +267,9 @@
             CreateAllModals();
             $(".openmodal").click(function () {
                 clear('register', ["input"]);
+                
                 $('#register').find('input:checkbox').prop('checked', true);
+                $('#register #isActive').val(true)
 
             });
             $(".btn-warning").click(function () {

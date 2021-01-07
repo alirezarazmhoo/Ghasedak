@@ -83,6 +83,8 @@ namespace Ghasedak.Controllers.API
                         box.charityId = item.charityId;
                         box.opratorId = oprator.id;
                         box.guidBox = item.guidBox;
+                        box.boxKind = item.boxKind;
+                        box.day = item.day;
                         var DischargeRoute = _context.DischargeRoutes.FirstOrDefault(x => x.guidDischargeRoute == item.guidDischargeRoute);
                         if (DischargeRoute == null)
                             continue;

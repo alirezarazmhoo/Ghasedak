@@ -16,9 +16,12 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Ghasedak.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ghasedak.Controllers
 {
+        [Authorize]
+
     public class FlowerCrownController : Controller
     {
         private readonly Context _context;

@@ -8,6 +8,7 @@ using Ghasedak.Models;
 using Ghasedak.Service.Interface;
 using Ghasedak.Utility;
 using Ghasedak.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,8 @@ using NPOI.XSSF.UserModel;
 
 namespace Ghasedak.Controllers
 {
+        [Authorize]
+
     public class BoxIncomeController : Controller
     {
         private readonly Context _context;

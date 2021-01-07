@@ -32,9 +32,23 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label asp-for="boxKind" class="control-label"></label>
+                                    <input asp-for="boxKind" class="form-control" />
+                                    <span asp-validation-for="boxKind" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label asp-for="mobile" class="control-label"></label>
                                     <input asp-for="mobile" class="form-control" />
                                     <span asp-validation-for="mobile" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="day" class="control-label"></label>
+                                    <input asp-for="day" class="form-control" />
+                                    <span asp-validation-for="day" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">

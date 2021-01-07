@@ -12,6 +12,7 @@ namespace Ghasedak.Service.Interface
         object GetDonator(int charityId);
         PagedList<Donator> GetDonator(int charityId,int? pageId = 1,string filterfullName="");
         int AddDonatorFromAdmin(Donator Donator);
+        object SearchDonator(string donatorFullName, string donatorAalias,string donatorMobile, int charityId);
         
         
     }

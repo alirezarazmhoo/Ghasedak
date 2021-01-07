@@ -8,6 +8,7 @@ using Ghasedak.Models;
 using Ghasedak.Service.Interface;
 using Ghasedak.Utility;
 using Ghasedak.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,8 @@ using PagedList.Core;
 
 namespace Ghasedak.Controllers
 {
+        [Authorize]
+
     public class BoxController : Controller
     {
         private IBox _Box;
@@ -266,7 +269,6 @@ namespace Ghasedak.Controllers
                 row.CreateCell(3).SetCellValue("Name");
 
                 row.CreateCell(4).SetCellValue("Number");
-                //row.CreateCell(5).SetCellValue("تاریخ واگذاری");
                 int count = 1;
                 foreach (var item in result)
                 {
@@ -278,7 +280,6 @@ namespace Ghasedak.Controllers
 
                     row.CreateCell(3).SetCellValue(item.fullName);
                     row.CreateCell(4).SetCellValue(item.number);
-                    //row.CreateCell(5).SetCellValue(item.assignmentDate);
                     count++;
                 }
                 workbook.Write(fs);

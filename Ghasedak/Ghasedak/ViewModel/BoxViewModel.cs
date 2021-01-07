@@ -23,6 +23,8 @@ namespace Ghasedak.ViewModel
         public int opratorId { get; set; }
         public Guid guidDischargeRoute { get; set; }
         public Guid guidBox { get; set; }
+        public string boxKind { get; set; }
+        public int? day { get; set; }
 
     }
 }

@@ -4,14 +4,16 @@ using Ghasedak.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ghasedak.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20201220061109_wqd")]
+    partial class wqd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,8 +71,6 @@ namespace Ghasedak.Migrations
                         .HasMaxLength(200);
 
                     b.Property<int>("charityId");
-
-                    b.Property<int?>("day");
 
                     b.Property<int>("dischargeRouteId");
 
@@ -243,6 +243,8 @@ namespace Ghasedak.Migrations
 
                     b.Property<string>("code")
                         .HasMaxLength(10);
+
+                    b.Property<int?>("day");
 
                     b.Property<Guid>("guidDischargeRoute");
 

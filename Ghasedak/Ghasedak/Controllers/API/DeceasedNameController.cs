@@ -34,11 +34,21 @@ namespace Ghasedak.Controllers.API
 
 
         [HttpGet]
-        public object GetDeceasedName()
+        [Route("GetAll")]
+        public object GetAll()
         {
             string Token = HttpContext.Request?.Headers["token"];
             var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
             var data = _DeceasedName.GetDeceasedName(oprator.charityId);
+            return data;
+        }
+         [HttpGet]
+        [Route("Find")]
+        public object Find(string deceasedFullName,string deceaseAalias)
+        {
+            string Token = HttpContext.Request?.Headers["token"];
+            var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
+            var data = _DeceasedName.SearchDeceasedName(deceasedFullName,deceaseAalias,oprator.charityId);
             return data;
         }
         [HttpPost]

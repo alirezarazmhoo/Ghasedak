@@ -8,6 +8,7 @@ using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Models.ViewModel;
 using Ghasedak.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,8 @@ using PagedList.Core;
 
 namespace Ghasedak.Controllers
 {
+        [Authorize]
+
     public class DischargeRouteController : Controller
     {
         private IDischargeRoute _DischargeRoute;
@@ -61,7 +64,6 @@ namespace Ghasedak.Controllers
                 edit.Add(new EditViewModels() { key = "code", value = dischargeRoute.code });
                 edit.Add(new EditViewModels() { key = "address", value = dischargeRoute.address });
                 edit.Add(new EditViewModels() { key = "charityId", value = dischargeRoute.charityId.ToString() });
-                edit.Add(new EditViewModels() { key = "day", value = dischargeRoute.day.ToString() });
                 edit.Add(new EditViewModels() { key = "DischargeRouteId", value = dischargeRoute.id.ToString() });
                 edit.Add(new EditViewModels() { key = "guidDischargeRoute", value = dischargeRoute.guidDischargeRoute.ToString() });
 
@@ -329,7 +331,6 @@ namespace Ghasedak.Controllers
                 //row.CreateCell(0).SetCellValue("ردیف");
                 row.CreateCell(0).SetCellValue("Code");
                 row.CreateCell(1).SetCellValue("Address");
-                row.CreateCell(2).SetCellValue("DischargeDate");
                 int count = 1;
                 foreach (var item in result)
                 {
@@ -337,7 +338,6 @@ namespace Ghasedak.Controllers
                     //row.CreateCell(0).SetCellValue(count);
                     row.CreateCell(0).SetCellValue(item.code);
                     row.CreateCell(1).SetCellValue(item.address);
-                    row.CreateCell(2).SetCellValue(item.day.ToString());
                     count++;
                 }
                 workbook.Write(fs);
@@ -396,7 +396,6 @@ namespace Ghasedak.Controllers
                                 dischargeRoute.code = row.GetCell(0).ToString();
                                 dischargeRoute.address = row.GetCell(1).ToString();
                                 var day = row.GetCell(2).NumericCellValue;
-                                dischargeRoute.day = Convert.ToInt32(day);
                                 _context.DischargeRoutes.Add(dischargeRoute);
                             }
                             catch (Exception ex)

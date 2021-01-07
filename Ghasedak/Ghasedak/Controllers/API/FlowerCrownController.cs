@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ghasedak.Controllers.API
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class FlowerCrownController : ControllerBase
@@ -31,15 +32,15 @@ namespace Ghasedak.Controllers.API
 
         }
 
-        
+
         [HttpGet]
-        public object GetFlowerCrown()
+        [Route("GetAll")]
+        public object GetAll(int page)
         {
             string Token = HttpContext.Request?.Headers["token"];
             var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
-            var data = _FlowerCrown.GetFlowerCrown(oprator.charityId);
-            return data;
-        }
+            var data = _FlowerCrown.GetFlowerCrownApi(oprator.charityId,page);
+            return data;        }
         [HttpPost]
         public object PostFlowerCrown(FlowerCrownViewModelApi FlowerCrownViewModelApi)
         {
@@ -49,19 +50,26 @@ namespace Ghasedak.Controllers.API
             }
             string Token = HttpContext.Request?.Headers["token"];
             var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
-             if (oprator == null)
+            if (oprator == null)
                 return new { IsError = true, message = "چنین کاربری وجود ندارد." };
-            var charityActive = _context.Charitys.FirstOrDefault(p => p.id==oprator.charityId);
-            if (!oprator.isActive )
+            var charityActive = _context.Charitys.FirstOrDefault(p => p.id == oprator.charityId);
+            if (!oprator.isActive)
                 return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
-            if (!charityActive.isActive )
+            if (!charityActive.isActive)
                 return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
-            var data = _FlowerCrown.AddFlowerCrown(FlowerCrownViewModelApi,oprator);
+            var data = _FlowerCrown.AddFlowerCrown(FlowerCrownViewModelApi, oprator);
             return data;
-            
-           
-        }
-       
 
+
+        }
+        [HttpGet]
+        [Route("Find")]
+        public object Find( string donatorName, string deceasedName,string introducedName,long? price,int? ceremonyType,int? flowerCrownTypeId,int page=1)
+        {
+            string Token = HttpContext.Request?.Headers["token"];
+            var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
+            var data = _FlowerCrown.SearchFlowerCrown(donatorName,deceasedName,introducedName,price,ceremonyType,flowerCrownTypeId,oprator.charityId,page);
+            return data;
+        }
     }
 }

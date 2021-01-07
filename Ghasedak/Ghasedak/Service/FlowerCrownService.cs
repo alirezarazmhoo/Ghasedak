@@ -20,11 +20,48 @@ namespace Ghasedak.Service
             _context = context;
         }
 
-        public object GetFlowerCrown(int charityId)
+        public object GetFlowerCrownApi(int charityId,int pageId = 1)
         {
             var result = _context.FlowerCrowns.Include(x=>x.FlowerCrownType).Include(x=>x.DeceasedName).Include(x=>x.FlowerCrownType).Select(x => new { x.id,x.price,x.CeremonyType,x.charityId,x.opratorId,x.flowerCrownTypeId,flowerCrownType=x.FlowerCrownType.title,x.deceasedNameId,x.DeceasedName.deceasedFullName,x.donatorId,donatorName=_context.Donators.FirstOrDefault(y=>y.id==x.donatorId).donatorFullName,x.IntroducedId,IntroducedName=_context.Donators.FirstOrDefault(z=>z.id==x.IntroducedId).donatorFullName,x.registerDate }).Where(x => x.charityId == charityId).OrderByDescending(u => u.id);
 
-            var res = result.OrderByDescending(u => u.id).ToList();
+            var res = result.OrderByDescending(u => u.id).Skip((pageId - 1)*100).Take(100).ToList();
+            if (res.Count() == 0)
+
+                return new { Data = res, Count = res.Count(), IsError = true, Message = "تاج گل ثبت نشده است" };
+            else
+                return new { Data = res, Count = res.Count(), IsError = false, Message = "" };
+        }
+        public object SearchFlowerCrown(string donatorName,string deceasedName,string introducedName,long? price,int? ceremonyType,int? flowerCrownType,int charityId,int pageId = 1)
+        {
+            var result = _context.FlowerCrowns.Include(x=>x.FlowerCrownType).Include(x=>x.DeceasedName).Include(x=>x.FlowerCrownType).Where(x => x.charityId == charityId);
+            if (!String.IsNullOrEmpty(donatorName))
+            {
+                List<int> donators = _context.Donators.Where(x => x.donatorFullName.Contains(donatorName)).Select(x => x.id).ToList();
+                result = result.Where(x => donators.Contains(x.donatorId));
+            }
+            if (!(price==null||price==0))
+            {
+                result = result.Where(x => x.price==price);
+            }
+            if (!(ceremonyType==null||ceremonyType==0))
+            {
+                result = result.Where(x => x.CeremonyType==(CeremonyType)ceremonyType);
+            }
+            if (!(flowerCrownType==null||flowerCrownType==0))
+            {
+                result = result.Where(x => x.flowerCrownTypeId==flowerCrownType);
+            }
+            if (!String.IsNullOrEmpty(introducedName))
+            {
+                List<int> donators = _context.Donators.Where(x => x.donatorFullName.Contains(introducedName)).Select(x => x.id).ToList();
+                result = result.Where(x => donators.Contains(x.IntroducedId));
+            }
+            if (!String.IsNullOrEmpty(deceasedName))
+            {
+                result = result.Where(x => x.DeceasedName.deceasedFullName.Contains(deceasedName));
+
+            }
+            var res = result.OrderByDescending(u => u.id).Skip((pageId - 1)*100).Select(x => new {  x.id,x.price,x.CeremonyType,x.charityId,x.opratorId,x.flowerCrownTypeId,flowerCrownType=x.FlowerCrownType.title,x.deceasedNameId,x.DeceasedName.deceasedFullName,x.donatorId,donatorName=_context.Donators.FirstOrDefault(y=>y.id==x.donatorId).donatorFullName,x.IntroducedId,IntroducedName=_context.Donators.FirstOrDefault(z=>z.id==x.IntroducedId).donatorFullName,x.registerDate }).Take(100).ToList();
             if (res.Count() == 0)
 
                 return new { Data = res, Count = res.Count(), IsError = true, Message = "تاج گل ثبت نشده است" };
@@ -52,6 +89,7 @@ namespace Ghasedak.Service
             return res;
         }
 
+       
         public FlowerCrownAdminViewModel GetDataForAdmin(int id)
         {
             var FlowerCrown = _context.FlowerCrowns.Include(x => x.FlowerCrownType).FirstOrDefault(x => x.id == id);

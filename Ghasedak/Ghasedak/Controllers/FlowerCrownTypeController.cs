@@ -8,6 +8,7 @@ using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Models.ViewModel;
 using Ghasedak.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,8 @@ using PagedList.Core;
 
 namespace Ghasedak.Controllers
 {
+        [Authorize]
+
     public class FlowerCrownTypeController : Controller
     {
         private IFlowerCrownType _FlowerCrownType;

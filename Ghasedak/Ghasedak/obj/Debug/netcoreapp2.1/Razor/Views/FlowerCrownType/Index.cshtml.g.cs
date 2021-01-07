@@ -68,7 +68,7 @@ using Ghasedak.Models;
             WriteLiteral("</p>\r\n            </div>\r\n            <div class=\"row\">\r\n                ");
             EndContext();
             BeginContext(387, 877, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6781ed02a85a4baebdbcbcaf1f623870", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c5a69031255a4315b543fd1b7f3887a3", async() => {
                 BeginContext(393, 864, true);
                 WriteLiteral(@"
                     <div class=""box-body"">
@@ -235,7 +235,7 @@ WriteAttributeValue("", 3839, item.id, 3839, 8, false);
             WriteLiteral("                            <li>\r\n                                ");
             EndContext();
             BeginContext(5139, 75, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "cf768724447c42908b3ad114ad5b8021", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "70b19740c5c24d0e8a1270921cfeb6b9", async() => {
             }
             );
             __PagedList_Core_Mvc_PagerTagHelper = CreateTagHelper<global::PagedList.Core.Mvc.PagerTagHelper>();
@@ -281,7 +281,7 @@ __PagedList_Core_Mvc_PagerTagHelper.List = Model;
                 ");
             EndContext();
             BeginContext(5896, 926, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "76bab69845774da1baced6b1625cb181", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ca1e74c422a3423cb9b3e341c73a663f", async() => {
                 BeginContext(5916, 899, true);
                 WriteLiteral(@"
                     <div class=""box-body"">

@@ -24,6 +24,8 @@ using System.Data.SqlClient;
 
 namespace Ghasedak.Controllers
 {
+        [Authorize]
+
     public class OpratorController : Controller
     {
         private readonly Context _context;
