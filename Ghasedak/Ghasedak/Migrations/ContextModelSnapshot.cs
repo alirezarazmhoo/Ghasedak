@@ -34,6 +34,29 @@ namespace Ghasedak.Migrations
                     b.ToTable("AboutUss");
                 });
 
+            modelBuilder.Entity("Ghasedak.Models.AllTableData", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("isCall");
+
+                    b.Property<string>("json");
+
+                    b.Property<string>("nameTable")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("op")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("registerDate");
+
+                    b.HasKey("id");
+
+                    b.ToTable("AllTableDatas");
+                });
+
             modelBuilder.Entity("Ghasedak.Models.AndroidVersion", b =>
                 {
                     b.Property<int>("id")
@@ -296,6 +319,8 @@ namespace Ghasedak.Migrations
 
                     b.Property<int?>("opratorId");
 
+                    b.Property<int>("payType");
+
                     b.Property<long>("price");
 
                     b.HasKey("id");
@@ -343,6 +368,8 @@ namespace Ghasedak.Migrations
 
                     b.Property<int?>("opratorId");
 
+                    b.Property<int>("payType");
+
                     b.Property<long>("price");
 
                     b.Property<string>("registerDate")
@@ -366,6 +393,8 @@ namespace Ghasedak.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("charityId");
+
+                    b.Property<long>("price");
 
                     b.Property<string>("title")
                         .HasMaxLength(50);
@@ -532,6 +561,8 @@ namespace Ghasedak.Migrations
                         .HasMaxLength(30);
 
                     b.Property<int>("opratorId");
+
+                    b.Property<int>("payType");
 
                     b.Property<long?>("price");
 

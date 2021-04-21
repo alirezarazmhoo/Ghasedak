@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
@@ -79,9 +80,10 @@ namespace Ghasedak.Controllers.API
                     return new { IsError = true, message = "این متوفی قبلا ثبت شده است." };
                 _context.DeceasedNames.Add(DeceasedName);
                 _context.SaveChanges();
+                string json = JsonSerializer.Serialize(DeceasedName);
                 UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
 
-                userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "متوفی با نام و نام خانوادگی " +DeceasedName.deceasedFullName + " ثبت گردید.");
+                userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "متوفی با نام و نام خانوادگی " +DeceasedName.deceasedFullName + " ثبت گردید.",json,"DeceasedName","Add");
 
                 return new { IsError = false, message = "متوفی با موفقیت ثبت گردید." };
             }

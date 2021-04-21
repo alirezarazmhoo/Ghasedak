@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Models.ViewModel;
 using Ghasedak.Service.Interface;
+using Ghasedak.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +22,7 @@ using PagedList.Core;
 
 namespace Ghasedak.Controllers
 {
-        [Authorize]
+    [Authorize]
 
     public class FinancialServiceTypeController : Controller
     {
@@ -37,9 +39,9 @@ namespace Ghasedak.Controllers
         [HttpGet]
         public IActionResult Index(int page = 1, string filtertitle = "", bool isSuccess = false)
         {
-              int charityId = Convert.ToInt32(User.Identity.Name);
+            int charityId = Convert.ToInt32(User.Identity.Name);
 
-            var model = _FinancialServiceType.GetFinancialServiceType(charityId,page, filtertitle);
+            var model = _FinancialServiceType.GetFinancialServiceType(charityId, page, filtertitle);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید چون کمک نقدی برای این رکورد ثبت شده است";
             return View(model);
@@ -87,14 +89,20 @@ namespace Ghasedak.Controllers
                     FinancialServiceType.charityId = charityId;
                     if (id == null)
                     {
-                       
+
 
                         _context.FinancialServiceTypes.Add(FinancialServiceType);
+                        string json = JsonSerializer.Serialize(FinancialServiceType);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(FinancialServiceType.id, Convert.ToInt32(FinancialServiceType.charityId), DateTime.Now, UserActivityEnum.register, "نوع کمک نقدی  " + FinancialServiceType.title + " ثبت گردید.", json, "FinancialServiceType", "Add");
                     }
                     else
                     {
-                        
+
                         _context.FinancialServiceTypes.Update(FinancialServiceType);
+                        string json = JsonSerializer.Serialize(FinancialServiceType);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(FinancialServiceType.id, Convert.ToInt32(FinancialServiceType.charityId), DateTime.Now, UserActivityEnum.edit, "نوع کمک نقدی  " + FinancialServiceType.title + " ویرایش گردید.", json, "FinancialServiceType", "Edit");
                     }
                     await _context.SaveChangesAsync();
                     return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
@@ -220,6 +228,9 @@ namespace Ghasedak.Controllers
                 var FinancialServiceType = _context.FinancialServiceTypes.FirstOrDefault(x => x.id == id);
                 _context.FinancialServiceTypes.Remove(FinancialServiceType);
                 _context.SaveChanges();
+                string json = JsonSerializer.Serialize(FinancialServiceType);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(FinancialServiceType.id, Convert.ToInt32(FinancialServiceType.charityId), DateTime.Now, UserActivityEnum.delete, "نوع کمک نقدی  " + FinancialServiceType.title + " حذف گردید.", json, "FinancialServiceType", "Delete");
                 //return RedirectToAction(nameof(Index));
                 return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
 
@@ -232,7 +243,7 @@ namespace Ghasedak.Controllers
 
             }
         }
-        
+
         [HttpPost, ActionName("DeleteAll")]
 
         public async Task<IActionResult> DeleteAll(int[] ids)
@@ -246,7 +257,9 @@ namespace Ghasedak.Controllers
                     foreach (var item in ids)
                     {
                         var FinancialServiceType = await _context.FinancialServiceTypes.FindAsync(item);
-
+                        string json = JsonSerializer.Serialize(FinancialServiceType);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(FinancialServiceType.id, Convert.ToInt32(FinancialServiceType.charityId), DateTime.Now, UserActivityEnum.delete, "نوع کمک نقدی  " + FinancialServiceType.title + " حذف گردید.", json, "FinancialServiceType", "Delete");
                         _context.FinancialServiceTypes.Remove(FinancialServiceType);
 
                     }
@@ -288,14 +301,14 @@ namespace Ghasedak.Controllers
 
                 //row.CreateCell(0).SetCellValue("ردیف");
                 row.CreateCell(0).SetCellValue("title");
-                
+
                 int count = 1;
                 foreach (var item in result)
                 {
                     row = excelSheet.CreateRow(count);
                     //row.CreateCell(0).SetCellValue(count);
                     row.CreateCell(0).SetCellValue(item.title);
-                    
+
                     count++;
                 }
                 workbook.Write(fs);
@@ -352,8 +365,8 @@ namespace Ghasedak.Controllers
                                 if (_context.FinancialServiceTypes.Any(x => x.title == row.GetCell(0).ToString()))
                                     continue;
                                 FinancialServiceType.title = row.GetCell(0).ToString();
-                                FinancialServiceType.charityId =  Convert.ToInt32(User.Identity.Name);
-;
+                                FinancialServiceType.charityId = Convert.ToInt32(User.Identity.Name);
+                                ;
                                 _context.FinancialServiceTypes.Add(FinancialServiceType);
                             }
                             catch (Exception ex)

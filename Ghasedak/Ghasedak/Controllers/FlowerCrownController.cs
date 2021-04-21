@@ -17,10 +17,11 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Ghasedak.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace Ghasedak.Controllers
 {
-        [Authorize]
+    [Authorize]
 
     public class FlowerCrownController : Controller
     {
@@ -76,6 +77,11 @@ namespace Ghasedak.Controllers
                 try
                 {
                     _context.Update(FlowerCrown);
+                    string json = JsonSerializer.Serialize(FlowerCrown);
+
+                    UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+
+                    userActivityAdd.Add(FlowerCrown.id, Convert.ToInt32(FlowerCrown.charityId), DateTime.Now, UserActivityEnum.register, "تاج گل با نام متوفی  " + FlowerCrown.DeceasedName.deceasedFullName + " با قیمت " + FlowerCrown.price + " ثبت گردید.", json, "FlowerCrown", "Add");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -97,10 +103,11 @@ namespace Ghasedak.Controllers
                 var FlowerCrown = _context.FlowerCrowns.FirstOrDefault(x => x.id == id);
                 _context.FlowerCrowns.Remove(FlowerCrown);
                 _context.SaveChanges();
+                string json = JsonSerializer.Serialize(FlowerCrown);
+                UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                userActivityAdd.Add(FlowerCrown.id, Convert.ToInt32(FlowerCrown.charityId), DateTime.Now, UserActivityEnum.delete, "تاج گل با نام متوفی  " + FlowerCrown.DeceasedName.deceasedFullName + " با قیمت " + FlowerCrown.price + " حذف گردید.", json, "FlowerCrown", "Delete");
                 //return RedirectToAction(nameof(Index));
                 return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
-
-
             }
             catch (Exception ex)
             {
@@ -214,9 +221,11 @@ namespace Ghasedak.Controllers
                 {
                     foreach (var item in ids)
                     {
-                        var Income = await _context.FlowerCrowns.FindAsync(item);
-
-                        _context.FlowerCrowns.Remove(Income);
+                        var FlowerCrown = await _context.FlowerCrowns.FindAsync(item);
+                        string json = JsonSerializer.Serialize(FlowerCrown);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(FlowerCrown.id, Convert.ToInt32(FlowerCrown.charityId), DateTime.Now, UserActivityEnum.delete, "تاج گل با نام متوفی  " + FlowerCrown.DeceasedName.deceasedFullName + " با قیمت " + FlowerCrown.price + " حذف گردید.", json, "FlowerCrown", "Delete");
+                        _context.FlowerCrowns.Remove(FlowerCrown);
 
                     }
                     _context.SaveChanges();

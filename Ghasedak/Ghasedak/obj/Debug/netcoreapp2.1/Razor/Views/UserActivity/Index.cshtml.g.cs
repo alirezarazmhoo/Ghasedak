@@ -149,7 +149,7 @@ using Ghasedak.Models;
             WriteLiteral("                            \r\n\r\n                            <td>\r\n                                ");
             EndContext();
             BeginContext(1638, 79, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "89dbcc77714f465898d09035aafd2faf", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f31d9baef0c24733981b89f4086de5cd", async() => {
                 BeginContext(1707, 6, true);
                 WriteLiteral("مشاهده");
                 EndContext();
@@ -209,7 +209,7 @@ using Ghasedak.Models;
                                 ");
             EndContext();
             BeginContext(2336, 72, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "f7ff1767df3047ffb3faced453a2a7aa", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "69e5ab2205bd4a72979b39478810d479", async() => {
             }
             );
             __PagedList_Core_Mvc_PagerTagHelper = CreateTagHelper<global::PagedList.Core.Mvc.PagerTagHelper>();

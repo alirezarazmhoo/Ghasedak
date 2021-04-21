@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Models.ViewModel;
 using Ghasedak.Service.Interface;
+using Ghasedak.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -108,6 +110,9 @@ namespace Ghasedak.Controllers
                         }
                         dischargeRoute.guidDischargeRoute = Guid.NewGuid();
                         _context.DischargeRoutes.Add(dischargeRoute);
+                        string json = JsonSerializer.Serialize(dischargeRoute);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(dischargeRoute.id, dischargeRoute.charityId, DateTime.Now, UserActivityEnum.register, "مسیر با کد  " + dischargeRoute.code + " ثبت گردید.", json, "DischargeRoute", "Add");
                     }
                     else
                     {
@@ -117,6 +122,9 @@ namespace Ghasedak.Controllers
 
                         }
                         _context.DischargeRoutes.Update(dischargeRoute);
+                        string json = JsonSerializer.Serialize(dischargeRoute);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(dischargeRoute.id, dischargeRoute.charityId, DateTime.Now, UserActivityEnum.edit, "مسیر با کد  " + dischargeRoute.code + " ویرایش گردید.", json, "DischargeRoute", "Edit");
                     }
                     await _context.SaveChangesAsync();
                     return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
@@ -242,6 +250,9 @@ namespace Ghasedak.Controllers
                 var DischargeRoute = _context.DischargeRoutes.FirstOrDefault(x => x.id == id);
                 _context.DischargeRoutes.Remove(DischargeRoute);
                 _context.SaveChanges();
+                string json = JsonSerializer.Serialize(DischargeRoute);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(DischargeRoute.id, DischargeRoute.charityId, DateTime.Now, UserActivityEnum.delete, "مسیر با کد  " + DischargeRoute.code + " حذف گردید.", json, "DischargeRoute", "Delete");
                 //return RedirectToAction(nameof(Index));
                 return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
 
@@ -288,7 +299,9 @@ namespace Ghasedak.Controllers
                     foreach (var item in ids)
                     {
                         var DischargeRoute = await _context.DischargeRoutes.FindAsync(item);
-
+                        string json = JsonSerializer.Serialize(DischargeRoute);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(DischargeRoute.id, DischargeRoute.charityId, DateTime.Now, UserActivityEnum.delete, "مسیر با کد  " + DischargeRoute.code + " حذف گردید.", json, "DischargeRoute", "Delete");
                         _context.DischargeRoutes.Remove(DischargeRoute);
 
                     }

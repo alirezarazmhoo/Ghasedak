@@ -37,5 +37,7 @@ namespace Ghasedak.Models
         [ForeignKey("Sponsor")]
         public int sponsorId { get; set; }
         public virtual Sponsor Sponsor { get; set; }
+        public PayType payType { get; set; }
+
     }
 }

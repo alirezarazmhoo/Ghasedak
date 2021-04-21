@@ -20,10 +20,11 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Ghasedak.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace Ghasedak.Controllers
 {
-        [Authorize]
+    [Authorize]
 
     public class CharityController : Controller
     {
@@ -37,26 +38,26 @@ namespace Ghasedak.Controllers
             _Charity = Charity;
             _hostingEnvironment = hostingEnvironment;
         }
-         [HttpGet]
+        [HttpGet]
         public IActionResult ActiveCharity(int isSuccess = 1)
         {
-            if (isSuccess==2)
+            if (isSuccess == 2)
                 ViewBag.success = "خیریه شما فعال گردید برای استفاده از امکانات پنل یکبار از حساب کاربری خارج شده سپس مجددا وارد شوید.";
-            if (isSuccess==3)
+            if (isSuccess == 3)
                 ViewBag.success = "کد وارد شده نامعتبر است.";
             return View();
         }
         public async Task<IActionResult> ActiveCharity(string androidCode)
         {
-              int charityId = Convert.ToInt32(User.Identity.Name);
-            bool result =await  _Charity.ActiveCharityAsync(charityId, androidCode);
-            if(result)
-            return RedirectToAction("ActiveCharity", new { @isSuccess = 2 });
+            int charityId = Convert.ToInt32(User.Identity.Name);
+            bool result = await _Charity.ActiveCharityAsync(charityId, androidCode);
+            if (result)
+                return RedirectToAction("ActiveCharity", new { @isSuccess = 2 });
             else
-            return RedirectToAction("ActiveCharity", new { @isSuccess = 3 });
+                return RedirectToAction("ActiveCharity", new { @isSuccess = 3 });
 
         }
-        
+
         public IActionResult Index(int page = 1, string filtercode = "", bool isSuccess = false)
         {
             var model = _Charity.GetCharity(page, filtercode);
@@ -112,7 +113,7 @@ namespace Ghasedak.Controllers
             }
         }
         #region Logout
-        
+
         [HttpPost, ActionName("DeleteAll")]
 
         public async Task<IActionResult> DeleteAll(int[] ids)
@@ -179,49 +180,57 @@ namespace Ghasedak.Controllers
                 ModelState.Remove("isAccessSponsor");
                 ModelState.Remove("isAccessFinancialAid");
                 ModelState.Remove("isAccessFlowerCrown");
-                if (String.IsNullOrEmpty(Charity.code) || String.IsNullOrEmpty(Charity.mobile)|| String.IsNullOrEmpty(Charity.title)||String.IsNullOrEmpty(Charity.userName)||String.IsNullOrEmpty(Charity.passwordShow))
+                if (String.IsNullOrEmpty(Charity.code) || String.IsNullOrEmpty(Charity.mobile) || String.IsNullOrEmpty(Charity.title) || String.IsNullOrEmpty(Charity.userName) || String.IsNullOrEmpty(Charity.passwordShow))
                 {
                     return Json(new { success = false, responseText = "مقادیر وارد شده نامعتبر است !" });
 
                 }
-                    if (ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     Charity.password = BCrypt.Net.BCrypt.HashPassword(Charity.passwordShow, BCrypt.Net.BCrypt.GenerateSalt());
-                        if (id == null)
+                    if (id == null)
+                    {
+                        if (_context.Charitys.Any(x => x.userName == Charity.userName) || _context.Users.Any(x => x.userName == Charity.userName))
                         {
-                            if (_context.Charitys.Any(x => x.userName == Charity.userName) || _context.Users.Any(x => x.userName == Charity.userName))
-                            {
-                                return Json(new { success = false, responseText = "نام کاربری تکراری است !" });
+                            return Json(new { success = false, responseText = "نام کاربری تکراری است !" });
 
-                            }
-                            if (_context.Charitys.Any(x => x.code == Charity.code))
-                            {
-                                return Json(new { success = false, responseText = "کد خیریه تکراری است !" });
-
-                            }
-                            _context.Charitys.Add(Charity);
                         }
-                        else
+                        if (_context.Charitys.Any(x => x.code == Charity.code))
                         {
-                         if (_context.Charitys.Any(x => x.userName == Charity.userName && x.id!=id)||_context.Users.Any(x => x.userName == Charity.userName))
-                            {
-                                return Json(new { success = false, responseText = "نام کاربری تکراری است !" });
+                            return Json(new { success = false, responseText = "کد خیریه تکراری است !" });
 
-                            }
-                         if (_context.Charitys.Any(x => x.code == Charity.code && x.id!=id))
-                            {
-                                return Json(new { success = false, responseText = "کد خیریه تکراری است !" });
-
-                            }
-                            _context.Charitys.Update(Charity);
                         }
-                        await _context.SaveChangesAsync();
-                        return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
-                    
+                        _context.Charitys.Add(Charity);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        string json = JsonSerializer.Serialize(Charity);
+
+                        userActivityAdd.Add(Charity.id, Charity.id, DateTime.Now, UserActivityEnum.register, "خیریه با نام  " + Charity.title + " ثبت گردید.", json, "Charity", "Add");
+                    }
+                    else
+                    {
+                        if (_context.Charitys.Any(x => x.userName == Charity.userName && x.id != id) || _context.Users.Any(x => x.userName == Charity.userName))
+                        {
+                            return Json(new { success = false, responseText = "نام کاربری تکراری است !" });
+
+                        }
+                        if (_context.Charitys.Any(x => x.code == Charity.code && x.id != id))
+                        {
+                            return Json(new { success = false, responseText = "کد خیریه تکراری است !" });
+
+                        }
+                        _context.Charitys.Update(Charity);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        string json = JsonSerializer.Serialize(Charity);
+
+                        userActivityAdd.Add(Charity.id, Charity.id, DateTime.Now, UserActivityEnum.edit, "خیریه با نام  " + Charity.title + " ویرایش گردید.", json, "Charity", "Edit");
+                    }
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
+
                 }
                 else
                 {
-                    
+
                     return Json(new { success = false, responseText = "مقادیر وارد شده نامعتبر است !" });
                 }
 
@@ -258,6 +267,9 @@ namespace Ghasedak.Controllers
                 var Charity = _context.Charitys.FirstOrDefault(x => x.id == id);
                 _context.Charitys.Remove(Charity);
                 _context.SaveChanges();
+                UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                string json = JsonSerializer.Serialize(Charity);
+                userActivityAdd.Add(Charity.id, Charity.id, DateTime.Now, UserActivityEnum.delete, "خیریه با نام  " + Charity.title + " حذف گردید.", json, "Charity", "Delete");
                 //return RedirectToAction(nameof(Index));
                 return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
 

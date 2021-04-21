@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Ghasedak.Models
@@ -29,6 +30,8 @@ namespace Ghasedak.Models
 
         [ForeignKey("dischargeRoute")]
         public int dischargeRouteId { get; set; }
+        [JsonIgnore]
+
         public virtual DischargeRoute dischargeRoute { get; set; }
         public double lon { get; set; }
         public double lat { get; set; }

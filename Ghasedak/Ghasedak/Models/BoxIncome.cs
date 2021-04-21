@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Ghasedak.Models
@@ -23,6 +24,7 @@ namespace Ghasedak.Models
         public EnumStatus status { get; set; }
         [ForeignKey("oprator")]
         public int opratorId { get; set; }
+        [JsonIgnore]
         public virtual Oprator oprator { get; set; }
 
         public double lon { get; set; }
@@ -30,6 +32,8 @@ namespace Ghasedak.Models
 
         [ForeignKey("box")]
         public int boxId { get; set; }
+        [JsonIgnore]
+
         public virtual Box box { get; set; }
 
         [Display(Name = "تاریخ ثبت ")]

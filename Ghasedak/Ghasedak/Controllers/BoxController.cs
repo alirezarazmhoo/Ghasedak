@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
@@ -21,7 +22,7 @@ using PagedList.Core;
 
 namespace Ghasedak.Controllers
 {
-        [Authorize]
+    [Authorize]
 
     public class BoxController : Controller
     {
@@ -38,9 +39,9 @@ namespace Ghasedak.Controllers
         [HttpGet]
         public IActionResult Index(int page = 1, string filternumber = "", bool isSuccess = false)
         {
-              int charityId = Convert.ToInt32(User.Identity.Name);
+            int charityId = Convert.ToInt32(User.Identity.Name);
 
-            var model = _Box.GetBox(charityId,page, filternumber);
+            var model = _Box.GetBox(charityId, page, filternumber);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید چون درآمد برای این رکورد ثبت شده است";
             return View(model);
@@ -114,6 +115,9 @@ namespace Ghasedak.Controllers
                 try
                 {
                     _context.Update(box);
+                    string json = JsonSerializer.Serialize(box);
+                    UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                    userActivityAdd.Add(box.opratorId, box.charityId, DateTime.Now, UserActivityEnum.edit, "صندوق با شماره " + box.number + " و شماره همراه " + box.mobile + " ویرایش گردید.", json, "Box", "Edit");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -156,6 +160,9 @@ namespace Ghasedak.Controllers
                 var box = _context.Boxs.FirstOrDefault(x => x.id == id);
                 _context.Boxs.Remove(box);
                 _context.SaveChanges();
+                string json = JsonSerializer.Serialize(box);
+                UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                userActivityAdd.Add(box.opratorId, box.charityId, DateTime.Now, UserActivityEnum.delete, "صندوق با شماره " + box.number + " و شماره همراه " + box.mobile + " حذف گردید.", json, "Box", "Delete");
                 //return RedirectToAction(nameof(Index));
                 return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
 
@@ -221,7 +228,9 @@ namespace Ghasedak.Controllers
                     foreach (var item in ids)
                     {
                         var Box = await _context.Boxs.FindAsync(item);
-
+                        string json = JsonSerializer.Serialize(Box);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(Box.opratorId, Box.charityId, DateTime.Now, UserActivityEnum.delete, "صندوق با شماره " + Box.number + " و شماره همراه " + Box.mobile + " حذف گردید.", json, "Box", "Delete");
                         _context.Boxs.Remove(Box);
 
                     }

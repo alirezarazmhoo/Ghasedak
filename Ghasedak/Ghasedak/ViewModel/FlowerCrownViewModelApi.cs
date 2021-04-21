@@ -10,6 +10,9 @@ namespace Ghasedak.ViewModel
     {
         public long price { get; set; }
         public CeremonyType CeremonyType { get; set; }
+        public PayType payType { get; set; }
+                        
+
         public int flowerCrownTypeId { get; set; }
         public string registerDate { get; set; }
         public Guid guidDeceasedName { get; set; }

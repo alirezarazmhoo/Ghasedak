@@ -14,5 +14,7 @@ namespace Ghasedak.Models
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string title { get; set; }
         public int charityId { get; set; }
+        [Display(Name = " قیمت")]
+        public long price { get; set; }
     }
 }

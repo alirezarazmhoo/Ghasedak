@@ -68,7 +68,21 @@
                             <span asp-validation-for="@Model.financialAid.price" class="text-danger"></span>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">نوع پرداخت</label>
+                            @if (Model.financialAid.payType == PayType.Naghd)
+                            {
+                                <input value="نقدی" type="text" class="form-control" />
 
+                            }
+                            @if (Model.financialAid.payType == PayType.Pos)
+                            {
+                                <input value="پوز" type="text" class="form-control" />
+
+                            }
+                        </div>
+                    </div>
 
 
                 </div>

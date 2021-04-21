@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Ghasedak.ViewModel;
 using SmsIrRestfulNetCore;
 using System.Text;
+using System.Text.Json;
 
 namespace Ghasedak.Controllers.API
 {
@@ -75,6 +76,7 @@ namespace Ghasedak.Controllers.API
                         FinancialAid.price = item.price;
                         FinancialAid.charityId = oprator.charityId;
                         FinancialAid.opratorId = oprator.id;
+                        FinancialAid.payType = item.payType;
                         if (item.id!=0)
                             continue;
                         financialAidUserActivitys.Add(FinancialAid);
@@ -84,9 +86,9 @@ namespace Ghasedak.Controllers.API
                     _context.SaveChanges();
                      foreach (var item in financialAidUserActivitys)
                     {
+                        string json = JsonSerializer.Serialize(item);
                          UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
-
-                        userActivityAdd.Add(item.opratorId,Convert.ToInt32(item.charityId), DateTime.Now, UserActivityEnum.register, "کمک نقدی با نام حامی  " + item.name + " ثبت گردید.");
+                        userActivityAdd.Add(item.opratorId,Convert.ToInt32(item.charityId), DateTime.Now, UserActivityEnum.register, "کمک نقدی با نام حامی  " + item.name + " ثبت گردید.",json,"FinancialAid","Add");
                     }
                     trans.Commit();
                     return new { IsError = false, message = "کمک های نقدی با موفقیت ثبت گردید." };
