@@ -7,6 +7,7 @@ using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
 using Ghasedak.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,8 @@ using NPOI.XSSF.UserModel;
 
 namespace Ghasedak.Controllers
 {
+        [Authorize]
+
     public class SponsorPayController : Controller
     {
         private readonly Context _context;

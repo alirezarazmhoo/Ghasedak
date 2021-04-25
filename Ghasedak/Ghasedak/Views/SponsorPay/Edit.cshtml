@@ -20,106 +20,120 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            
-                                    <p style="padding-right: 15px;">
-                                        مشخصات حامی
 
-                                    </p>
-                                
-                            
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">نام و نام خانوادگی </label>
-                                        <input asp-for="@Model.Sponsor.fullName" type="text" class="form-control" />
-                                        <span asp-validation-for="@Model.Sponsor.fullName" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">شماره همراه</label>
-                                        <input asp-for="@Model.Sponsor.mobile" type="text" class="form-control" />
-                                        <span asp-validation-for="@Model.Sponsor.mobile" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">کد ملی</label>
-                                        <input asp-for="@Model.Sponsor.nationalcode" type="text" class="form-control" />
-                                        <span asp-validation-for="@Model.Sponsor.nationalcode" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">تلفن</label>
-                                        <input asp-for="@Model.Sponsor.phone" type="text" class="form-control" />
-                                        <span asp-validation-for="@Model.Sponsor.phone" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">تاریخ تولد:</label>
-                                        <input value="@Model.Sponsor.birthDate" type="text" class="form-control" />
-                                        <span asp-validation-for="@Model.Sponsor.birthDate" class="text-danger"></span>
+                            <p style="padding-right: 15px;">
+                                مشخصات حامی
 
-                                    </div>
+                            </p>
+
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">نام و نام خانوادگی </label>
+                                    <input asp-for="@Model.Sponsor.fullName" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.Sponsor.fullName" class="text-danger"></span>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">آدرس:</label>
-                                        <textarea value="@Model.Sponsor.address" type="text" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">شماره همراه</label>
+                                    <input asp-for="@Model.Sponsor.mobile" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.Sponsor.mobile" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">کد ملی</label>
+                                    <input asp-for="@Model.Sponsor.nationalcode" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.Sponsor.nationalcode" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">تلفن</label>
+                                    <input asp-for="@Model.Sponsor.phone" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.Sponsor.phone" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">تاریخ تولد:</label>
+                                    <input value="@Model.Sponsor.birthDate" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.Sponsor.birthDate" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">آدرس:</label>
+                                    <textarea value="@Model.Sponsor.address" type="text" class="form-control">
 </textarea>
-                                        <span asp-validation-for="@Model.Sponsor.address" class="text-danger"></span>
-
-                                    </div>
-                                </div>
-                                <div>
-                                    <hr  style="width:100%" />
+                                    <span asp-validation-for="@Model.Sponsor.address" class="text-danger"></span>
 
                                 </div>
-                                <p style="padding-right: 15px;">مشخصات پرداخت</p>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">مبلغ</label>
-                                        <input asp-for="price" type="text" class="form-control" onkeyup="numberWithCommas(this)" />
-                                        <span asp-validation-for="price" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">کد پذیرنده:</label>
-                                        <input value="@Model.recieverCode" type="text" class="form-control" />
-                                        <span asp-validation-for="@Model.recieverCode" class="text-danger"></span>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">شماره پایانه:</label>
-                                        <input value="@Model.terminalCode" type="text" class="form-control" />
-                                        <span asp-validation-for="@Model.terminalCode" class="text-danger"></span>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">شماره دستگاه:</label>
-                                        <input value="@Model.deviceCode" type="text" class="form-control" />
-                                        <span asp-validation-for="@Model.deviceCode" class="text-danger"></span>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">توضیحات:</label>
-                                        <textarea value="@Model.description" type="text" class="form-control">
-</textarea>
-                                        <span asp-validation-for="@Model.description" class="text-danger"></span>
-
-                                    </div>
-                                </div>
+                            </div>
+                            <div>
+                                <hr style="width:100%" />
 
                             </div>
+                            <p style="padding-right: 15px;">مشخصات پرداخت</p>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">مبلغ</label>
+                                    <input asp-for="price" type="text" class="form-control" onkeyup="numberWithCommas(this)" />
+                                    <span asp-validation-for="price" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">کد پذیرنده:</label>
+                                    <input value="@Model.recieverCode" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.recieverCode" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">شماره پایانه:</label>
+                                    <input value="@Model.terminalCode" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.terminalCode" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">شماره دستگاه:</label>
+                                    <input value="@Model.deviceCode" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.deviceCode" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">توضیحات:</label>
+                                    <textarea value="@Model.description" type="text" class="form-control">
+</textarea>
+                                    <span asp-validation-for="@Model.description" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">نوع پرداخت</label>
+                                    @if (Model.payType == PayType.Naghd)
+                                    {
+                                        <input value="نقدی" type="text" class="form-control" />
+
+                                    }
+                                    @if (Model.payType == PayType.Pos)
+                                    {
+                                        <input value="پوز" type="text" class="form-control" />
+
+                                    }
+                                </div>
+                            </div>
+                        </div>
 
 </form>
                 </div>

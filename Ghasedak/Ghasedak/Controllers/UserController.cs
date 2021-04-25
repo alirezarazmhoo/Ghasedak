@@ -23,6 +23,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Ghasedak.Controllers
 {
+        //[Authorize]
+
     public class UserController : Controller
     {
         private readonly Context _context;
@@ -279,8 +281,8 @@ namespace Ghasedak.Controllers
                         }
                         else
                         {
-                            var User = await _context.Users.FindAsync(item);
-                            _context.Users.Remove(User);
+                            var Oprator = await _context.Oprators.FindAsync(item);
+                            _context.Oprators.Remove(Oprator);
                         }
                     }
                     _context.SaveChanges();

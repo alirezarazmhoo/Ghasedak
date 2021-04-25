@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Ghasedak.DAL;
 using Ghasedak.Models;
-using Ghasedak.Service.Interface;
-using Newtonsoft.Json.Linq;
 using Ghasedak.Utility;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Ghasedak.ViewModel;
-using SmsIrRestfulNetCore;
 using System.Text;
+using System.Text.Json;
 
 namespace Ghasedak.Controllers.API
 {
@@ -35,15 +31,15 @@ namespace Ghasedak.Controllers.API
         public object GetBoxIncome()
         {
             string Token = HttpContext.Request?.Headers["token"];
-            int opratorId = _context.Oprators.FirstOrDefault(x => x.token == Token).id;
-            
-            IQueryable<BoxIncome> result = _context.BoxIncomes.Where(x=>x.opratorId==opratorId);
+            int charityId = _context.Oprators.FirstOrDefault(x => x.token == Token).charityId;
+
+            IQueryable<BoxIncome> result = _context.BoxIncomes.Where(x => x.charityId == charityId);
             List<BoxIncome> res = result.OrderBy(u => u.id).ToList();
-           
+
             if (res.Count() == 0)
                 return new { Data = res, Count = res.Count(), IsError = true, Message = "درآمد ثبت نشده است" };
             else
-               return new { Data = res.Select(x => new { x.id, x.lon, x.lat, x.status, x.boxId, x.registerDate }).GroupBy(x => x.boxId).Select(x => x.Last()), Count = res.Count(), IsError = false, Message = "" };
+                return new { Data = res.Select(x => new { x.id, x.lon, x.lat, x.status, x.boxId, x.registerDate }).GroupBy(x => x.boxId).Select(x => x.Last()), Count = res.Count(), IsError = false, Message = "" };
 
         }
         [HttpPost]
@@ -57,15 +53,15 @@ namespace Ghasedak.Controllers.API
             }
             string Token = HttpContext.Request?.Headers["Token"];
             var oprator = _context.Oprators.Where(p => p.token == Token).FirstOrDefault();
-             if (oprator == null)
+            if (oprator == null)
                 return new { IsError = true, message = "چنین کاربری وجود ندارد." };
-            var charityActive = _context.Charitys.FirstOrDefault(p => p.id==oprator.charityId);
-            if (!oprator.isActive )
+            var charityActive = _context.Charitys.FirstOrDefault(p => p.id == oprator.charityId);
+            if (!oprator.isActive)
                 return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
-            if (!charityActive.isActive )
+            if (!charityActive.isActive)
                 return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
-            
-            using ( var trans = _context.Database.BeginTransaction())
+
+            using (var trans = _context.Database.BeginTransaction())
             {
                 try
                 {
@@ -85,20 +81,22 @@ namespace Ghasedak.Controllers.API
                         if (Box == null)
                             continue;
                         BoxIncome.boxId = Box.id;
+
                         boxIncomeUserActivitys.Add(BoxIncome);
                         _context.BoxIncomes.Add(BoxIncome);
                     }
-                     if(boxIncomeUserActivitys==null)
-                    return new { IsError = false, message = "تمام درآمدها قبلا ثبت شده اند." };
+                    if (boxIncomeUserActivitys == null)
+                        return new { IsError = false, message = "تمام درآمدها قبلا ثبت شده اند." };
                     _context.SaveChanges();
                     foreach (var item in boxIncomeUserActivitys)
                     {
-                         UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        string json = JsonSerializer.Serialize(item);
 
-                        userActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "درآمد با قیمت " + item.price + " ثبت گردید.");
+                        userActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "درآمد با قیمت " + item.price + " ثبت گردید.",json,"BoxIncome","Add");
                     }
                     trans.Commit();
-                   
+
                     return new { IsError = false, message = "درآمد ها با موفقیت ثبت گردید." };
 
                 }
@@ -121,7 +119,7 @@ namespace Ghasedak.Controllers.API
 
         }
 
-        
+
         public long DateToUnix(DateTime date)
         {
             date.AddHours(-3);
@@ -130,7 +128,7 @@ namespace Ghasedak.Controllers.API
             return (long)timeSpan.TotalSeconds;
         }
 
-        
+
 
     }
 }

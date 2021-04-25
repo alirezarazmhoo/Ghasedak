@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Ghasedak.Models
@@ -29,6 +30,8 @@ namespace Ghasedak.Models
 
         [ForeignKey("dischargeRoute")]
         public int dischargeRouteId { get; set; }
+        [JsonIgnore]
+
         public virtual DischargeRoute dischargeRoute { get; set; }
         public double lon { get; set; }
         public double lat { get; set; }
@@ -40,7 +43,12 @@ namespace Ghasedak.Models
         public int? opratorId { get; set; }
 
         public Guid guidBox { get; set; }
-
+        [Display(Name = "نوع صندوق")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
+        public string boxKind { get; set; }
+         [Display(Name = "تاریخ در ماه ")]
+       
+        public int? day { get; set; }
        
     }
 }

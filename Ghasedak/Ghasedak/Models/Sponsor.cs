@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Ghasedak.Models
@@ -39,6 +40,7 @@ namespace Ghasedak.Models
         public string birthDate { get; set; }
         [ForeignKey("Charity")]
         public int charityId { get; set; }
+        [JsonIgnore]
         public virtual Charity Charity { get; set; }
         public int opratorId { get; set; }
     }

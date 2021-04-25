@@ -194,7 +194,6 @@ E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Raz
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\Oprator\Index.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FlowerCrownType\Index.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\FinancialServiceType\Index.cshtml.g.cs
-E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.csproj.CoreCompileInputs.cache
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\SponsorPay\Delete.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\SponsorPay\Edit.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\SponsorPay\Index.cshtml.g.cs
@@ -208,3 +207,4 @@ E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Raz
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\UserActivity\Edit.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\UserActivity\Index.cshtml.g.cs
 E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Razor\Views\Charity\ActiveCharity.cshtml.g.cs
+E:\Atrin\GhasedakFromGit2\Ghasedak\Ghasedak\Ghasedak\obj\Debug\netcoreapp2.1\Ghasedak.csproj.CoreCompileInputs.cache

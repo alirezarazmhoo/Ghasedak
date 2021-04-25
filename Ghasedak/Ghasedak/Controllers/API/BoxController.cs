@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
@@ -37,8 +38,8 @@ namespace Ghasedak.Controllers.API
         public object GetBox()
         {
             string Token = HttpContext.Request?.Headers["token"];
-            int opratorId = _context.Oprators.FirstOrDefault(x => x.token == Token).id;
-            var data = _Box.GetBox(opratorId);
+            int charityId = _context.Oprators.FirstOrDefault(x => x.token == Token).charityId;
+            var data = _Box.GetBox(charityId);
             return data;
         }
 
@@ -83,6 +84,8 @@ namespace Ghasedak.Controllers.API
                         box.charityId = item.charityId;
                         box.opratorId = oprator.id;
                         box.guidBox = item.guidBox;
+                        box.boxKind = item.boxKind;
+                        box.day = item.day;
                         var DischargeRoute = _context.DischargeRoutes.FirstOrDefault(x => x.guidDischargeRoute == item.guidDischargeRoute);
                         if (DischargeRoute == null)
                             continue;
@@ -96,8 +99,9 @@ namespace Ghasedak.Controllers.API
                     _context.SaveChanges();
                     foreach (var item in boxUserActivitys)
                     {
+                        string json = JsonSerializer.Serialize(item);
                         UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
-                        userActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "صندق با شماره " + item.number + " و شماره همراه " + item.mobile + " ثبت گردید.");
+                        userActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "صندق با شماره " + item.number + " و شماره همراه " + item.mobile + " ثبت گردید.",json,"Box","Add");
                     }
                     trans.Commit();
                     return new { IsError = false, message = "صندوق ها با موفقیت ثبت گردید." };

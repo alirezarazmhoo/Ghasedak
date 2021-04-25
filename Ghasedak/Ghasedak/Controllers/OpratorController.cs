@@ -21,9 +21,12 @@ using NPOI.XSSF.UserModel;
 using Ghasedak.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using System.Data.SqlClient;
+using System.Text.Json;
 
 namespace Ghasedak.Controllers
 {
+    [Authorize]
+
     public class OpratorController : Controller
     {
         private readonly Context _context;
@@ -49,9 +52,9 @@ namespace Ghasedak.Controllers
         //   private Task<Oprator> GetCurrentOpratorAsync() => _OpratorManager.GetOpratorAsync(HttpContext.Oprator);
         public IActionResult Index(int page = 1, string filtercellphone = "", bool isSuccess = false)
         {
-              int charityId = Convert.ToInt32(User.Identity.Name);
+            int charityId = Convert.ToInt32(User.Identity.Name);
 
-            var model = _Oprator.GetOprators(charityId,page, filtercellphone);
+            var model = _Oprator.GetOprators(charityId, page, filtercellphone);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید چون درآمد برای این رکورد ثبت شده است";
             return View(model);
@@ -113,6 +116,10 @@ namespace Ghasedak.Controllers
                             return Json(new { success = false, responseText = "نام کاربری تکراری است !" });
                         }
                         _context.Oprators.Add(Oprator);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        string json = JsonSerializer.Serialize(Oprator);
+
+                        userActivityAdd.Add(Oprator.id, Oprator.charityId, DateTime.Now, UserActivityEnum.register, "متصدی با نام  " + Oprator.fullName + " ثبت گردید.", json, "Oprator", "Add");
                     }
                     else
                     {
@@ -121,6 +128,9 @@ namespace Ghasedak.Controllers
                             return Json(new { success = false, responseText = "نام کاربری تکراری است !" });
                         }
                         _context.Oprators.Update(Oprator);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        string json = JsonSerializer.Serialize(Oprator);
+                        userActivityAdd.Add(Oprator.id, Oprator.charityId, DateTime.Now, UserActivityEnum.edit, "متصدی با نام  " + Oprator.fullName + " ویرایش گردید.", json, "Oprator", "Edit");
                     }
                     await _context.SaveChangesAsync();
                     return Json(new { success = true, responseText = "موفقیت آمیز !" });
@@ -179,6 +189,9 @@ namespace Ghasedak.Controllers
                 var Oprator = _context.Oprators.FirstOrDefault(x => x.id == id);
                 _context.Oprators.Remove(Oprator);
                 _context.SaveChanges();
+                UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                string json = JsonSerializer.Serialize(Oprator);
+                userActivityAdd.Add(Oprator.id, Oprator.charityId, DateTime.Now, UserActivityEnum.delete, "متصدی با نام  " + Oprator.fullName + " حذف گردید.", json, "Oprator", "Delete");
                 //return RedirectToAction(nameof(Index));
                 return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
 

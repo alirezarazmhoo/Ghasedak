@@ -34,7 +34,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="control-label">نام و نام خانوادگی</label>
-                                            <input class="form-control" type="text" asp-for="@Model.oprator.mobile" readonly>
+                                            <input class="form-control" type="text" asp-for="@Model.oprator.fullName" readonly>
                                         </div>
                                     </div>
                                     <div>
@@ -67,9 +67,23 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label asp-for="@Model.box.boxKind" class="control-label"></label>
+                                    <input asp-for="@Model.box.boxKind" class="form-control" />
+                                    <span asp-validation-for="@Model.box.boxKind" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label asp-for="@Model.box.mobile" class="control-label"></label>
                                     <input asp-for="@Model.box.mobile" class="form-control" />
                                     <span asp-validation-for="@Model.box.mobile" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="@Model.box.day" class="control-label"></label>
+                                    <input asp-for="@Model.box.day" class="form-control" />
+                                    <span asp-validation-for="@Model.box.day" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
