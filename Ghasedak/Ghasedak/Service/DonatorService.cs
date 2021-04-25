@@ -26,6 +26,29 @@ namespace Ghasedak.Service
             else
                 return new { Data = res, Count = res.Count(), IsError = false, Message = "" };
         }
+        public object SearchDonator(string donatorFullName,string donatorAlias,string donatorMobile,int charityId)
+        {
+            IQueryable<Donator> result = _context.Donators.Where(x=>x.charityId==charityId).OrderByDescending(x=>x.id);
+             if (!String.IsNullOrEmpty(donatorFullName))
+            {
+                result = result.Where(x => x.donatorFullName.Contains(donatorFullName));
+
+            }
+              if (!String.IsNullOrEmpty(donatorMobile))
+            {
+                result = result.Where(x => x.donatorMobile==donatorMobile);
+
+            }
+             if (!String.IsNullOrEmpty(donatorAlias))
+            {
+                result = result.Where(x => x.donatorAlias.Contains(donatorAlias));
+
+            }
+            if (result.Count() == 0)
+                return new { Data = result, Count = result.Count(), IsError = true, Message = "اهدا کننده ثبت نشده است" };
+            else
+                return new { Data = result, Count = result.Count(), IsError = false, Message = "" };
+        }
 
          public int AddDonatorFromAdmin(Donator Donator)
         {

@@ -7,6 +7,7 @@ using PagedList.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Ghasedak.Service
@@ -66,6 +67,7 @@ namespace Ghasedak.Service
                             sponsorPay.opratorId = oprator.id;
                             sponsorPay.price = item.price;
                             sponsorPay.description = item.description;
+                            sponsorPay.payType = item.payType;
                             sponsorPay.deviceCode = item.deviceCode;
                             sponsorPay.terminalCode = item.terminalCode;
                             sponsorPay.recieverCode = item.recieverCode;
@@ -80,6 +82,7 @@ namespace Ghasedak.Service
                             sponsorPay.opratorId = oprator.id;
                             sponsorPay.price = item.price;
                             sponsorPay.description = item.description;
+                            sponsorPay.payType = item.payType;
                             sponsorPay.deviceCode = item.deviceCode;
                             sponsorPay.terminalCode = item.terminalCode;
                             sponsorPay.recieverCode = item.recieverCode;
@@ -90,9 +93,11 @@ namespace Ghasedak.Service
                     _context.SaveChanges();
                     foreach (var item in sponsorPayUserActivitys)
                     {
-                         UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        string json = JsonSerializer.Serialize(item);
 
-                        userActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "مشارکت با قیمت  " + item.price + " و شماره پذیرنده " + item.recieverCode +"و شماره پایانه "+item.terminalCode+"و شماره دستگاه "+item.deviceCode+ " ثبت گردید.");
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+
+                        userActivityAdd.Add(item.opratorId, item.charityId, DateTime.Now, UserActivityEnum.register, "مشارکت با قیمت  " + item.price + " و شماره پذیرنده " + item.recieverCode + "و شماره پایانه " + item.terminalCode + "و شماره دستگاه " + item.deviceCode + " ثبت گردید.", json, "SponsorPay", "Add");
                     }
                     trans.Commit();
                     return new { IsError = false, message = "پرداخت حامیان با موفقیت ثبت گردید." };
@@ -110,6 +115,9 @@ namespace Ghasedak.Service
         {
             _context.Sponsors.Add(Sponsor);
             _context.SaveChanges();
+            string json = JsonSerializer.Serialize(Sponsor);
+            UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+            userActivityAdd.Add(Sponsor.opratorId, Sponsor.charityId, DateTime.Now, UserActivityEnum.register, "مشارکت با قیمت  " + Sponsor.fullName + " ثبت گردید.", json, "Sponsor", "Add");
             return Sponsor.id;
         }
 

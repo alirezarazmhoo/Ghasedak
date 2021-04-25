@@ -123,7 +123,7 @@ namespace Ghasedak
                //    template: "{area:exists}/{controller=User}/{action=Login}/{id?}"
 
                //);
-               routes.MapRoute("Default", "{controller=User}/{action=Login}/{id?}");
+               routes.MapRoute("Default", "{controller=User}/{action=Login}");
                routes.MapRoute("ActionApi", "api/{controller}/{name?}");
            });
 

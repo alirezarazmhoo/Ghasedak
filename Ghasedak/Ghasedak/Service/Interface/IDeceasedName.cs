@@ -12,6 +12,7 @@ namespace Ghasedak.Service.Interface
         object GetDeceasedName(int charityId);
         PagedList<DeceasedName> GetDeceasedName(int charityId,int? pageId = 1,string filterfullName="");
         int AddDeceasedNameFromAdmin(DeceasedName DeceasedName);
+        object SearchDeceasedName(string DeceasedFullName, string deceaseAalias, int charityId);
         
         
     }

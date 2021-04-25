@@ -141,7 +141,13 @@
                                 <span class="text-danger field-validation-valid" data-valmsg-for="title" data-valmsg-replace="true"></span>
                             </div>
                         </div>
-                       
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">قیمت</label>
+                                <input class="form-control" type="text" data-val="true"  required id="price" name="price" value="">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="price" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -284,6 +290,7 @@
                 $("#myModal").modal('toggle');
                 var Parameters = [{ id: "id", htmlname: "FlowerCrownTypeId", special: "" },
                     { id: "title", htmlname: "title", special: "" },
+                    { id: "price", htmlname: "price", special: "" },
 
                 { id: "charityId", htmlname: "charityId", special: "" }];
                 PostAjax('../FlowerCrownType/Register', Parameters, "../FlowerCrownType/Index?page="+@Model.PageNumber+"");

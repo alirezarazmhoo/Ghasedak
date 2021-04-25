@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ghasedak.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace Ghasedak.ViewModel
         public string terminalCode { get; set; }
         public int sponsorId { get; set; }
 
+        public PayType payType { get; set; }
          
     }
 }

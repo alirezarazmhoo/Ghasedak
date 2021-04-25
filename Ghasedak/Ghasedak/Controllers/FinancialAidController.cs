@@ -16,9 +16,13 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Ghasedak.ViewModel;
+using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace Ghasedak.Controllers
 {
+    [Authorize]
+
     public class FinancialAidController : Controller
     {
         private readonly Context _context;
@@ -36,7 +40,7 @@ namespace Ghasedak.Controllers
         {
             int charityId = Convert.ToInt32(User.Identity.Name);
 
-            var model = _FinancialAid.GetFinancialAidFromAdmin(charityId, page,filtername);
+            var model = _FinancialAid.GetFinancialAidFromAdmin(charityId, page, filtername);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید ";
             return View(model);
@@ -73,6 +77,9 @@ namespace Ghasedak.Controllers
                 try
                 {
                     _context.Update(FinancialAid);
+                    string json = JsonSerializer.Serialize(FinancialAid);
+                    UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                    userActivityAdd.Add(FinancialAid.opratorId, Convert.ToInt32(FinancialAid.charityId), DateTime.Now, UserActivityEnum.edit, "کمک نقدی با نام حامی  " + FinancialAid.name + " ویرایش گردید.", json, "FinancialAid", "Edit");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -94,6 +101,9 @@ namespace Ghasedak.Controllers
                 var FinancialAid = _context.FinancialAids.FirstOrDefault(x => x.id == id);
                 _context.FinancialAids.Remove(FinancialAid);
                 _context.SaveChanges();
+                string json = JsonSerializer.Serialize(FinancialAid);
+                UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                userActivityAdd.Add(FinancialAid.opratorId, Convert.ToInt32(FinancialAid.charityId), DateTime.Now, UserActivityEnum.delete, "کمک نقدی با نام حامی  " + FinancialAid.name + " حذف گردید.", json, "FinancialAid", "Delete");
                 return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
 
 
@@ -123,13 +133,13 @@ namespace Ghasedak.Controllers
                 ISheet excelSheet = workbook.CreateSheet("Demo");
                 IRow row = excelSheet.CreateRow(0);
                 excelSheet.IsRightToLeft = true;
-                
+
 
                 int count = 1;
                 foreach (var item in result)
                 {
                     row = excelSheet.CreateRow(count);
-                    
+
                     count++;
                 }
                 workbook.Write(fs);
@@ -159,7 +169,7 @@ namespace Ghasedak.Controllers
             return View(FinancialAid);
         }
 
-        
+
         [HttpPost, ActionName("DeleteAll")]
 
         public async Task<IActionResult> DeleteAll(int[] ids)
@@ -171,9 +181,11 @@ namespace Ghasedak.Controllers
                 {
                     foreach (var item in ids)
                     {
-                        var Income = await _context.FinancialAids.FindAsync(item);
-
-                        _context.FinancialAids.Remove(Income);
+                        var FinancialAid = await _context.FinancialAids.FindAsync(item);
+                        string json = JsonSerializer.Serialize(FinancialAid);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(FinancialAid.opratorId, Convert.ToInt32(FinancialAid.charityId), DateTime.Now, UserActivityEnum.delete, "کمک نقدی با نام حامی  " + FinancialAid.name + " حذف گردید.", json, "FinancialAid", "Delete");
+                        _context.FinancialAids.Remove(FinancialAid);
 
                     }
                     _context.SaveChanges();

@@ -21,7 +21,8 @@ namespace Ghasedak.Service
 
         public object GetFinancialAid(int opratorId,int charityId)
         {
-            IQueryable<FinancialAid> result = _context.FinancialAids.Where(x=>x.charityId==charityId && x.opratorId==opratorId);
+            //IQueryable<FinancialAid> result = _context.FinancialAids.Where(x=>x.charityId==charityId && x.opratorId==opratorId);
+            IQueryable<FinancialAid> result = _context.FinancialAids.Where(x=>x.charityId==charityId );
             
             var res = result.OrderByDescending(u => u.id).ToList();
             if (res.Count() == 0)

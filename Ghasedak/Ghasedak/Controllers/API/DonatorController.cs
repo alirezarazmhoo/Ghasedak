@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
@@ -34,11 +35,23 @@ namespace Ghasedak.Controllers.API
 
 
         [HttpGet]
+        [Route("GetAll")]
+
         public object GetDonator()
         {
             string Token = HttpContext.Request?.Headers["token"];
             var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
             var data = _Donator.GetDonator(oprator.charityId);
+            return data;
+        }
+        [HttpGet]
+        [Route("Find")]
+
+        public object Find(string donatorFullName, string donatorAlias, string donatorMobile)
+        {
+            string Token = HttpContext.Request?.Headers["token"];
+            var oprator = _context.Oprators.FirstOrDefault(x => x.token == Token);
+            var data = _Donator.SearchDonator(donatorFullName, donatorAlias, donatorMobile, oprator.charityId);
             return data;
         }
         [HttpPost]
@@ -65,9 +78,9 @@ namespace Ghasedak.Controllers.API
                     return new { IsError = true, message = "اهدا کننده قبلا ثبت شده است." };
                 _context.Donators.Add(Donator);
                 _context.SaveChanges();
+                string json = JsonSerializer.Serialize(Donator);
                 UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
-                userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "اهدا کننده  " + Donator.donatorFullName + " ثبت گردید.");
-
+                userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "اهدا کننده  " + Donator.donatorFullName + " ثبت گردید.", json, "Donator", "Add");
                 return new { IsError = false, message = "اهدا کننده با موفقیت ثبت گردید." };
             }
             catch (Exception ex)

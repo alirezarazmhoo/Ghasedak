@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Models.ViewModel;
 using Ghasedak.Service.Interface;
+using Ghasedak.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +22,8 @@ using PagedList.Core;
 
 namespace Ghasedak.Controllers
 {
+    [Authorize]
+
     public class FlowerCrownTypeController : Controller
     {
         private IFlowerCrownType _FlowerCrownType;
@@ -34,9 +39,9 @@ namespace Ghasedak.Controllers
         [HttpGet]
         public IActionResult Index(int page = 1, string filtertitle = "", bool isSuccess = false)
         {
-              int charityId = Convert.ToInt32(User.Identity.Name);
+            int charityId = Convert.ToInt32(User.Identity.Name);
 
-            var model = _FlowerCrownType.GetFlowerCrownType(charityId,page, filtertitle);
+            var model = _FlowerCrownType.GetFlowerCrownType(charityId, page, filtertitle);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید چون تاج گل برای این رکورد ثبت شده است";
             return View(model);
@@ -58,6 +63,7 @@ namespace Ghasedak.Controllers
                 }
                 List<EditViewModels> edit = new List<EditViewModels>();
                 edit.Add(new EditViewModels() { key = "title", value = FlowerCrownType.title });
+                edit.Add(new EditViewModels() { key = "price", value = FlowerCrownType.price.ToString() });
                 edit.Add(new EditViewModels() { key = "charityId", value = FlowerCrownType.charityId.ToString() });
                 edit.Add(new EditViewModels() { key = "FlowerCrownTypeId", value = FlowerCrownType.id.ToString() });
 
@@ -84,14 +90,18 @@ namespace Ghasedak.Controllers
                     FlowerCrownType.charityId = charityId;
                     if (id == null)
                     {
-                       
-
                         _context.FlowerCrownTypes.Add(FlowerCrownType);
+                        string json = JsonSerializer.Serialize(FlowerCrownType);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(FlowerCrownType.id, Convert.ToInt32(FlowerCrownType.charityId), DateTime.Now, UserActivityEnum.register, "نوع تاج گل  " + FlowerCrownType.title + " با قیمت " + FlowerCrownType.price + " ثبت گردید.", json, "FlowerCrownType", "Add");
                     }
                     else
                     {
-                        
                         _context.FlowerCrownTypes.Update(FlowerCrownType);
+
+                        string json = JsonSerializer.Serialize(FlowerCrownType);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(FlowerCrownType.id, Convert.ToInt32(FlowerCrownType.charityId), DateTime.Now, UserActivityEnum.edit, "نوع تاج گل  " + FlowerCrownType.title + " با قیمت " + FlowerCrownType.price + " ویرایش گردید.", json, "FlowerCrownType", "Edit");
                     }
                     await _context.SaveChangesAsync();
                     return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
@@ -180,6 +190,9 @@ namespace Ghasedak.Controllers
                 try
                 {
                     _context.Update(FlowerCrownType);
+                    string json = JsonSerializer.Serialize(FlowerCrownType);
+                    UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                    userActivityAdd.Add(FlowerCrownType.id, Convert.ToInt32(FlowerCrownType.charityId), DateTime.Now, UserActivityEnum.register, "نوع تاج گل  " + FlowerCrownType.title + " با قیمت " + FlowerCrownType.price + " ویرایش گردید.", json, "FlowerCrownType", "Edit");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -217,6 +230,9 @@ namespace Ghasedak.Controllers
                 var FlowerCrownType = _context.FlowerCrownTypes.FirstOrDefault(x => x.id == id);
                 _context.FlowerCrownTypes.Remove(FlowerCrownType);
                 _context.SaveChanges();
+                string json = JsonSerializer.Serialize(FlowerCrownType);
+                UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                userActivityAdd.Add(FlowerCrownType.id, Convert.ToInt32(FlowerCrownType.charityId), DateTime.Now, UserActivityEnum.delete, "نوع تاج گل  " + FlowerCrownType.title + " با قیمت " + FlowerCrownType.price + " حذف گردید.", json, "FlowerCrownType", "Delete");
                 //return RedirectToAction(nameof(Index));
                 return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
 
@@ -229,7 +245,7 @@ namespace Ghasedak.Controllers
 
             }
         }
-        
+
         [HttpPost, ActionName("DeleteAll")]
 
         public async Task<IActionResult> DeleteAll(int[] ids)
@@ -243,7 +259,9 @@ namespace Ghasedak.Controllers
                     foreach (var item in ids)
                     {
                         var FlowerCrownType = await _context.FlowerCrownTypes.FindAsync(item);
-
+                        string json = JsonSerializer.Serialize(FlowerCrownType);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(FlowerCrownType.id, Convert.ToInt32(FlowerCrownType.charityId), DateTime.Now, UserActivityEnum.delete, "نوع تاج گل  " + FlowerCrownType.title + " با قیمت " + FlowerCrownType.price + " حذف گردید.", json, "FlowerCrownType", "Delete");
                         _context.FlowerCrownTypes.Remove(FlowerCrownType);
 
                     }
@@ -285,14 +303,14 @@ namespace Ghasedak.Controllers
 
                 //row.CreateCell(0).SetCellValue("ردیف");
                 row.CreateCell(0).SetCellValue("title");
-                
+
                 int count = 1;
                 foreach (var item in result)
                 {
                     row = excelSheet.CreateRow(count);
                     //row.CreateCell(0).SetCellValue(count);
                     row.CreateCell(0).SetCellValue(item.title);
-                    
+
                     count++;
                 }
                 workbook.Write(fs);
@@ -349,8 +367,8 @@ namespace Ghasedak.Controllers
                                 if (_context.FlowerCrownTypes.Any(x => x.title == row.GetCell(0).ToString()))
                                     continue;
                                 FlowerCrownType.title = row.GetCell(0).ToString();
-                                FlowerCrownType.charityId =  Convert.ToInt32(User.Identity.Name);
-;
+                                FlowerCrownType.charityId = Convert.ToInt32(User.Identity.Name);
+                                ;
                                 _context.FlowerCrownTypes.Add(FlowerCrownType);
                             }
                             catch (Exception ex)

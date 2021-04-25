@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Ghasedak.Models
@@ -14,15 +15,15 @@ namespace Ghasedak.Models
         [MaxLength(10, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
 
         public string code { get; set; }
-        [Display(Name = "تاریخ در ماه ")]
        
-        public int? day { get; set; }
 
         [Display(Name = "آدرس ")]
         [MaxLength(500, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string address { get; set; }
          [ForeignKey("Charity")]
         public int charityId { get; set; }
+        [JsonIgnore]
+
         public virtual Charity Charity { get; set; }
         
         public int? opratorId { get; set; }

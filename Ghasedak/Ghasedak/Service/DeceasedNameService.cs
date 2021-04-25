@@ -26,6 +26,25 @@ namespace Ghasedak.Service
             else
                 return new { Data = res, Count = res.Count(), IsError = false, Message = "" };
         }
+        public object SearchDeceasedName(string DeceasedFullName,string deceaseAalias,int charityId)
+        {
+            IQueryable<DeceasedName> result = _context.DeceasedNames.Where(x=>x.charityId==charityId).OrderByDescending(x => x.id);
+            
+             if (!String.IsNullOrEmpty(DeceasedFullName))
+            {
+                result = result.Where(x => x.deceasedFullName.Contains(DeceasedFullName));
+
+            }
+             if (!String.IsNullOrEmpty(deceaseAalias))
+            {
+                result = result.Where(x => x.deceaseAalias.Contains(deceaseAalias));
+
+            }
+            if (result.Count() == 0)
+                return new { Data = result, Count = result.Count(), IsError = true, Message = "متوفی ثبت نشده است" };
+            else
+                return new { Data = result, Count = result.Count(), IsError = false, Message = "" };
+        }
 
          public int AddDeceasedNameFromAdmin(DeceasedName DeceasedName)
         {

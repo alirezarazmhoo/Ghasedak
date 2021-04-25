@@ -36,6 +36,7 @@ namespace Ghasedak.DAL
         public DbSet<Sponsor> Sponsors { get; set; }
         public DbSet<SponsorPay> SponsorPays { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
+        public DbSet<AllTableData> AllTableDatas { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
              

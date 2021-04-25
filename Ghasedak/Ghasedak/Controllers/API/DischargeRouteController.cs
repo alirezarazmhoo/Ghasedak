@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
@@ -46,16 +47,16 @@ namespace Ghasedak.Controllers.API
             var oprator = _context.Oprators.Where(p => p.token == Token).FirstOrDefault();
             if (oprator == null)
                 return new { IsError = true, message = "چنین کاربری وجود ندارد." };
-            
-            var charityActive = _context.Charitys.FirstOrDefault(p => p.id==oprator.charityId);
-            if (!oprator.isActive )
-            
+
+            var charityActive = _context.Charitys.FirstOrDefault(p => p.id == oprator.charityId);
+            if (!oprator.isActive)
+
                 return new { IsError = true, message = "کاربر مورد نظر غیر فعال است." };
-           
-            if (!charityActive.isActive )
-            
+
+            if (!charityActive.isActive)
+
                 return new { IsError = true, message = "خیریه کاربر مورد نظر غیر فعال است." };
-           
+
 
             using (var trans = _context.Database.BeginTransaction())
             {
@@ -67,19 +68,19 @@ namespace Ghasedak.Controllers.API
                     {
                         if (_context.DischargeRoutes.Any(x => x.code == item.code))
                             continue;
-                        item.opratorId =oprator.id;
+                        item.opratorId = oprator.id;
                         DischargeRouteUserActivitys.Add(item);
 
                         _context.DischargeRoutes.Add(item);
                     }
-                    if(DischargeRouteUserActivitys==null)
-                    return new { IsError = false, message = "تمام مسیرها قبلا ثبت شده اند." };
+                    if (DischargeRouteUserActivitys == null)
+                        return new { IsError = false, message = "تمام مسیرها قبلا ثبت شده اند." };
                     _context.SaveChanges();
                     foreach (var item in DischargeRouteUserActivitys)
                     {
-                    UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
-
-                        userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "مسیر با کد  " + item.code + " ثبت گردید.");
+                        string json = JsonSerializer.Serialize(item);
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        userActivityAdd.Add(oprator.id, oprator.charityId, DateTime.Now, UserActivityEnum.register, "مسیر با کد  " + item.code + " ثبت گردید.", json, "DischargeRoute", "Add");
                     }
 
                     trans.Commit();

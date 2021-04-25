@@ -12,10 +12,12 @@ namespace Ghasedak.Service.Interface
     {
         FlowerCrownAdminViewModel GetDataForAdmin(int flowerCrownId);
 
-        object GetFlowerCrown(int charityId);
+        object GetFlowerCrownApi(int charityId,int pageId = 1);
         PagedList<FlowerCrown> GetFlowerCrown(int charityId,int pageId = 1, long filterprice = 0);
         int AddFlowerCrownFromAdmin(FlowerCrown FlowerCrown);
-        object AddFlowerCrown(FlowerCrownViewModelApi item, Oprator oprator);      
+        object AddFlowerCrown(FlowerCrownViewModelApi item, Oprator oprator);
+        object SearchFlowerCrown(string donatorName, string deceasedName,string introducedName,long? price,int? ceremonyType,int? flowerCrownType, int charityId, int pageId = 1);
+
         
     }
 }

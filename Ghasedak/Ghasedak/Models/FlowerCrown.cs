@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Ghasedak.Models
@@ -16,6 +17,12 @@ namespace Ghasedak.Models
         Sal = 4,
         eid=5
     }
+    public enum PayType
+    {
+        Naghd = 1,
+        Pos = 2,
+        
+    }
     public class FlowerCrown
     {
         [Key]
@@ -27,8 +34,11 @@ namespace Ghasedak.Models
         [Display(Name = "قیمت")]
         public long price { get; set; }
         public CeremonyType CeremonyType { get; set; }
+        public PayType payType { get; set; }
         [ForeignKey("Charity")]
         public int? charityId { get; set; }
+        [JsonIgnore]
+
         public virtual Charity Charity { get; set; }
 
         
@@ -37,9 +47,13 @@ namespace Ghasedak.Models
 
         [ForeignKey("FlowerCrownType")]
         public int flowerCrownTypeId { get; set; }
+        [JsonIgnore]
+
         public virtual FlowerCrownType FlowerCrownType { get; set; }
         [ForeignKey("DeceasedName")]
         public int deceasedNameId { get; set; }
+        [JsonIgnore]
+
         public virtual DeceasedName DeceasedName { get; set; }
 
         public int donatorId { get; set; }

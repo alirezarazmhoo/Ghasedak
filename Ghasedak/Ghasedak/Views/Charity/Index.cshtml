@@ -251,7 +251,17 @@
                 $('#example2 tr:has(td)').find('input[type="checkbox"]').prop('checked', isChecked);
             }
         });
-        
+        $('#isActive').change(function () {
+            if (this.checked) {
+                var isChecked = $(this).prop("checked");
+                $('#register').find('input[type="checkbox"]').prop('checked', isChecked);
+                $('#register #isActive').val(true)
+            }
+            else {
+                $('#register #isActive').val(false)
+
+            }
+        });
         $('.deleteAll').on('click', function () {
             var array = [];
             $('#example2 tr:has(td)').find("input[type='checkbox']:checked").each(function () {
@@ -298,7 +308,17 @@
             $(".openmodal").click(function () {
                 clear('register', ["input"]);
                 clear('register', ["textarea"]);
-                $('#register').find('input:checkbox').prop('checked', false);
+                $('#register').find('input:checkbox[id^="isActive"]').prop('checked', true);
+                $('#register').find('input:checkbox[id^="isAccessBox"]').prop('checked', false);
+                $('#register').find('input:checkbox[id^="isAccessSponsor"]').prop('checked', false);
+                $('#register').find('input:checkbox[id^="isAccessFinancialAid"]').prop('checked', false);
+                $('#register').find('input:checkbox[id^="isAccessFlowerCrown"]').prop('checked', false);
+                $('#register #isActive').val(true)
+                $('#register #isAccessBox').val(false)
+                $('#register #isAccessSponsor').val(false)
+                $('#register #isAccessFinancialAid').val(false)
+                $('#register #isAccessFlowerCrown').val(false)
+
             });
             $(".btn-warning").click(function () {
                 

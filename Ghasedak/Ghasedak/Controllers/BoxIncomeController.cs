@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ghasedak.DAL;
 using Ghasedak.Models;
 using Ghasedak.Service.Interface;
 using Ghasedak.Utility;
 using Ghasedak.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +21,8 @@ using NPOI.XSSF.UserModel;
 
 namespace Ghasedak.Controllers
 {
+    [Authorize]
+
     public class BoxIncomeController : Controller
     {
         private readonly Context _context;
@@ -34,9 +38,9 @@ namespace Ghasedak.Controllers
         // GET: Products
         public IActionResult Index(int page = 1, bool isSuccess = false)
         {
-              int charityId = Convert.ToInt32(User.Identity.Name);
+            int charityId = Convert.ToInt32(User.Identity.Name);
 
-            var model = _BoxIncome.GetBoxIncome(charityId,page);
+            var model = _BoxIncome.GetBoxIncome(charityId, page);
             if (isSuccess)
                 ViewBag.success = "شما قادر به حذف نمی باشید ";
             return View(model);
@@ -82,6 +86,9 @@ namespace Ghasedak.Controllers
                 try
                 {
                     _context.Update(BoxIncome);
+                    UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                    string json = JsonSerializer.Serialize(BoxIncome);
+                    userActivityAdd.Add(BoxIncome.opratorId, BoxIncome.charityId, DateTime.Now, UserActivityEnum.edit, "درآمد با قیمت " + BoxIncome.price + " ویرایش گردید.", json, "BoxIncome", "Edit");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -96,7 +103,7 @@ namespace Ghasedak.Controllers
             return View(BoxIncome);
         }
 
-         [HttpPost]
+        [HttpPost]
         public IActionResult Delete(int id)
         {
             try
@@ -105,9 +112,10 @@ namespace Ghasedak.Controllers
                 _context.BoxIncomes.Remove(BoxIncome);
                 _context.SaveChanges();
                 //return RedirectToAction(nameof(Index));
+                UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                string json = JsonSerializer.Serialize(BoxIncome);
+                userActivityAdd.Add(BoxIncome.opratorId, BoxIncome.charityId, DateTime.Now, UserActivityEnum.delete, "درآمد با قیمت " + BoxIncome.price + " حذف گردید.", json, "BoxIncome", "Delete");
                 return Json(new { success = true, responseText = "عملیات با موفقیت انجام شد !" });
-
-
             }
             catch (Exception ex)
             {
@@ -222,7 +230,9 @@ namespace Ghasedak.Controllers
                     foreach (var item in ids)
                     {
                         var Income = await _context.BoxIncomes.FindAsync(item);
-
+                        UserActivityAdd userActivityAdd = new UserActivityAdd(_context);
+                        string json = JsonSerializer.Serialize(Income);
+                        userActivityAdd.Add(Income.opratorId, Income.charityId, DateTime.Now, UserActivityEnum.delete, "درآمد با قیمت " + Income.price + " حذف گردید.", json, "BoxIncome", "Delete");
                         _context.BoxIncomes.Remove(Income);
 
                     }
